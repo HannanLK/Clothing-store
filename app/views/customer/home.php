@@ -69,7 +69,7 @@
 
             <!-- Men's Collection Card -->
             <div class="explore-item bg-white rounded-lg shadow-md p-4">
-                <img src="/clothing-store/public/images/mens.jpg" alt="Men's Collection" class="w-full h-48 object-cover mb-2 rounded-lg">
+            <img src="/clothing-store/public/images/banners/cardmens.jpg" alt="Men's Collection" class="w-full h-48 object-cover mb-2 rounded-lg">
                 <p class="font-semibold text-lg">Men's Collection</p>
                 <p class="text-gray-600">Shop the latest men's fashion.</p>
                 <a href="/clothing-store/public/products/mens" class="bg-blue-500 text-white px-4 py-2 rounded-md mt-3 inline-block">Shop Mens</a>
@@ -77,7 +77,7 @@
 
             <!-- Women's Collection Card -->
             <div class="explore-item bg-white rounded-lg shadow-md p-4">
-                <img src="/clothing-store/public/images/womens.jpg" alt="Women's Collection" class="w-full h-48 object-cover mb-2 rounded-lg">
+            <img src="/clothing-store/public/images/banners/cardwomens.jpg" alt="Women's Collection" class="w-full h-48 object-cover mb-2 rounded-lg">
                 <p class="font-semibold text-lg">Women's Collection</p>
                 <p class="text-gray-600">Shop the latest women's fashion.</p>
                 <a href="/clothing-store/public/products/womens" class="bg-blue-500 text-white px-4 py-2 rounded-md mt-3 inline-block">Shop Womens</a>
@@ -85,7 +85,7 @@
 
             <!-- Accessories Collection Card -->
             <div class="explore-item bg-white rounded-lg shadow-md p-4">
-                <img src="/clothing-store/public/images/accessories.jpg" alt="Accessories" class="w-full h-48 object-cover mb-2 rounded-lg">
+                <img src="/clothing-store/public/images/banners/cardaccessories.jpg" alt="Accessories" class="w-full h-48 object-cover mb-2 rounded-lg">
                 <p class="font-semibold text-lg">Accessories</p>
                 <p class="text-gray-600">Complete your look with accessories.</p>
                 <a href="/clothing-store/public/products/accessories" class="bg-blue-500 text-white px-4 py-2 rounded-md mt-3 inline-block">Shop Accessories</a>
