@@ -12,9 +12,19 @@
         <h1 class="text-3xl font-bold mb-5">Admin Dashboard</h1>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <!-- Products Management -->
-            <a href="/clothing-store/public/admin/products" class="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md text-center">
-                Manage All Products
+            <!-- Mens Products Management -->
+            <a href="/clothing-store/public/admin/mens" class="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md text-center">
+                Manage Men's Products
+            </a>
+
+            <!-- Womens Products Management -->
+            <a href="/clothing-store/public/admin/womens" class="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md text-center">
+                Manage Women's Products
+            </a>
+
+            <!-- Accessories Products Management -->
+            <a href="/clothing-store/public/admin/accessories" class="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md text-center">
+                Manage Accessories
             </a>
 
             <!-- Users Management -->
