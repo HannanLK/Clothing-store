@@ -9,7 +9,8 @@ $routes = [
     'products/accessories' => 'ProductController@accessories',  // Accessories products page
 
     // Admin product management routes
-    'admin/dashboard' => 'AdminController@dashboard',    // Admin dashboard
+    'admin/dashboard' => 'AdminController@dashboard',
+
     'admin/products' => 'AdminController@products',      // General product management
     'admin/mens' => 'AdminController@mens',              // Men's product management
     'admin/womens' => 'AdminController@womens',          // Women's product management

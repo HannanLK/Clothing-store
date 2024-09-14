@@ -2,6 +2,10 @@
 
 class AdminController extends Controller {
 
+    public function dashboard() {
+        $this->renderView('admin/dashboard');
+    }
+    
     // Helper method to fetch sorted products
     private function getSortedProducts($category) {
         $sortOption = isset($_GET['sort']) ? $_GET['sort'] : 'date_new';  // Default sort option
