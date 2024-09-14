@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -16,24 +16,24 @@
         <input type="number" id="price" name="price" step="0.01" required><br>
 
         <label for="category">Category:</label>
-        <?php if (isset($_GET['category']) && $_GET['category'] == 'mens'): ?>
+        <?php //if (isset($_GET['category']) && $_GET['category'] == 'mens'): ?>
             <input type="text" value="mens" disabled>
             <input type="hidden" name="category" value="mens">
-        <?php elseif (isset($_GET['category']) && $_GET['category'] == 'womens'): ?>
+        <?php // elseif (isset($_GET['category']) && $_GET['category'] == 'womens'): ?>
             <input type="text" value="womens" disabled>
             <input type="hidden" name="category" value="womens">
-        <?php elseif (isset($_GET['category']) && $_GET['category'] == 'accessories'): ?>
+        <?php // elseif (isset($_GET['category']) && $_GET['category'] == 'accessories'): ?>
             <input type="text" value="accessories" disabled>
             <input type="hidden" name="category" value="accessories">
-        <?php else: ?>
+        <?php // else: ?>
             <select id="category" name="category">
                 <option value="mens">Mens</option>
                 <option value="womens">Womens</option>
                 <option value="accessories">Accessories</option>
             </select>
-        <?php endif; ?><br>
+        <?php //endif; ?><br>
 
         <button type="submit">Add Product</button>
     </form>
 </body>
-</html>
+</html> -->

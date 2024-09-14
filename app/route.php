@@ -21,4 +21,12 @@ $routes = [
     'admin/blogs' => 'AdminController@blogs',              // Blog management page
     'admin/addOrEditBlog' => 'AdminController@addOrEditBlog', // Add or Edit blog form
     'admin/deleteBlog' => 'AdminController@deleteBlog', 
+
+    //User management routes
+    'admin/users' => 'UserController@users',         // Manage users page
+    'admin/addUser' => 'UserController@addUser',   // Add user form submission
+    'admin/editUser' => 'UserController@editUser',   // Edit user form submission
+    'admin/deleteUser' => 'UserController@deleteUser' // Delete user action
+    
+
 ];

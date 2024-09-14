@@ -11,13 +11,22 @@ class App {
         // Debugging: Print the parsed URL (for testing)
         echo 'Parsed URL: <pre>' . print_r($url, true) . '</pre>';
 
+        // Check if the URL starts with 'admin'
+        if (isset($url[0]) && strtolower($url[0]) == 'admin') {
+            // Handle user management routes
+            if (isset($url[1]) && in_array(strtolower($url[1]), ['users', 'adduser', 'edituser', 'deleteuser'])) {
+                $this->controller = 'UserController';  // Set UserController for user management
+            } else {
+                $this->controller = 'AdminController'; // Set AdminController for other admin routes
+            }
+        }
         // Manually map 'products' to 'ProductController'
-        if (isset($url[0]) && strtolower($url[0]) == 'products') {
+        else if (isset($url[0]) && strtolower($url[0]) == 'products') {
             $this->controller = 'ProductController';
-        } 
-        // Default logic to load other controllers (e.g., AdminController)
+        }
+        // Default logic to load other controllers
         else if (isset($url[0]) && file_exists('../app/controllers/' . ucfirst($url[0]) . 'Controller.php')) {
-            $this->controller = ucfirst($url[0]) . 'Controller';  // Set the controller
+            $this->controller = ucfirst($url[0]) . 'Controller';  // Set the controller based on the first URL segment
         }
 
         // Debugging: Print the controller being loaded
