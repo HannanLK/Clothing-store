@@ -85,9 +85,9 @@
                             <td class="border px-4 py-2"><?= htmlspecialchars($user['email']) ?></td>
                             <td class="border px-4 py-2"><?= htmlspecialchars($user['role']) ?></td>
                             <td class="border px-4 py-2">
-                                <button class="view-user bg-blue-500 text-white px-2 py-1 rounded-md" data-id="<?= $user['user_id'] ?>">View</button>
-                                <button class="edit-user bg-yellow-500 text-white px-2 py-1 rounded-md ml-2" data-id="<?= $user['user_id'] ?>">Edit</button>
-                                <button class="delete-user bg-red-500 text-white px-2 py-1 rounded-md ml-2" data-id="<?= $user['user_id'] ?>">Delete</button>
+                                <button class="view-user bg-blue-500 text-white px-3 py-2 rounded-md" data-id="<?= $user['user_id'] ?>">View</button>
+                                <button class="edit-user bg-yellow-500 text-white px-3 py-2 rounded-md ml-2" data-id="<?= $user['user_id'] ?>">Edit</button>
+                                <button class="delete-user bg-red-500 text-white px-3 py-2 rounded-md ml-2" data-id="<?= $user['user_id'] ?>">Delete</button>
                             </td>
                         </tr>
                     <?php endforeach; ?>

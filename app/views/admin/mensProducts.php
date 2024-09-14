@@ -101,9 +101,9 @@
                             <td class="border px-4 py-2">$<?= htmlspecialchars($product['price']) ?></td>
                             <td class="border px-4 py-2"><?= htmlspecialchars($product['description']) ?></td>
                             <td class="border px-4 py-2">
-                                <button class="view-product bg-blue-500 text-white px-2 py-1 rounded-md" data-id="<?= $product['id'] ?>">View</button>
-                                <button class="edit-product bg-yellow-500 text-white px-2 py-1 rounded-md ml-2" data-id="<?= $product['id'] ?>">Edit</button>
-                                <button class="delete-product bg-red-500 text-white px-2 py-1 rounded-md ml-2" data-id="<?= $product['id'] ?>">Delete</button>
+                                <button class="view-product bg-blue-500 text-white px-3 py-2 rounded-md" data-id="<?= $product['id'] ?>">View</button>
+                                <button class="edit-product bg-yellow-500 text-white px-3 py-2 rounded-md ml-2" data-id="<?= $product['id'] ?>">Edit</button>
+                                <button class="delete-product bg-red-500 text-white px-3 py-2 rounded-md ml-2" data-id="<?= $product['id'] ?>">Delete</button>
                             </td>
                         </tr>
                     <?php endforeach; ?>
