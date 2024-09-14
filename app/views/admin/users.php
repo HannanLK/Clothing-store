@@ -44,6 +44,14 @@
         <!-- Add User Button -->
         <button id="showAddUserForm" class="bg-blue-500 text-white px-4 py-2 rounded-md mb-5">Add User</button>
 
+        <select id="sortUsers" class="bg-white border border-gray-300 px-4 py-2 rounded-md">
+            <option value="">Sort by</option>
+            <option value="customer" <?= isset($_GET['sort']) && $_GET['sort'] == 'customer' ? 'selected' : '' ?>>Customers</option>
+            <option value="admin" <?= isset($_GET['sort']) && $_GET['sort'] == 'admin' ? 'selected' : '' ?>>Admins</option>
+            <option value="time_asc" <?= isset($_GET['sort']) && $_GET['sort'] == 'time_asc' ? 'selected' : '' ?>>Time Ascending</option>
+            <option value="time_desc" <?= isset($_GET['sort']) && $_GET['sort'] == 'time_desc' ? 'selected' : '' ?>>Time Descending</option>
+        </select>
+
         <!-- Add User Form (initially hidden) -->
         <div id="addUserForm" class="bg-white p-6 rounded-md shadow-md hidden">
             <h2 class="text-2xl font-semibold mb-4">Add User</h2>
@@ -117,6 +125,12 @@
         document.getElementById('showAddUserForm').addEventListener('click', function() {
             var form = document.getElementById('addUserForm');
             form.classList.toggle('hidden');
+        });
+
+        // Sort Users
+        document.getElementById('sortUsers').addEventListener('change', function() {
+            const selectedSort = this.value;
+            window.location.href = `/clothing-store/public/admin/users?sort=${selectedSort}`;
         });
 
         // Show Modal for Viewing or Editing User

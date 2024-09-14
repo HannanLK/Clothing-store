@@ -6,8 +6,22 @@ class UserModel {
         $this->db = new Database();
     }
 
-    public function getAllUsers() {
-        $this->db->query('SELECT * FROM users');
+    // Method to fetch all users with optional sorting
+    public function getAllUsers($sort = null) {
+        $query = 'SELECT * FROM users';
+
+        // Modify query based on sort option
+        if ($sort == 'customer') {
+            $query .= ' WHERE role = "customer"';
+        } elseif ($sort == 'admin') {
+            $query .= ' WHERE role = "admin"';
+        } elseif ($sort == 'time_asc') {
+            $query .= ' ORDER BY created_at ASC';
+        } elseif ($sort == 'time_desc') {
+            $query .= ' ORDER BY created_at DESC';
+        }
+
+        $this->db->query($query);
         return $this->db->resultSet();
     }
 
