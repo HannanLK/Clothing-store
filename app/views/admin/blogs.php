@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Management</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Add a new class for the highlighted blog card */
+        .highlighted {
+            background-color: #e5e6e9; /* Light grey background */
+        }
+    </style>
 </head>
 <body>
 
@@ -38,8 +44,6 @@
     </div>
 
     <hr class="my-6">
-
-    <!-- Blog Table -->
 
     <!-- Blog Table -->
     <h2 class="text-2xl font-bold mb-4">Existing Blogs</h2>
@@ -178,13 +182,22 @@
         });
     });
 
-    // Scroll to the relevant blog card when clicking the View button in the table
+    // Scroll to the relevant blog card when clicking the View button in the table and highlight it
     document.querySelectorAll('.view-blog').forEach(button => {
         button.addEventListener('click', function () {
             const blogId = this.getAttribute('data-id');
             const blogCard = document.querySelector(`.blog-card[data-id='${blogId}']`);
             
             if (blogCard) {
+                // Remove highlight from all other cards
+                document.querySelectorAll('.blog-card').forEach(card => {
+                    card.classList.remove('highlighted');
+                });
+                
+                // Add highlight to the clicked blog card
+                blogCard.classList.add('highlighted');
+                
+                // Scroll to the blog card
                 blogCard.scrollIntoView({ behavior: 'smooth' });
             }
         });

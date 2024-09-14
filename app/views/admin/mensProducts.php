@@ -4,16 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Men's Products</title>
-    <script src="https://cdn.tailwindcss.com"></script> <!-- Ensure Tailwind is loaded -->
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS -->
+    <style>
+        /* Add blur effect when modal is active */
+        .blur-background {
+            filter: blur(5px);
+            pointer-events: none;
+        }
+
+        /* Modal styling */
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            z-index: 100;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Modal background overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+        }
+    </style>
 </head>
 <body class="bg-gray-100">
 
-    <div class="container mx-auto p-5">
+    <div id="main-content" class="container mx-auto p-5">
         <h1 class="text-3xl font-bold mb-5">Manage Men's Products</h1>
 
         <!-- Add Product Button -->
-        <button id="showAddProductForm" class="bg-blue-500 text-white px-4 py-2 rounded-md mb-5">Add Men's Product</button>
-
+        <button id="showAddProductForm" class="bg-blue-500 text-white px-4 py-2 rounded-md">Add Men's Product</button>
+            
         <!-- Sort Dropdown -->
         <select id="sortProducts" class="bg-white border border-gray-300 px-4 py-2 rounded-md">
             <option value="name_asc" <?= isset($data['sortOption']) && $data['sortOption'] == 'name_asc' ? 'selected' : '' ?>>Sort by Name: A to Z</option>
@@ -76,106 +106,116 @@
                                 <button class="delete-product bg-red-500 text-white px-2 py-1 rounded-md ml-2" data-id="<?= $product['id'] ?>">Delete</button>
                             </td>
                         </tr>
-
-                        <!-- Edit Form inside the card (initially hidden) -->
-                        <tr id="edit-form-<?= $product['id'] ?>" class="hidden">
-                            <td colspan="6">
-                                <form action="/clothing-store/public/admin/editProduct" method="POST" enctype="multipart/form-data" class="bg-gray-100 p-4 rounded-lg">
-                                    <input type="hidden" name="id" value="<?= $product['id'] ?>">
-                                    <label for="name">Product Name:</label>
-                                    <input type="text" name="name" value="<?= htmlspecialchars($product['name']) ?>" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3"><br>
-                                    
-                                    <label for="price">Price:</label>
-                                    <input type="number" name="price" value="<?= htmlspecialchars($product['price']) ?>" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3"><br>
-
-                                    <label for="description">Description:</label>
-                                    <textarea name="description" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3"><?= htmlspecialchars($product['description']) ?></textarea><br>
-
-                                    <label for="image">Update Image:</label>
-                                    <input type="file" name="image" accept="image/png, image/jpg, image/jpeg" class="w-full mb-3"><br>
-
-                                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Save Changes</button>
-                                </form>
-                            </td>
-                        </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr><td colspan="6" class="border px-4 py-2">No products found in this category.</td></tr>
                 <?php endif; ?>
             </tbody>
         </table>
-
-        <hr class="my-6">
-
-        <!-- Display products in a grid (4 products per row) -->
-        <h2 class="text-2xl font-bold mb-4">Product Details</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <?php if (!empty($data['products'])): ?>
-                <?php foreach ($data['products'] as $product): ?>
-                    <div class="product-item bg-white rounded-lg shadow-md p-2" id="product-details-<?= $product['id'] ?>">
-                        <strong class="text-lg font-semibold"><?= htmlspecialchars($product['name']) ?></strong><br>
-                        <img src="/clothing-store/public/images/mens/<?= $product['image'] ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full h-64 object-cover rounded-lg mb-2"><br>
-                        <span class="text-gray-700">$<?= htmlspecialchars($product['price']) ?></span><br>
-                        <p class="text-gray-600 text-sm mb-2"><?= htmlspecialchars($product['description']) ?></p><br>
-                        <button class="edit-product bg-yellow-500 text-white px-2 py-1 rounded-md" data-id="<?= $product['id'] ?>">Edit</button>
-                        <button class="delete-product bg-red-500 text-white px-2 py-1 rounded-md ml-2" data-id="<?= $product['id'] ?>">Delete</button>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>No products found in this category.</p>
-            <?php endif; ?>
-        </div>
     </div>
 
-    <!-- JavaScript to toggle the visibility of the form and scroll to the product -->
+    <!-- Modal for Viewing and Editing Products -->
+    <div id="productModal" class="modal hidden">
+        <div class="flex">
+            <!-- Left side: Product Image -->
+            <div class="w-1/3">
+                <img id="productImage" src="" alt="Product Image" class="w-full h-auto object-cover">
+            </div>
+            <!-- Right side: Form -->
+            <div id="productFormContent" class="w-2/3 ml-4"></div>
+        </div>
+        <button id="closeModal" class="mt-4 bg-red-500 text-white px-4 py-2 rounded-md">Close</button>
+    </div>
+    <div id="modalOverlay" class="modal-overlay hidden"></div>
+
     <script>
+        // Show Add Product form on button click
         document.getElementById('showAddProductForm').addEventListener('click', function() {
             var form = document.getElementById('addProductForm');
             form.classList.toggle('hidden');
         });
 
-        // Sort products when the dropdown value changes
-        document.getElementById('sortProducts').addEventListener('change', function() {
-        const sortOption = this.value;
-        window.location.href = `/clothing-store/public/admin/mens?sort=${sortOption}`;
-    });
+        // Show Modal for Viewing or Editing Product
+        function showModal(contentHtml, imageUrl) {
+            document.getElementById('productFormContent').innerHTML = contentHtml;
+            document.getElementById('productImage').src = imageUrl;
+            document.getElementById('productModal').classList.remove('hidden');
+            document.getElementById('modalOverlay').classList.remove('hidden');
+            document.getElementById('main-content').classList.add('blur-background');
+        }
 
-        // Toggle the edit form when the Edit button is clicked and scroll to the form
-        document.querySelectorAll('.edit-product').forEach(button => {
+        // Hide Modal
+        document.getElementById('closeModal').addEventListener('click', function() {
+            document.getElementById('productModal').classList.add('hidden');
+            document.getElementById('modalOverlay').classList.add('hidden');
+            document.getElementById('main-content').classList.remove('blur-background');
+        });
+
+        // View Product button logic
+        document.querySelectorAll('.view-product').forEach(button => {
             button.addEventListener('click', function() {
-                const productId = this.getAttribute('data-id');
-                const editForm = document.getElementById(`edit-form-${productId}`);
-                const tableRow = document.getElementById(`product-${productId}`);
-                
-                // Toggle the visibility of the edit form in the table
-                editForm.classList.toggle('hidden');
+                var productId = this.getAttribute('data-id');
+                var productData = <?= json_encode($data['products']) ?>.find(p => p.id == productId);
 
-                // Scroll to the table row where the form is located
-                if (!editForm.classList.contains('hidden')) {
-                    tableRow.scrollIntoView({ behavior: 'smooth' });
-                }
+                var viewHtml = `
+                    <h2 class="text-2xl font-semibold mb-4">View Product</h2>
+                    <label for="name" class="block text-lg font-medium">Name:</label>
+                    <input type="text" value="${productData.name}" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3" disabled>
+                    
+                    <label for="price" class="block text-lg font-medium">Price:</label>
+                    <input type="number" value="${productData.price}" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3" disabled>
+
+                    <label for="description" class="block text-lg font-medium">Description:</label>
+                    <textarea class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3" disabled>${productData.description}</textarea>
+                `;
+                showModal(viewHtml, `/clothing-store/public/images/mens/${productData.image}`);
             });
         });
 
-        // Delete product with confirmation
+        // Edit Product button logic
+        document.querySelectorAll('.edit-product').forEach(button => {
+            button.addEventListener('click', function() {
+                var productId = this.getAttribute('data-id');
+                var productData = <?= json_encode($data['products']) ?>.find(p => p.id == productId);
+
+                var editHtml = `
+                    <h2 class="text-2xl font-semibold mb-4">Edit Product</h2>
+                    <form action="/clothing-store/public/admin/editProduct" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="id" value="${productData.id}">
+                        
+                        <label for="name" class="block text-lg font-medium">Name:</label>
+                        <input type="text" name="name" value="${productData.name}" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">
+                        
+                        <label for="price" class="block text-lg font-medium">Price:</label>
+                        <input type="number" name="price" value="${productData.price}" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">
+                        
+                        <label for="description" class="block text-lg font-medium">Description:</label>
+                        <textarea name="description" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">${productData.description}</textarea>
+                        
+                        <label for="image" class="block text-lg font-medium">Update Image:</label>
+                        <input type="file" name="image" accept="image/png, image/jpg, image/jpeg" class="w-full mb-3">
+                        
+                        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Save Changes</button>
+                    </form>
+                `;
+                showModal(editHtml, `/clothing-store/public/images/mens/${productData.image}`);
+            });
+        });
+
+        // Delete Product button logic
         document.querySelectorAll('.delete-product').forEach(button => {
             button.addEventListener('click', function() {
-                const productId = this.getAttribute('data-id');
+                var productId = this.getAttribute('data-id');
                 if (confirm("Are you sure you want to delete this product?")) {
                     window.location.href = `/clothing-store/public/admin/deleteProduct?id=${productId}`;
                 }
             });
         });
 
-        // Scroll to the relevant product details when the view button is clicked
-        document.querySelectorAll('.view-product').forEach(button => {
-            button.addEventListener('click', function() {
-                var productId = this.getAttribute('data-id');
-                var productDetails = document.getElementById('product-details-' + productId);
-                if (productDetails) {
-                    productDetails.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
+        // Sorting logic
+        document.getElementById('sortProducts').addEventListener('change', function() {
+            const selectedSort = this.value;
+            window.location.href = `/clothing-store/public/admin/mens?sort=${selectedSort}`;
         });
     </script>
 </body>
