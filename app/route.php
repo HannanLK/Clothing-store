@@ -27,7 +27,17 @@ $routes = [
     'admin/users' => 'UserController@users',         // Manage users page
     'admin/addUser' => 'UserController@addUser',   // Add user form submission
     'admin/editUser' => 'UserController@editUser',   // Edit user form submission
-    'admin/deleteUser' => 'UserController@deleteUser' // Delete user action
+    'admin/deleteUser' => 'UserController@deleteUser', // Delete user action
+
+    // Inquiry management routes
+    'admin/inquiries' => 'InquiryController@inquiries',         // Inquiry management page
+    'admin/addInquiry' => 'InquiryController@addInquiry',       // Add new inquiry
+    'admin/editInquiry' => 'InquiryController@editInquiry',     // Edit inquiry details
+    'admin/deleteInquiry' => 'InquiryController@deleteInquiry', // Delete inquiry
+    'admin/updateStatus' => 'InquiryController@updateStatus',   // Update inquiry status
+
+
+
     
 
 ];

@@ -1,5 +1,4 @@
 <?php
-
 class App {
     protected $controller = 'HomeController';  // Default controller
     protected $method = 'index';               // Default method
@@ -16,8 +15,14 @@ class App {
             // Handle user management routes
             if (isset($url[1]) && in_array(strtolower($url[1]), ['users', 'adduser', 'edituser', 'deleteuser'])) {
                 $this->controller = 'UserController';  // Set UserController for user management
-            } else {
-                $this->controller = 'AdminController'; // Set AdminController for other admin routes
+            }
+            // Handle inquiry management routes (add updateStatus here)
+            else if (isset($url[1]) && in_array(strtolower($url[1]), ['inquiries', 'addinquiry', 'editinquiry', 'deleteinquiry', 'updatestatus'])) {
+                $this->controller = 'InquiryController'; // Set InquiryController for inquiries
+            }
+            // Other admin-related routes
+            else {
+                $this->controller = 'AdminController'; // Default to AdminController for other admin routes
             }
         }
         // Manually map 'products' to 'ProductController'
