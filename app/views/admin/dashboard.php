@@ -37,6 +37,11 @@
                 Manage Blogs
             </a>
 
+            <!-- Inquiries Management -->
+            <a href="/clothing-store/public/admin/inquiries" class="bg-red-500 text-white px-4 py-2 rounded-md shadow-md text-center">
+                Manage Inquiries
+            </a>
+
             <!-- Add more links as needed -->
         </div>
     </div>

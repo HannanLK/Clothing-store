@@ -79,4 +79,14 @@ class ProductModel {
         $this->db->bind(':id', $id);
         $this->db->execute();
     }
+
+    public function getNewArrivals() {
+        $this->db->query("SELECT * FROM products ORDER BY created_at DESC LIMIT 4");
+        return $this->db->resultSet();
+    }
+
+    public function getFeaturedProducts() {
+        $this->db->query("SELECT * FROM products WHERE is_featured = 1 LIMIT 4");
+        return $this->db->resultSet();
+    }
 }

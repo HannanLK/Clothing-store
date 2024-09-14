@@ -1,9 +1,17 @@
 <?php
+
 class HomeController extends Controller {
-    
-    // Default method (index)
     public function index() {
-        // You can load a home page view, for example
-        $this->renderView('home/index');
+        // Fetch new arrivals, featured products, blog posts, etc.
+        $newArrivals = $this->model('ProductModel')->getNewArrivals();
+        $featuredProducts = $this->model('ProductModel')->getFeaturedProducts();
+        $blogs = $this->model('BlogModel')->getRecentBlogs();
+        
+        // Pass the data to the home view
+        $this->renderView('Customer/home', [
+            'newArrivals' => $newArrivals,
+            'featuredProducts' => $featuredProducts,
+            'blogs' => $blogs,
+        ]);
     }
 }

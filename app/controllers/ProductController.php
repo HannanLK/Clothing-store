@@ -35,4 +35,5 @@ class ProductController extends Controller {
         // Render the accessories products view and pass the products data
         $this->renderView('products/accessories/index', ['products' => $products]);
     }
+    
 }

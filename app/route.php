@@ -1,7 +1,8 @@
 <?php
 
 $routes = [
-    '' => 'HomeController@index',            // Home page route
+    //Home Page
+    '' => 'HomeController@index',
 
     // Product routes
     'products/mens' => 'ProductController@mens',      // Men's products page

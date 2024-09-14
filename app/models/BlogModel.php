@@ -46,4 +46,9 @@ class BlogModel {
         $this->db->query('SELECT * FROM blogs ORDER BY date_added DESC');
         return $this->db->resultSet();
     }
+
+    public function getRecentBlogs() {
+        $this->db->query("SELECT * FROM blogs ORDER BY date_added DESC LIMIT 4");
+        return $this->db->resultSet();
+    }
 }
