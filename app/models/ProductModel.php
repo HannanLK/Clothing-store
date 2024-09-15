@@ -105,4 +105,12 @@ class ProductModel {
         $this->db->bind(':category', $category);
         return $this->db->resultSet();
     }
+
+    // ProductModel.php
+    public function getProductById($id) {
+        $this->db->query('SELECT * FROM products WHERE id = :id');
+        $this->db->bind(':id', $id);
+        return $this->db->single(); // Assuming you're using the single() method to return one result
+    }
+
 }

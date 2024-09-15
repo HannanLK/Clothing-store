@@ -14,50 +14,52 @@ class ProductController extends Controller {
         $this->mens();
     }
 
+    // ProductController.php
     public function mens() {
-        // Check for sorting option from the GET parameters
-        $sortOption = isset($_GET['sort']) ? $_GET['sort'] : 'date_new';  // Default sort option
+        // Check for sort options from the query string
+        $sortOption = isset($_GET['sort']) ? $_GET['sort'] : 'date_new';  // Default sort by newest
     
-        // Fetch men's products based on the selected sort option
+        // Fetch sorted products from the existing method
         $products = $this->productModel->getSortedProductsByCategory('mens', $sortOption);
-        
-        // Render the men's products view and pass the products data and sort option
+    
+        // If it's an AJAX request, return the data as JSON
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
+            echo json_encode($products);
+            exit; // Stop further execution for AJAX
+        }
+    
+        // Render the view with sorted products
         $this->renderView('customer/mens', ['products' => $products, 'sortOption' => $sortOption]);
     }
     
-    
-
-    // Method for fetching and displaying women's products
+    // Other product categories such as womens, accessories, etc.
     public function womens() {
-        // Fetch women's products from the database
-        $products = $this->productModel->getProductsByCategory('womens');
-        
-        // Render the women's products view and pass the products data
-        $this->renderView('products/womens/index', ['products' => $products]);
+        $sortOption = isset($_GET['sort']) ? $_GET['sort'] : 'date_new';  // Default sort by newest
+        $products = $this->productModel->getSortedProductsByCategory('womens', $sortOption);
+        $this->renderView('customer/womens', ['products' => $products, 'sortOption' => $sortOption]);
     }
 
-    // Method for fetching and displaying accessories
     public function accessories() {
-        // Fetch accessories from the database
-        $products = $this->productModel->getProductsByCategory('accessories');
-        
-        // Render the accessories products view and pass the products data
-        $this->renderView('products/accessories/index', ['products' => $products]);
+        $sortOption = isset($_GET['sort']) ? $_GET['sort'] : 'date_new';  // Default sort by newest
+        $products = $this->productModel->getSortedProductsByCategory('accessories', $sortOption);
+        $this->renderView('customer/accessories', ['products' => $products, 'sortOption' => $sortOption]);
     }
-    
-    // In ProductController.php
+
+    // ProductController.php
     public function details() {
         if (isset($_GET['id'])) {
             $productId = $_GET['id'];
-            $product = $this->model('ProductModel')->getProductById($productId);
+            $product = $this->productModel->getProductById($productId);
 
             // Return product details as JSON
-            echo json_encode($product);
+            if ($product) {
+                echo json_encode($product);
+            } else {
+                echo json_encode(['error' => 'Product not found']);
+            }
         } else {
-            echo json_encode(['error' => 'Product not found']);
+            echo json_encode(['error' => 'No product ID provided']);
         }
     }
 
-
-    
 }
