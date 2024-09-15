@@ -54,7 +54,7 @@
             <option value="date_old" <?= isset($data['sortOption']) && $data['sortOption'] == 'date_old' ? 'selected' : '' ?>>Sort by Date: Oldest First</option>
         </select>
 
-        <!-- Add these buttons after the sort dropdown -->
+        <!-- Stock Filter Buttons -->
         <button id="filterInStock" class="bg-green-500 text-white px-4 py-2 rounded-md ml-2">In Stock</button>
         <button id="filterOutOfStock" class="bg-red-500 text-white px-4 py-2 rounded-md ml-2">Out of Stock</button>
 
@@ -94,6 +94,7 @@
                     <th class="px-4 py-2 border">Time Added</th>
                     <th class="px-4 py-2 border">Name</th>
                     <th class="px-4 py-2 border">Price</th>
+                    <th class="px-4 py-2 border">Quantity</th>
                     <th class="px-4 py-2 border">Description</th>
                     <th class="px-4 py-2 border">Action</th>
                 </tr>
@@ -106,6 +107,7 @@
                             <td class="border px-4 py-2"><?= $product['created_at'] ?></td>
                             <td class="border px-4 py-2"><?= htmlspecialchars($product['name']) ?></td>
                             <td class="border px-4 py-2">$<?= htmlspecialchars($product['price']) ?></td>
+                            <td class="border px-4 py-2"><?= htmlspecialchars($product['quantity']) ?></td>
                             <td class="border px-4 py-2"><?= htmlspecialchars($product['description']) ?></td>
                             <td class="border px-4 py-2">
                                 <button class="view-product bg-blue-500 text-white px-3 py-2 rounded-md" data-id="<?= $product['id'] ?>">View</button>
@@ -184,10 +186,23 @@
                     <h2 class="text-2xl font-semibold mb-4">Edit Product</h2>
                     <form action="/clothing-store/public/admin/editProduct" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="id" value="${productData.id}">
+                        <input type="hidden" name="category" value="womens">
+                        
+                        <label for="name" class="block text-lg font-medium">Name:</label>
                         <input type="text" name="name" value="${productData.name}" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">
+                        
+                        <label for="price" class="block text-lg font-medium">Price:</label>
                         <input type="number" name="price" value="${productData.price}" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">
+                        
+                        <label for="quantity" class="block text-lg font-medium">Quantity:</label>
+                        <input type="number" name="quantity" value="${productData.quantity}" min="0" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">
+                        
+                        <label for="description" class="block text-lg font-medium">Description:</label>
                         <textarea name="description" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">${productData.description}</textarea>
+                        
+                        <label for="image" class="block text-lg font-medium">Update Image:</label>
                         <input type="file" name="image" accept="image/png, image/jpg, image/jpeg" class="w-full mb-3">
+                        
                         <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Save Changes</button>
                     </form>
                 `;
@@ -213,14 +228,13 @@
 
         // In Stock button logic
         document.getElementById('filterInStock').addEventListener('click', function() {
-            window.location.href = '/clothing-store/public/admin/womens?stock=in'; // Change 'womens' to 'accessories' for the accessories page
+            window.location.href = '/clothing-store/public/admin/womens?stock=in';
         });
 
         // Out of Stock button logic
         document.getElementById('filterOutOfStock').addEventListener('click', function() {
-            window.location.href = '/clothing-store/public/admin/womens?stock=out'; // Change 'womens' to 'accessories' for the accessories page
+            window.location.href = '/clothing-store/public/admin/womens?stock=out';
         });
-
     </script>
 </body>
 </html>
