@@ -3,16 +3,27 @@
 $routes = [
     //Home Page
     '' => 'HomeController@index',
-    
+
     //Navigating Pages for Customers
     'mens' => 'ProductController@mens',
     'womens' => 'ProductController@womens',
     'accessories' => 'ProductController@accessories',
 
-    // Product routes
-    'products/mens' => 'ProductController@mens',      // Men's products page
-    'products/womens' => 'ProductController@womens',  // Women's products page
-    'products/accessories' => 'ProductController@accessories',  // Accessories products page
+    // Cart routes
+    'cart' => 'CartController@index',          // Display the cart
+    'cart/addToCart' => 'CartController@addToCart', // Add item to cart
+    'cart/updateQuantity' => 'CartController@updateQuantity', // Update item quantity
+    'cart/removeItem' => 'CartController@removeItem', // Remove item from cart
+
+    'login' => 'LoginController@index',
+    'login/login' => 'LoginController@login',
+    'logout' => 'LoginController@logout',
+
+
+    // // Product routes
+    // 'products/mens' => 'ProductController@mens',      // Men's products page
+    // 'products/womens' => 'ProductController@womens',  // Women's products page
+    // 'products/accessories' => 'ProductController@accessories',  // Accessories products page
 
     // Admin product management routes
     'admin/dashboard' => 'AdminController@dashboard',
@@ -42,8 +53,5 @@ $routes = [
     'admin/deleteInquiry' => 'InquiryController@deleteInquiry', // Delete inquiry
     'admin/updateStatus' => 'InquiryController@updateStatus',   // Update inquiry status
 
-
-
-    
 
 ];

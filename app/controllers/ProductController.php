@@ -45,4 +45,19 @@ class ProductController extends Controller {
         $this->renderView('products/accessories/index', ['products' => $products]);
     }
     
+    // In ProductController.php
+    public function details() {
+        if (isset($_GET['id'])) {
+            $productId = $_GET['id'];
+            $product = $this->model('ProductModel')->getProductById($productId);
+
+            // Return product details as JSON
+            echo json_encode($product);
+        } else {
+            echo json_encode(['error' => 'Product not found']);
+        }
+    }
+
+
+    
 }
