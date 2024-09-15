@@ -54,6 +54,10 @@
             <option value="date_old" <?= isset($data['sortOption']) && $data['sortOption'] == 'date_old' ? 'selected' : '' ?>>Sort by Date: Oldest First</option>
         </select>
 
+        <!-- Buttons for Filtering Stock -->
+        <button id="filterInStock" class="bg-green-500 text-white px-4 py-2 rounded-md ml-2">In Stock</button>
+        <button id="filterOutOfStock" class="bg-red-500 text-white px-4 py-2 rounded-md ml-2">Out of Stock</button>
+
         <!-- Add Product Form (initially hidden) -->
         <div id="addProductForm" class="bg-white p-6 rounded-md shadow-md hidden">
             <h2 class="text-2xl font-semibold mb-4">Add Product</h2>
@@ -180,33 +184,33 @@
         // Edit Product button logic
         document.querySelectorAll('.edit-product').forEach(button => {
             button.addEventListener('click', function() {
-            var productId = this.getAttribute('data-id');
-            var productData = <?= json_encode($data['products']) ?>.find(p => p.id == productId);
+                var productId = this.getAttribute('data-id');
+                var productData = <?= json_encode($data['products']) ?>.find(p => p.id == productId);
 
-            var editHtml = `
-                <h2 class="text-2xl font-semibold mb-4">Edit Product</h2>
-                <form action="/clothing-store/public/admin/editProduct" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" name="id" value="${productData.id}">
-                    <input type="hidden" name="category" value="mens"> <!-- Ensure the category is passed -->
-                    
-                    <label for="name" class="block text-lg font-medium">Name:</label>
-                    <input type="text" name="name" value="${productData.name}" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">
-                    
-                    <label for="price" class="block text-lg font-medium">Price:</label>
-                    <input type="number" name="price" value="${productData.price}" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">
-                    
-                    <label for="quantity" class="block text-lg font-medium">Quantity:</label>
-                    <input type="number" name="quantity" value="${productData.quantity}" min="0" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">
-                    
-                    <label for="description" class="block text-lg font-medium">Description:</label>
-                    <textarea name="description" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">${productData.description}</textarea>
-                    
-                    <label for="image" class="block text-lg font-medium">Update Image:</label>
-                    <input type="file" name="image" accept="image/png, image/jpg, image/jpeg" class="w-full mb-3">
-                    
-                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Save Changes</button>
-                </form>
-                `;
+                var editHtml = `
+                    <h2 class="text-2xl font-semibold mb-4">Edit Product</h2>
+                    <form action="/clothing-store/public/admin/editProduct" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="id" value="${productData.id}">
+                        <input type="hidden" name="category" value="mens"> <!-- Ensure the category is passed -->
+                        
+                        <label for="name" class="block text-lg font-medium">Name:</label>
+                        <input type="text" name="name" value="${productData.name}" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">
+                        
+                        <label for="price" class="block text-lg font-medium">Price:</label>
+                        <input type="number" name="price" value="${productData.price}" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">
+                        
+                        <label for="quantity" class="block text-lg font-medium">Quantity:</label>
+                        <input type="number" name="quantity" value="${productData.quantity}" min="0" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">
+                        
+                        <label for="description" class="block text-lg font-medium">Description:</label>
+                        <textarea name="description" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">${productData.description}</textarea>
+                        
+                        <label for="image" class="block text-lg font-medium">Update Image:</label>
+                        <input type="file" name="image" accept="image/png, image/jpg, image/jpeg" class="w-full mb-3">
+                        
+                        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Save Changes</button>
+                    </form>
+                    `;
                 showModal(editHtml, `/clothing-store/public/images/mens/${productData.image}`);
             });
         });
@@ -226,6 +230,17 @@
             const selectedSort = this.value;
             window.location.href = `/clothing-store/public/admin/mens?sort=${selectedSort}`;
         });
+
+        // In Stock button logic
+        document.getElementById('filterInStock').addEventListener('click', function() {
+            window.location.href = '/clothing-store/public/admin/mens?stock=in';
+        });
+
+        // Out of Stock button logic
+        document.getElementById('filterOutOfStock').addEventListener('click', function() {
+            window.location.href = '/clothing-store/public/admin/mens?stock=out';
+        });
+
     </script>
 </body>
 </html>

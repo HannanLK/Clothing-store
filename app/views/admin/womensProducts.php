@@ -54,6 +54,10 @@
             <option value="date_old" <?= isset($data['sortOption']) && $data['sortOption'] == 'date_old' ? 'selected' : '' ?>>Sort by Date: Oldest First</option>
         </select>
 
+        <!-- Add these buttons after the sort dropdown -->
+        <button id="filterInStock" class="bg-green-500 text-white px-4 py-2 rounded-md ml-2">In Stock</button>
+        <button id="filterOutOfStock" class="bg-red-500 text-white px-4 py-2 rounded-md ml-2">Out of Stock</button>
+
         <!-- Add Product Form (initially hidden) -->
         <div id="addProductForm" class="bg-white p-6 rounded-md shadow-md hidden">
             <h2 class="text-2xl font-semibold mb-4">Add Product</h2>
@@ -65,6 +69,9 @@
 
                 <label for="price" class="block text-lg font-medium">Price:</label>
                 <input type="number" id="price" name="price" step="0.01" required class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3"><br>
+
+                <label for="quantity" class="block text-lg font-medium">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" min="0" required class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">
 
                 <label for="description" class="block text-lg font-medium">Description:</label>
                 <textarea id="description" name="description" required class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3"></textarea><br>
@@ -203,6 +210,17 @@
             const selectedSort = this.value;
             window.location.href = `/clothing-store/public/admin/womens?sort=${selectedSort}`;
         });
+
+        // In Stock button logic
+        document.getElementById('filterInStock').addEventListener('click', function() {
+            window.location.href = '/clothing-store/public/admin/womens?stock=in'; // Change 'womens' to 'accessories' for the accessories page
+        });
+
+        // Out of Stock button logic
+        document.getElementById('filterOutOfStock').addEventListener('click', function() {
+            window.location.href = '/clothing-store/public/admin/womens?stock=out'; // Change 'womens' to 'accessories' for the accessories page
+        });
+
     </script>
 </body>
 </html>

@@ -14,11 +14,18 @@ class ProductModel {
     }
 
     // Method to fetch sorted products by category
-    public function getSortedProductsByCategory($category, $sortOption) {
-        // Default query
+    public function getSortedProductsByCategory($category, $sortOption, $stockFilter = null) {
+        // Default query to fetch products by category
         $query = 'SELECT * FROM products WHERE category_id = (SELECT id FROM categories WHERE name = :category)';
-    
-        // Modify query based on the selected sort option
+        
+        // Filter by stock status if provided
+        if ($stockFilter === 'in') {
+            $query .= ' AND quantity > 0';
+        } elseif ($stockFilter === 'out') {
+            $query .= ' AND quantity = 0';
+        }
+        
+        // Modify query based on sort option
         switch ($sortOption) {
             case 'name_asc':
                 $query .= ' ORDER BY name ASC';
@@ -40,7 +47,6 @@ class ProductModel {
                 break;
         }
     
-        // Execute the query and return results
         $this->db->query($query);
         $this->db->bind(':category', $category);
         return $this->db->resultSet();

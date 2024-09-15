@@ -6,24 +6,25 @@ class AdminController extends Controller {
         $this->renderView('admin/dashboard');
     }
     
-    // Helper method to fetch sorted products
+    // Helper method to fetch sorted products with optional stock filter
     private function getSortedProducts($category) {
         $sortOption = isset($_GET['sort']) ? $_GET['sort'] : 'date_new';  // Default sort option
-        return $this->model('ProductModel')->getSortedProductsByCategory($category, $sortOption);
+        $stockFilter = isset($_GET['stock']) ? $_GET['stock'] : null;     // Optional stock filter
+        
+        // Pass both sort and stock options to the ProductModel
+        return $this->model('ProductModel')->getSortedProductsByCategory($category, $sortOption, $stockFilter);
     }
 
-    // Women's product management
+    // Women's product management with stock filter and sorting
     public function womens() {
-        $sortOption = isset($_GET['sort']) ? $_GET['sort'] : 'date_new';  // Default sort option
-        $products = $this->getSortedProducts('womens');
-        $this->renderView('admin/womensProducts', ['products' => $products, 'sortOption' => $sortOption]);
+        $products = $this->getSortedProducts('womens');  // Use the updated helper method
+        $this->renderView('admin/womensProducts', ['products' => $products, 'sortOption' => isset($_GET['sort']) ? $_GET['sort'] : 'date_new']);
     }
 
-    // Accessories product management
+    // Accessories product management with stock filter and sorting
     public function accessories() {
-        $sortOption = isset($_GET['sort']) ? $_GET['sort'] : 'date_new';  // Default sort option
-        $products = $this->getSortedProducts('accessories');
-        $this->renderView('admin/accessoriesProducts', ['products' => $products, 'sortOption' => $sortOption]);
+        $products = $this->getSortedProducts('accessories');  // Use the updated helper method
+        $this->renderView('admin/accessoriesProducts', ['products' => $products, 'sortOption' => isset($_GET['sort']) ? $_GET['sort'] : 'date_new']);
     }
 
     // General product management
@@ -32,11 +33,10 @@ class AdminController extends Controller {
         $this->renderView('admin/products', ['products' => $products]);
     }
 
-    // Men's product management
+    // Men's product management with stock filter and sorting
     public function mens() {
-        $sortOption = isset($_GET['sort']) ? $_GET['sort'] : 'date_new';  // Default sort option
-        $products = $this->getSortedProducts('mens');
-        $this->renderView('admin/mensProducts', ['products' => $products, 'sortOption' => $sortOption]);
+        $products = $this->getSortedProducts('mens');  // Use the updated helper method
+        $this->renderView('admin/mensProducts', ['products' => $products, 'sortOption' => isset($_GET['sort']) ? $_GET['sort'] : 'date_new']);
     }
 
     // Add product form
