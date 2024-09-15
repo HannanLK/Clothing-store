@@ -66,6 +66,9 @@
                 <label for="price" class="block text-lg font-medium">Price:</label>
                 <input type="number" id="price" name="price" step="0.01" required class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3"><br>
 
+                <label for="quantity" class="block text-lg font-medium">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" min="0" required class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">
+
                 <label for="description" class="block text-lg font-medium">Description:</label>
                 <textarea id="description" name="description" required class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3"></textarea><br>
 
@@ -87,6 +90,7 @@
                     <th class="px-4 py-2 border">Time Added</th>
                     <th class="px-4 py-2 border">Name</th>
                     <th class="px-4 py-2 border">Price</th>
+                    <th class="px-4 py-2 border">Quantity</th>
                     <th class="px-4 py-2 border">Description</th>
                     <th class="px-4 py-2 border">Action</th>
                 </tr>
@@ -99,6 +103,7 @@
                             <td class="border px-4 py-2"><?= $product['created_at'] ?></td>
                             <td class="border px-4 py-2"><?= htmlspecialchars($product['name']) ?></td>
                             <td class="border px-4 py-2">$<?= htmlspecialchars($product['price']) ?></td>
+                            <td class="border px-4 py-2"><?= htmlspecialchars($product['quantity']) ?></td>
                             <td class="border px-4 py-2"><?= htmlspecialchars($product['description']) ?></td>
                             <td class="border px-4 py-2">
                                 <button class="view-product bg-blue-500 text-white px-3 py-2 rounded-md" data-id="<?= $product['id'] ?>">View</button>
@@ -175,28 +180,32 @@
         // Edit Product button logic
         document.querySelectorAll('.edit-product').forEach(button => {
             button.addEventListener('click', function() {
-                var productId = this.getAttribute('data-id');
-                var productData = <?= json_encode($data['products']) ?>.find(p => p.id == productId);
+            var productId = this.getAttribute('data-id');
+            var productData = <?= json_encode($data['products']) ?>.find(p => p.id == productId);
 
-                var editHtml = `
-                    <h2 class="text-2xl font-semibold mb-4">Edit Product</h2>
-                    <form action="/clothing-store/public/admin/editProduct" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="id" value="${productData.id}">
-                        
-                        <label for="name" class="block text-lg font-medium">Name:</label>
-                        <input type="text" name="name" value="${productData.name}" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">
-                        
-                        <label for="price" class="block text-lg font-medium">Price:</label>
-                        <input type="number" name="price" value="${productData.price}" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">
-                        
-                        <label for="description" class="block text-lg font-medium">Description:</label>
-                        <textarea name="description" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">${productData.description}</textarea>
-                        
-                        <label for="image" class="block text-lg font-medium">Update Image:</label>
-                        <input type="file" name="image" accept="image/png, image/jpg, image/jpeg" class="w-full mb-3">
-                        
-                        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Save Changes</button>
-                    </form>
+            var editHtml = `
+                <h2 class="text-2xl font-semibold mb-4">Edit Product</h2>
+                <form action="/clothing-store/public/admin/editProduct" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="id" value="${productData.id}">
+                    <input type="hidden" name="category" value="mens"> <!-- Ensure the category is passed -->
+                    
+                    <label for="name" class="block text-lg font-medium">Name:</label>
+                    <input type="text" name="name" value="${productData.name}" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">
+                    
+                    <label for="price" class="block text-lg font-medium">Price:</label>
+                    <input type="number" name="price" value="${productData.price}" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">
+                    
+                    <label for="quantity" class="block text-lg font-medium">Quantity:</label>
+                    <input type="number" name="quantity" value="${productData.quantity}" min="0" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">
+                    
+                    <label for="description" class="block text-lg font-medium">Description:</label>
+                    <textarea name="description" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">${productData.description}</textarea>
+                    
+                    <label for="image" class="block text-lg font-medium">Update Image:</label>
+                    <input type="file" name="image" accept="image/png, image/jpg, image/jpeg" class="w-full mb-3">
+                    
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Save Changes</button>
+                </form>
                 `;
                 showModal(editHtml, `/clothing-store/public/images/mens/${productData.image}`);
             });

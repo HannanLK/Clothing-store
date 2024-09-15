@@ -44,6 +44,7 @@ class AdminController extends Controller {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $name = htmlspecialchars(trim($_POST['name']));
             $price = htmlspecialchars(trim($_POST['price']));
+            $quantity = (int)$_POST['quantity'];  // Get quantity
             $description = htmlspecialchars(trim($_POST['description']));
             $category = htmlspecialchars(trim($_POST['category']));
 
@@ -51,7 +52,7 @@ class AdminController extends Controller {
             $imageName = $this->handleImageUpload($imageFolder);
 
             if ($imageName) {
-                $this->model('ProductModel')->addProduct($name, $category, $price, $description, $imageName);
+                $this->model('ProductModel')->addProduct($name, $category, $price, $quantity, $description, $imageName);
                 $this->redirectToCategoryPage($category);
             } else {
                 echo "Failed to upload the image.";
@@ -65,6 +66,7 @@ class AdminController extends Controller {
             $id = htmlspecialchars(trim($_POST['id']));
             $name = htmlspecialchars(trim($_POST['name']));
             $price = htmlspecialchars(trim($_POST['price']));
+            $quantity = (int)$_POST['quantity'];  // Get quantity
             $description = htmlspecialchars(trim($_POST['description']));
             $category = htmlspecialchars(trim($_POST['category']));
 
@@ -72,9 +74,9 @@ class AdminController extends Controller {
             $imageName = $this->handleImageUpload($imageFolder);
 
             if ($imageName) {
-                $this->model('ProductModel')->updateProduct($id, $name, $category, $price, $description, $imageName);
+                $this->model('ProductModel')->updateProduct($id, $name, $category, $price, $quantity, $description, $imageName);
             } else {
-                $this->model('ProductModel')->updateProduct($id, $name, $category, $price, $description);
+                $this->model('ProductModel')->updateProduct($id, $name, $category, $price, $quantity, $description);
             }
 
             $this->redirectToCategoryPage($category);

@@ -47,27 +47,29 @@ class ProductModel {
     }
     
     // Method to add a new product
-    public function addProduct($name, $category, $price, $description, $image) {
-        $this->db->query('INSERT INTO products (name, category_id, price, description, image, created_at) VALUES (:name, (SELECT id FROM categories WHERE name = :category), :price, :description, :image, NOW())');
+    public function addProduct($name, $category, $price, $quantity, $description, $image) {
+        $this->db->query('INSERT INTO products (name, category_id, price, quantity, description, image, created_at) VALUES (:name, (SELECT id FROM categories WHERE name = :category), :price, :quantity, :description, :image, NOW())');
         $this->db->bind(':name', $name);
         $this->db->bind(':category', $category);
         $this->db->bind(':price', $price);
+        $this->db->bind(':quantity', $quantity);  // Bind quantity
         $this->db->bind(':description', $description);
         $this->db->bind(':image', $image);
         $this->db->execute();
     }
 
     // Method to update an existing product
-    public function updateProduct($id, $name, $category, $price, $description, $image = null) {
+    public function updateProduct($id, $name, $category, $price, $quantity, $description, $image = null) {
         if ($image) {
-            $this->db->query('UPDATE products SET name = :name, price = :price, description = :description, image = :image, category_id = (SELECT id FROM categories WHERE name = :category) WHERE id = :id');
+            $this->db->query('UPDATE products SET name = :name, price = :price, quantity = :quantity, description = :description, image = :image, category_id = (SELECT id FROM categories WHERE name = :category) WHERE id = :id');
             $this->db->bind(':image', $image);
         } else {
-            $this->db->query('UPDATE products SET name = :name, price = :price, description = :description, category_id = (SELECT id FROM categories WHERE name = :category) WHERE id = :id');
+            $this->db->query('UPDATE products SET name = :name, price = :price, quantity = :quantity, description = :description, category_id = (SELECT id FROM categories WHERE name = :category) WHERE id = :id');
         }
         $this->db->bind(':id', $id);
         $this->db->bind(':name', $name);
         $this->db->bind(':price', $price);
+        $this->db->bind(':quantity', $quantity);  // Bind quantity
         $this->db->bind(':description', $description);
         $this->db->bind(':category', $category);
         $this->db->execute();
