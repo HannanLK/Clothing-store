@@ -3,6 +3,11 @@
 $routes = [
     //Home Page
     '' => 'HomeController@index',
+    
+    //Navigating Pages for Customers
+    'mens' => 'ProductController@mens',
+    'womens' => 'ProductController@womens',
+    'accessories' => 'ProductController@accessories',
 
     // Product routes
     'products/mens' => 'ProductController@mens',      // Men's products page

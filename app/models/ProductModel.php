@@ -17,8 +17,8 @@ class ProductModel {
     public function getSortedProductsByCategory($category, $sortOption) {
         // Default query
         $query = 'SELECT * FROM products WHERE category_id = (SELECT id FROM categories WHERE name = :category)';
-
-        // Modify query based on sort option
+    
+        // Modify query based on the selected sort option
         switch ($sortOption) {
             case 'name_asc':
                 $query .= ' ORDER BY name ASC';
@@ -39,13 +39,13 @@ class ProductModel {
                 $query .= ' ORDER BY created_at ASC';
                 break;
         }
-
-        // Prepare and execute query
+    
+        // Execute the query and return results
         $this->db->query($query);
         $this->db->bind(':category', $category);
         return $this->db->resultSet();
     }
-
+    
     // Method to add a new product
     public function addProduct($name, $category, $price, $description, $image) {
         $this->db->query('INSERT INTO products (name, category_id, price, description, image, created_at) VALUES (:name, (SELECT id FROM categories WHERE name = :category), :price, :description, :image, NOW())');
@@ -87,6 +87,14 @@ class ProductModel {
 
     public function getFeaturedProducts() {
         $this->db->query("SELECT * FROM products WHERE is_featured = 1 LIMIT 4");
+        return $this->db->resultSet();
+    }
+
+    // Method to fetch products by category
+    public function getProductsByCategory($category) {
+        // Create the query to fetch products based on category
+        $this->db->query('SELECT * FROM products WHERE category_id = (SELECT id FROM categories WHERE name = :category)');
+        $this->db->bind(':category', $category);
         return $this->db->resultSet();
     }
 }

@@ -25,6 +25,10 @@ class App {
                 $this->controller = 'AdminController'; // Default to AdminController for other admin routes
             }
         }
+        // Handle customer routes like mens, womens, and accessories
+        else if (isset($url[0]) && in_array(strtolower($url[0]), ['mens', 'womens', 'accessories'])) {
+            $this->controller = 'ProductController';
+        }
         // Manually map 'products' to 'ProductController'
         else if (isset($url[0]) && strtolower($url[0]) == 'products') {
             $this->controller = 'ProductController';
