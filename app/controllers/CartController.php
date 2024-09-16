@@ -46,14 +46,16 @@ class CartController extends Controller {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $userId = $_SESSION['user_id'];
             $productId = $_POST['product_id'];
-
+    
+            // Remove the item from the cart using the model
             $this->cartModel->removeCartItem($userId, $productId);
-
-            // Redirect to the cart page
+    
+            // Redirect back to the cart page
             header('Location: /clothing-store/public/cart');
+            exit;
         }
     }
-
+    
     public function checkLoginStatus() {
         header('Content-Type: application/json');
         

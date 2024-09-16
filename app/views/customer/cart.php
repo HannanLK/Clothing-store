@@ -27,9 +27,9 @@
         }
 
         table {
-            width: 90%; /* Reduced width and centered */
+            width: 90%;
             border-collapse: collapse;
-            margin: 20px auto; /* Center the table with margins */
+            margin: 20px auto;
         }
 
         .total-summary {
@@ -38,7 +38,7 @@
             padding: 10px 20px;
             font-size: 16px;
             width: 90%;
-            margin: 10px auto; /* Adjust position */
+            margin: 10px auto;
         }
 
         .total-summary span {
@@ -47,7 +47,7 @@
 
         .total-value {
             text-align: right;
-            white-space: nowrap; /* Ensure $ sign and value are close */
+            white-space: nowrap;
         }
 
         .semi-bold {
@@ -72,7 +72,7 @@
         }
 
         .product-image {
-            width: 100px; /* Increase image size */
+            width: 100px;
             height: 100px;
             object-fit: cover;
             margin-left: 10px;
@@ -81,7 +81,7 @@
         .product-info {
             display: flex;
             align-items: center;
-            gap: 10px; /* Space between product image and name */
+            gap: 10px;
         }
 
         .qty-btn {
@@ -131,7 +131,11 @@
                             <div>
                                 <span class="font-semibold"><?= htmlspecialchars($item['name']) ?></span>
                                 <br>
-                                <a href="/clothing-store/public/cart/removeItem?product_id=<?= $item['id'] ?>" class="remove-link">Remove</a>
+                                <!-- Use POST for remove instead of GET -->
+                                <form action="/clothing-store/public/cart/removeItem" method="POST" style="display: inline;">
+                                    <input type="hidden" name="product_id" value="<?= $item['id'] ?>">
+                                    <button type="submit" class="remove-link">Remove</button>
+                                </form>
                             </div>
                         </div>
                     </td>
