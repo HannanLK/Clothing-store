@@ -1,5 +1,4 @@
 <?php
-
 class CartModel {
     private $db;
 
@@ -18,18 +17,15 @@ class CartModel {
         $this->db->execute();
     }
 
-    // Get cart items for a specific user
+    // Get cart items for a specific user, including category_id for dynamic image paths
     public function getCartItems($userId) {
-        $this->db->query("
-            SELECT products.id, products.name, products.price, products.image, products.category_id, cart.quantity 
-            FROM cart
-            JOIN products ON cart.product_id = products.id
-            WHERE cart.user_id = :user_id
-        ");
+        $this->db->query("SELECT products.id, products.name, products.price, products.image, products.category_id, cart.quantity 
+                          FROM cart
+                          JOIN products ON cart.product_id = products.id
+                          WHERE cart.user_id = :user_id");
         $this->db->bind(':user_id', $userId);
         return $this->db->resultSet();
     }
-    
 
     // Remove an item from the cart
     public function removeCartItem($userId, $productId) {

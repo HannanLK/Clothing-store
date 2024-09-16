@@ -3,7 +3,7 @@
 class LoginController extends Controller {
 
     public function index() {
-        // Render the login view with two tabs for login and registration
+        // Render the login view
         $this->renderView('auth/login');
     }
 
@@ -30,9 +30,8 @@ class LoginController extends Controller {
                 if ($user['role'] === 'admin') {
                     header('Location: /clothing-store/public/admin/dashboard');
                 } else {
-                    header('Location: /clothing-store/public/checkout');
+                    header('Location: /clothing-store/public/checkout'); // Redirect to checkout after login
                 }
-                exit; // Ensure further code does not execute
             } else {
                 // Invalid credentials, reload login with error
                 $this->renderView('auth/login', ['error' => 'Invalid username or password']);
@@ -45,4 +44,15 @@ class LoginController extends Controller {
         session_destroy();
         header('Location: /clothing-store/public/login');
     }
+
+    // Check if the user is logged in (for AJAX requests)
+    public function checkLoginStatus() {
+        if (isset($_SESSION['user_id'])) {
+            echo json_encode(['loggedIn' => true]);
+        } else {
+            echo json_encode(['loggedIn' => false]);
+        }
+        exit; // Always exit after sending JSON
+    }
+
 }
