@@ -9,7 +9,7 @@
 <body class="bg-gray-100">
 
 <div class="container mx-auto p-5">
-    <h1 class="text-3xl font-bold mb-5">Checkout</h1>
+    <h1 class="text-3xl font-bold mb-5">CHECKOUT</h1>
 
     <!-- Customer Information -->
     <div class="bg-white p-5 mb-5 shadow-md rounded">
@@ -38,7 +38,7 @@
 
     <!-- Cart Items -->
     <div class="bg-white p-5 mb-5 shadow-md rounded">
-        <h2 class="text-xl font-bold mb-3">YOR CART</h2>
+        <h2 class="text-xl font-bold mb-3">YOUR CART</h2>
         <table class="min-w-full bg-white border border-gray-200">
             <thead>
                 <tr>
