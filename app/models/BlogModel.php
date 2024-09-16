@@ -47,8 +47,23 @@ class BlogModel {
         return $this->db->resultSet();
     }
 
+    // Method to fetch recent blogs for the blog list page
     public function getRecentBlogs() {
         $this->db->query("SELECT * FROM blogs ORDER BY date_added DESC LIMIT 4");
+        return $this->db->resultSet();
+    }
+
+    // Method to fetch a single blog by its ID (for the detailed view)
+    public function getBlogById($id) {
+        $this->db->query('SELECT * FROM blogs WHERE id = :id');
+        $this->db->bind(':id', $id);
+        return $this->db->single(); // Return single result
+    }
+
+    // Method to fetch related blogs (excluding the current one)
+    public function getRelatedBlogs($currentBlogId) {
+        $this->db->query('SELECT * FROM blogs WHERE id != :id LIMIT 4');
+        $this->db->bind(':id', $currentBlogId);
         return $this->db->resultSet();
     }
 }

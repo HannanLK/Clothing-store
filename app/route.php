@@ -11,6 +11,9 @@ $routes = [
 
     'product/details' => 'ProductController@details',
 
+    // Blog routes
+    'blogs' => 'BlogController@list',  // Route for blog listing page
+
 
     // Cart routes
     'cart' => 'CartController@index',          // Display the cart

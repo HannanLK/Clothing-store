@@ -52,12 +52,69 @@
             padding: 10px;
             cursor: pointer;
         }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            display: flex;
+        }
+        .modal-content img {
+            width: 50%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .modal-details {
+            width: 50%;
+            padding-left: 20px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Notification style */
+        #notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
     </style>
 
 </head>
 <body class="bg-gray-100">
 
-    <!-- Sliding Banner Section with Unique Content -->
+    <!-- Sliding Banner Section -->
     <header class="slider">
         <div class="slides">
             <!-- Slide 1 -->
@@ -99,7 +156,6 @@
         <h2 class="text-3xl font-bold mb-5">New Arrivals</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <?php 
-            // Map category_id to folder names
             $categoryMap = [
                 1 => 'mens',
                 2 => 'womens',
@@ -113,7 +169,8 @@
                     <img src="/clothing-store/public/images/<?= $categoryFolder ?>/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full h-64 object-cover mb-2 rounded-lg">
                     <p class="font-semibold text-lg"><?= htmlspecialchars($product['name']) ?></p>
                     <p class="text-gray-600">$<?= htmlspecialchars($product['price']) ?></p>
-                    <a href="/clothing-store/public/products/<?= $product['id'] ?>" class="bg-blue-500 text-white px-4 py-2 rounded-md mt-3 inline-block">View Product</a>
+                    <button class="view-product bg-blue-500 text-white px-4 py-2 rounded-md mt-3" data-id="<?= $product['id'] ?>">View Product</button>
+                    <button class="add-to-cart bg-green-500 text-white px-4 py-2 rounded-md mt-3" data-id="<?= $product['id'] ?>">Add to Cart</button>
                 </div>
             <?php endforeach; ?>
         </div>
@@ -128,57 +185,128 @@
                     <img src="/clothing-store/public/images/<?= $categoryFolder ?>/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full h-64 object-cover mb-2 rounded-lg">
                     <p class="font-semibold text-lg"><?= htmlspecialchars($product['name']) ?></p>
                     <p class="text-gray-600">$<?= htmlspecialchars($product['price']) ?></p>
-                    <a href="/clothing-store/public/products/<?= $product['id'] ?>" class="bg-blue-500 text-white px-4 py-2 rounded-md mt-3 inline-block">View Product</a>
+                    <button class="view-product bg-blue-500 text-white px-4 py-2 rounded-md mt-3" data-id="<?= $product['id'] ?>">View Product</button>
+                    <button class="add-to-cart bg-green-500 text-white px-4 py-2 rounded-md mt-3" data-id="<?= $product['id'] ?>">Add to Cart</button>
                 </div>
             <?php endforeach; ?>
         </div>
+    </div>
 
-        <!-- Explore Section (Cards for Blog, Mens, Womens, Accessories) -->
-        <h2 class="text-3xl font-bold my-10">Explore</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
-            <!-- Blog Card -->
-            <div class="explore-item bg-white rounded-lg shadow-md p-4">
-                <img src="/clothing-store/public/images/blog.jpg" alt="Our Blog" class="w-full h-48 object-cover mb-2 rounded-lg">
-                <p class="font-semibold text-lg">Our Blog</p>
-                <p class="text-gray-600">Latest fashion tips and trends.</p>
-                <a href="/clothing-store/public/blog" class="bg-purple-500 text-white px-4 py-2 rounded-md mt-3 inline-block">Read Blog</a>
-            </div>
-
-            <!-- Men's Collection Card -->
-            <div class="explore-item bg-white rounded-lg shadow-md p-4">
-                <img src="/clothing-store/public/images/banners/cardmens.jpg" alt="Men's Collection" class="w-full h-48 object-cover mb-2 rounded-lg">
-                <p class="font-semibold text-lg">Men's Collection</p>
-                <p class="text-gray-600">Shop the latest men's fashion.</p>
-                <a href="/clothing-store/public/products/mens" class="bg-blue-500 text-white px-4 py-2 rounded-md mt-3 inline-block">Shop Mens</a>
-            </div>
-
-            <!-- Women's Collection Card -->
-            <div class="explore-item bg-white rounded-lg shadow-md p-4">
-                <img src="/clothing-store/public/images/banners/cardwomens.jpg" alt="Women's Collection" class="w-full h-48 object-cover mb-2 rounded-lg">
-                <p class="font-semibold text-lg">Women's Collection</p>
-                <p class="text-gray-600">Shop the latest women's fashion.</p>
-                <a href="/clothing-store/public/products/womens" class="bg-blue-500 text-white px-4 py-2 rounded-md mt-3 inline-block">Shop Womens</a>
-            </div>
-
-            <!-- Accessories Collection Card -->
-            <div class="explore-item bg-white rounded-lg shadow-md p-4">
-                <img src="/clothing-store/public/images/banners/cardaccessories.jpg" alt="Accessories" class="w-full h-48 object-cover mb-2 rounded-lg">
-                <p class="font-semibold text-lg">Accessories</p>
-                <p class="text-gray-600">Complete your look with accessories.</p>
-                <a href="/clothing-store/public/products/accessories" class="bg-blue-500 text-white px-4 py-2 rounded-md mt-3 inline-block">Shop Accessories</a>
+    <!-- Product Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <img id="modalProductImage" src="" alt="Product Image">
+            <div class="modal-details">
+                <span class="close">&times;</span>
+                <h2 id="modalProductName" class="text-xl font-bold"></h2>
+                <p id="modalProductPrice" class="text-gray-600"></p>
+                <p id="modalProductDescription"></p>
+                <button id="modalAddToCart" class="bg-green-500 text-white px-4 py-2 rounded-md mt-3">Add to Cart</button>
             </div>
         </div>
     </div>
 
-    <!-- Footer Section -->
-    <footer class="bg-gray-800 text-white py-4 mt-10">
-        <div class="container mx-auto text-center">
-            <p>&copy; <?= date('Y') ?> Clothing Store. All rights reserved.</p>
-        </div>
-    </footer>
+    <!-- Notification -->
+    <div id="notification">Product added to cart!</div>
 
-    <!-- JavaScript for the Slider -->
     <script>
+        function initializeEventListeners() {
+            const modal = document.getElementById('productModal');
+            const closeModal = document.getElementsByClassName('close')[0];
+
+            document.querySelectorAll('.view-product').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = this.getAttribute('data-id');
+
+                    fetch(`/clothing-store/public/product/details?id=${productId}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Error fetching product details.');
+                            }
+                            return response.json();
+                        })
+                        .then(product => {
+                            document.getElementById('modalProductName').innerText = product.name;
+                            document.getElementById('modalProductPrice').innerText = `$${product.price}`;
+                            document.getElementById('modalProductDescription').innerText = product.description;
+                            document.getElementById('modalProductImage').src = `/clothing-store/public/images/${product.category}/${product.image}`;
+                            document.getElementById('modalAddToCart').setAttribute('data-id', product.id);
+                            modal.style.display = 'block';
+                        })
+                        .catch(error => {
+                            alert(error.message);
+                            console.error('Error fetching product details:', error);
+                        });
+                });
+            });
+
+            closeModal.onclick = function() {
+                modal.style.display = 'none';
+            }
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            }
+
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = this.getAttribute('data-id');
+
+                    fetch(`/clothing-store/public/cart/addToCart`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: `product_id=${productId}`
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error adding product to cart.');
+                        }
+                        return response.text();
+                    })
+                    .then(() => {
+                        const notification = document.getElementById('notification');
+                        notification.style.display = 'block';
+                        setTimeout(() => { notification.style.display = 'none'; }, 2000);
+                    })
+                    .catch(error => {
+                        alert(error.message);
+                        console.error('Error adding product to cart:', error);
+                    });
+                });
+            });
+
+            document.getElementById('modalAddToCart').addEventListener('click', function() {
+                const productId = this.getAttribute('data-id');
+
+                fetch(`/clothing-store/public/cart/addToCart`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `product_id=${productId}`
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error adding product to cart.');
+                    }
+                    return response.text();
+                })
+                .then(() => {
+                    modal.style.display = 'none';
+
+                    const notification = document.getElementById('notification');
+                    notification.style.display = 'block';
+                    setTimeout(() => { notification.style.display = 'none'; }, 2000);
+                })
+                .catch(error => {
+                    alert(error.message);
+                    console.error('Error adding product to cart:', error);
+                });
+            });
+        }
+
+        initializeEventListeners();
+
         let currentIndex = 0;
         const slides = document.querySelectorAll('.slide');
         const totalSlides = slides.length;
@@ -198,7 +326,6 @@
             showSlide(currentIndex);
         });
 
-        // Auto-slide every 5 seconds
         setInterval(function() {
             currentIndex = (currentIndex + 1) % totalSlides;
             showSlide(currentIndex);

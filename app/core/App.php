@@ -31,6 +31,16 @@ class App {
             $this->controller = 'ProductController';
             $this->method = strtolower($url[0]);  // Set the method based on the URL (mens, womens, accessories)
         } 
+        // Check if the URL is related to blogs
+        else if (isset($url[0]) && strtolower($url[0]) == 'blogs') {
+            $this->controller = 'BlogController';
+            if (isset($url[1]) && strtolower($url[1]) == 'view' && isset($url[2])) {
+                $this->method = 'view';
+                $this->params = [$url[2]];  // Blog ID
+            } else {
+                $this->method = 'list';  // Default to the blog list method
+            }
+        }
         // Check if the URL is related to the cart
         else if (isset($url[0]) && strtolower($url[0]) == 'cart') {
             if (!isset($_SESSION['user_id'])) {
