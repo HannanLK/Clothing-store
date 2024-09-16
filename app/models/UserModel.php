@@ -87,4 +87,11 @@ class UserModel {
             return false;
         }
     }
+
+    public function getUserById($userId) {
+        $this->db->query("SELECT * FROM users WHERE user_id = :user_id");
+        $this->db->bind(':user_id', $userId);
+        return $this->db->single();
+    }
+    
 }

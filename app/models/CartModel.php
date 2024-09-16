@@ -14,19 +14,34 @@ class CartModel {
         $this->db->bind(':user_id', $userId);
         $this->db->bind(':product_id', $productId);
         $this->db->bind(':quantity', $quantity);
-        $this->db->execute();
+    
+        // Check if the query executes successfully
+        if ($this->db->execute()) {
+            // Log the success (optional)
+            echo "Product successfully added to the cart.";
+        } else {
+            echo "Error: Could not add product to the cart.";
+            print_r($this->db->errorInfo());
+        }
     }
-
+    
     // Get cart items for a specific user, including category_id for dynamic image paths
     public function getCartItems($userId) {
         $this->db->query("SELECT products.id, products.name, products.price, products.image, products.category_id, cart.quantity 
-                          FROM cart
+                          FROM cart 
                           JOIN products ON cart.product_id = products.id
                           WHERE cart.user_id = :user_id");
         $this->db->bind(':user_id', $userId);
-        return $this->db->resultSet();
+    
+        // Debug: Check if any items are being returned
+        $cartItems = $this->db->resultSet();
+        if (empty($cartItems)) {
+            echo "No items in the cart for this user.";
+        }
+        return $cartItems;
     }
-
+    
+    
     // Remove an item from the cart
     public function removeCartItem($userId, $productId) {
         $this->db->query("DELETE FROM cart WHERE user_id = :user_id AND product_id = :product_id");
@@ -34,4 +49,14 @@ class CartModel {
         $this->db->bind(':product_id', $productId);
         $this->db->execute();
     }
+
+    public function updateProductQuantity($userId, $productId, $quantity) {
+        $this->db->query("UPDATE cart SET quantity = :quantity WHERE user_id = :user_id AND product_id = :product_id");
+        $this->db->bind(':quantity', $quantity);
+        $this->db->bind(':user_id', $userId);
+        $this->db->bind(':product_id', $productId);
+        $this->db->execute();
+    }
+    
+    
 }
