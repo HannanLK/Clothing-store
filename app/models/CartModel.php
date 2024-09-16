@@ -32,15 +32,8 @@ class CartModel {
                           JOIN products ON cart.product_id = products.id
                           WHERE cart.user_id = :user_id");
         $this->db->bind(':user_id', $userId);
-    
-        // Debug: Check if any items are being returned
-        $cartItems = $this->db->resultSet();
-        if (empty($cartItems)) {
-            echo "No items in the cart for this user.";
-        }
-        return $cartItems;
+        return $this->db->resultSet();
     }
-    
     
     // Remove an item from the cart
     public function removeCartItem($userId, $productId) {
@@ -57,6 +50,13 @@ class CartModel {
         $this->db->bind(':product_id', $productId);
         $this->db->execute();
     }
+
+    public function clearCart($userId) {
+        $this->db->query('DELETE FROM cart WHERE user_id = :user_id');
+        $this->db->bind(':user_id', $userId);
+        $this->db->execute();
+    }
+    
     
     
 }

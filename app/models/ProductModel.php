@@ -113,6 +113,13 @@ class ProductModel {
         $this->db->bind(':id', $id);
         return $this->db->single();
     }
+
+    public function updateProductQuantity($productId, $newQuantity) {
+        $this->db->query("UPDATE products SET quantity = :quantity WHERE id = :id");
+        $this->db->bind(':quantity', $newQuantity);
+        $this->db->bind(':id', $productId);
+        $this->db->execute();
+    }
     
 
 }

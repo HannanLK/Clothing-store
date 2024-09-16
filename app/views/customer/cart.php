@@ -65,17 +65,17 @@
 
         <!-- Subtotal, Tax, Total -->
         <div class="mt-5">
-            <div class="flex justify-between px-4 py-2 text-lg">
+            <div class="flex justify-end px-8 py-1 text-lg">
                 <span>Subtotal:</span>
-                <span>$<span id="subtotal"><?= number_format($subtotal, 2) ?></span></span>
+                <span class="ml-3">$<span id="subtotal"><?= number_format($subtotal, 2) ?></span></span>
             </div>
-            <div class="flex justify-between px-4 py-2 text-lg">
+            <div class="flex justify-end px-8 py-1 text-lg">
                 <span>Tax (10%):</span>
-                <span>$<span id="tax"><?= number_format($tax, 2) ?></span></span>
+                <span class="ml-3">$<span id="tax"><?= number_format($tax, 2) ?></span></span>
             </div>
-            <div class="flex justify-between px-4 py-2 font-semibold text-lg">
+            <div class="flex justify-end px-8 py-1 font-semibold text-lg">
                 <span>Total:</span>
-                <span>$<span id="total"><?= number_format($total, 2) ?></span></span>
+                <span class="ml-3">$<span id="total"><?= number_format($total, 2) ?></span></span>
             </div>
 
             <!-- Horizontal line -->

@@ -29,6 +29,10 @@ $routes = [
 
     // 'checkout' => 'CartController@checkout',  // Route for checkout page
     'checkout' => 'CheckoutController@index',
+    'checkout/placeOrder' => 'OrderController@placeOrder', // Route for placing the order
+    'checkout/thankyou' => 'OrderController@thankYou',     // Route for showing the thank you message
+    'profile' => 'ProfileController@index',                // Route for profile page
+    'profile/edit' => 'ProfileController@edit',            // Route for editing profile
 
 
     // Admin product management routes

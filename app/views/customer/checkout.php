@@ -76,15 +76,15 @@
 
         <!-- Subtotal, Tax, Total -->
         <div class="mt-5">
-            <div class="flex justify-end text-base mb-1">
+            <div class="flex justify-end text-base mb-1 px-6">
                 <span class="mr-2">Subtotal:</span>
                 <span>$<?= number_format($subtotal, 2) ?></span>
             </div>
-            <div class="flex justify-end text-base mb-1">
+            <div class="flex justify-end text-base mb-1 px-6">
                 <span class="mr-2">Tax (10%):</span>
                 <span>$<?= number_format($tax, 2) ?></span>
             </div>
-            <div class="flex justify-end font-semibold text-base">
+            <div class="flex justify-end font-semibold text-base px-6">
                 <span class="mr-2">Total:</span>
                 <span>$<?= number_format($total, 2) ?></span>
             </div>
@@ -102,6 +102,11 @@
             </div>
         </div>
         <form id="payment-form" action="/clothing-store/public/checkout/placeOrder" method="POST">
+            <input type="hidden" name="total" value="<?= number_format($total, 2) ?>">
+            <input type="hidden" name="address" value="<?= htmlspecialchars($customer['address']) ?>">
+            <input type="hidden" name="phone" value="<?= htmlspecialchars($customer['phone']) ?>">
+
+            <!-- Other form fields for card details, etc. -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                 <div>
                     <label for="card-number" class="block font-semibold">Card Number:</label>

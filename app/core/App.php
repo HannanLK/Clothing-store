@@ -25,12 +25,12 @@ class App {
             } else {
                 $this->controller = 'AdminController';
             }
-        } 
+        }
         // Check if the URL is related to mens, womens, or accessories
         else if (isset($url[0]) && in_array(strtolower($url[0]), ['mens', 'womens', 'accessories'])) {
             $this->controller = 'ProductController';
             $this->method = strtolower($url[0]);  // Set the method based on the URL (mens, womens, accessories)
-        } 
+        }
         // Check if the URL is related to blogs
         else if (isset($url[0]) && strtolower($url[0]) == 'blogs') {
             $this->controller = 'BlogController';
@@ -48,19 +48,41 @@ class App {
                 exit;
             }
             $this->controller = 'CartController';
-        } 
+        }
         // Check if the URL is related to login or logout
         else if (isset($url[0]) && strtolower($url[0]) == 'login') {
             $this->controller = 'LoginController';
-        } 
+        }
         else if (isset($url[0]) && strtolower($url[0]) == 'logout') {
             $this->controller = 'LoginController';
             $this->method = 'logout';
-        } 
-        // Check for general product routes
+        }
+        // Check if the URL is related to products
         else if (isset($url[0]) && strtolower($url[0]) == 'products') {
             $this->controller = 'ProductController';
-        } 
+        }
+
+        // Check if the URL is related to orders
+        else if (isset($url[0]) && strtolower($url[0]) == 'checkout') {
+            $this->controller = 'OrderController';
+            if (isset($url[1]) && strtolower($url[1]) == 'placeOrder') {
+                $this->method = 'placeOrder';
+            } else if (isset($url[1]) && strtolower($url[1]) == 'thankyou') {
+                $this->method = 'thankYou';
+            } else {
+                $this->method = 'index';
+            }
+        }
+
+        // Check if the URL is related to the profile page
+        else if (isset($url[0]) && strtolower($url[0]) == 'profile') {
+            $this->controller = 'ProfileController';
+            if (isset($url[1]) && strtolower($url[1]) == 'edit') {
+                $this->method = 'edit';
+            } else {
+                $this->method = 'index';  // Default to viewing profile
+            }
+        }
         // Check for dynamically loaded controllers
         else if (isset($url[0]) && file_exists('../app/controllers/' . ucfirst($url[0]) . 'Controller.php')) {
             $this->controller = ucfirst($url[0]) . 'Controller';

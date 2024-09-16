@@ -89,6 +89,7 @@ class ProductController extends Controller {
         exit;
     }
 
+
     // Helper method to check if it's an AJAX request
     private function isAjax() {
         return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
