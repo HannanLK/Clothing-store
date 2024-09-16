@@ -3,7 +3,7 @@
 class LoginController extends Controller {
 
     public function index() {
-        // Render the login view
+        // Render the login view with two tabs for login and registration
         $this->renderView('auth/login');
     }
 
@@ -30,8 +30,9 @@ class LoginController extends Controller {
                 if ($user['role'] === 'admin') {
                     header('Location: /clothing-store/public/admin/dashboard');
                 } else {
-                    header('Location: /clothing-store/public');
+                    header('Location: /clothing-store/public/checkout');
                 }
+                exit; // Ensure further code does not execute
             } else {
                 // Invalid credentials, reload login with error
                 $this->renderView('auth/login', ['error' => 'Invalid username or password']);

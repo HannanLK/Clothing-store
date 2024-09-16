@@ -115,7 +115,22 @@
             document.getElementById('tax').innerText = tax.toFixed(2);
             document.getElementById('grand-total').innerText = grandTotal.toFixed(2);
         }
-    </script>
 
+        document.getElementById('checkoutBtn').addEventListener('click', function() {
+        // Check if user is logged in via an AJAX request or by checking session in the backend
+        fetch('/clothing-store/public/check-login-status')
+            .then(response => response.json())
+            .then(data => {
+                if (data.loggedIn) {
+                    // Redirect to checkout page
+                    window.location.href = '/clothing-store/public/checkout';
+                } else {
+                    // Redirect to login page
+                    window.location.href = '/clothing-store/public/login';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
 </body>
 </html>
