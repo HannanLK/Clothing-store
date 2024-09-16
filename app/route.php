@@ -9,6 +9,9 @@ $routes = [
     'womens' => 'ProductController@womens',
     'accessories' => 'ProductController@accessories',
 
+    'product/details' => 'ProductController@details',
+
+
     // Cart routes
     'cart' => 'CartController@index',          // Display the cart
     'cart/addToCart' => 'CartController@addToCart', // Add item to cart

@@ -24,7 +24,7 @@ class ProductModel {
         } elseif ($stockFilter === 'out') {
             $query .= ' AND quantity = 0';
         }
-        
+    
         // Modify query based on sort option
         switch ($sortOption) {
             case 'name_asc':
@@ -48,10 +48,11 @@ class ProductModel {
         }
     
         $this->db->query($query);
-        $this->db->bind(':category', $category);
+        $this->db->bind(':category', $category);  // Bind the category
         return $this->db->resultSet();
     }
     
+        
     // Method to add a new product
     public function addProduct($name, $category, $price, $quantity, $description, $image) {
         $this->db->query('INSERT INTO products (name, category_id, price, quantity, description, image, created_at) VALUES (:name, (SELECT id FROM categories WHERE name = :category), :price, :quantity, :description, :image, NOW())');
@@ -110,7 +111,8 @@ class ProductModel {
     public function getProductById($id) {
         $this->db->query('SELECT * FROM products WHERE id = :id');
         $this->db->bind(':id', $id);
-        return $this->db->single(); // Assuming you're using the single() method to return one result
+        return $this->db->single();
     }
+    
 
 }

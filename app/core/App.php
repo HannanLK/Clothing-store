@@ -25,40 +25,57 @@ class App {
             } else {
                 $this->controller = 'AdminController';
             }
-        } else if (isset($url[0]) && in_array(strtolower($url[0]), ['mens', 'womens', 'accessories'])) {
+        } 
+        // Check if the URL is related to mens, womens, or accessories
+        else if (isset($url[0]) && in_array(strtolower($url[0]), ['mens', 'womens', 'accessories'])) {
             $this->controller = 'ProductController';
-        } else if (isset($url[0]) && strtolower($url[0]) == 'cart') {
+            $this->method = strtolower($url[0]);  // Set the method based on the URL (mens, womens, accessories)
+        } 
+        // Check if the URL is related to the cart
+        else if (isset($url[0]) && strtolower($url[0]) == 'cart') {
             if (!isset($_SESSION['user_id'])) {
                 header('Location: /clothing-store/public/login');
                 exit;
             }
             $this->controller = 'CartController';
-        } else if (isset($url[0]) && strtolower($url[0]) == 'login') {
+        } 
+        // Check if the URL is related to login or logout
+        else if (isset($url[0]) && strtolower($url[0]) == 'login') {
             $this->controller = 'LoginController';
-        } else if (isset($url[0]) && strtolower($url[0]) == 'logout') {
+        } 
+        else if (isset($url[0]) && strtolower($url[0]) == 'logout') {
             $this->controller = 'LoginController';
             $this->method = 'logout';
-        } else if (isset($url[0]) && strtolower($url[0]) == 'products') {
+        } 
+        // Check for general product routes
+        else if (isset($url[0]) && strtolower($url[0]) == 'products') {
             $this->controller = 'ProductController';
-        } else if (isset($url[0]) && file_exists('../app/controllers/' . ucfirst($url[0]) . 'Controller.php')) {
+        } 
+        // Check for dynamically loaded controllers
+        else if (isset($url[0]) && file_exists('../app/controllers/' . ucfirst($url[0]) . 'Controller.php')) {
             $this->controller = ucfirst($url[0]) . 'Controller';
         }
 
+        // Include the controller file
         if (file_exists('../app/controllers/' . $this->controller . '.php')) {
             require_once '../app/controllers/' . $this->controller . '.php';
         } else {
             die("Controller file not found: " . $this->controller . '.php');
         }
 
+        // Instantiate the controller class
         $this->controller = new $this->controller;
 
+        // Check if a method is specified in the URL
         if (isset($url[1]) && method_exists($this->controller, $url[1])) {
             $this->method = $url[1];
             unset($url[1]);
         }
 
+        // Any remaining parts of the URL are considered parameters
         $this->params = $url ? array_values($url) : [];
 
+        // Call the controller method with the parameters
         call_user_func_array([$this->controller, $this->method], $this->params);
     }
 
