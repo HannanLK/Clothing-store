@@ -72,10 +72,10 @@
         <div class="mb-5">
             <label for="sortOptions" class="font-semibold mr-3">Sort by:</label>
             <select id="sortOptions" class="bg-white border border-gray-300 px-4 py-2 rounded-md">
-                <option value="name_asc">Name (A-Z)</option>
-                <option value="name_desc">Name (Z-A)</option>
-                <option value="price_asc">Price (Low to High)</option>
-                <option value="price_desc">Price (High to Low)</option>
+                <option value="name_asc" <?= isset($sortOption) && $sortOption == 'name_asc' ? 'selected' : '' ?>>Name (A-Z)</option>
+                <option value="name_desc" <?= isset($sortOption) && $sortOption == 'name_desc' ? 'selected' : '' ?>>Name (Z-A)</option>
+                <option value="price_asc" <?= isset($sortOption) && $sortOption == 'price_asc' ? 'selected' : '' ?>>Price (Low to High)</option>
+                <option value="price_desc" <?= isset($sortOption) && $sortOption == 'price_desc' ? 'selected' : '' ?>>Price (High to Low)</option>
             </select>
         </div>
 
@@ -122,6 +122,7 @@
     <div id="notification">Product added to cart!</div>
 
     <script>
+        // Function to initialize event listeners for View Product and Add to Cart
         function initializeEventListeners() {
             // Modal functionality
             const modal = document.getElementById('productModal');
@@ -133,7 +134,12 @@
 
                     // Use AJAX to fetch product details
                     fetch(`/clothing-store/public/product/details?id=${productId}`)
-                        .then(response => response.json())
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Error fetching product details.');
+                            }
+                            return response.json();
+                        })
                         .then(product => {
                             document.getElementById('modalProductName').innerText = product.name;
                             document.getElementById('modalProductPrice').innerText = `$${product.price}`;
@@ -143,6 +149,7 @@
                             modal.style.display = 'block';
                         })
                         .catch(error => {
+                            alert(error.message);
                             console.error('Error fetching product details:', error);
                         });
                 });
@@ -169,12 +176,21 @@
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: `product_id=${productId}`
                     })
-                    .then(response => response.text())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error adding product to cart.');
+                        }
+                        return response.text();
+                    })
                     .then(() => {
                         // Show notification
                         const notification = document.getElementById('notification');
                         notification.style.display = 'block';
                         setTimeout(() => { notification.style.display = 'none'; }, 2000);
+                    })
+                    .catch(error => {
+                        alert(error.message);
+                        console.error('Error adding product to cart:', error);
                     });
                 });
             });
@@ -189,53 +205,72 @@
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: `product_id=${productId}`
                 })
-                .then(response => response.text())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error adding product to cart.');
+                    }
+                    return response.text();
+                })
                 .then(() => {
+                    modal.style.display = 'none'; // Close modal after adding to cart
+
+                    // Show notification
                     const notification = document.getElementById('notification');
                     notification.style.display = 'block';
                     setTimeout(() => { notification.style.display = 'none'; }, 2000);
+                })
+                .catch(error => {
+                    alert(error.message);
+                    console.error('Error adding product to cart:', error);
                 });
-
-                // Close the modal
-                modal.style.display = 'none';
             });
         }
 
-        // Initialize event listeners on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            initializeEventListeners();
+        // Initial call to set up listeners
+        initializeEventListeners();
 
-            // Handle sort functionality
-            document.getElementById('sortOptions').addEventListener('change', function() {
-                const sortOption = this.value;
+        // Function to handle sorting
+        document.getElementById('sortOptions').addEventListener('change', function() {
+            const sortOption = this.value; // Get selected sort option
 
-                fetch(`/clothing-store/public/accessories?sort=${sortOption}`)
-                    .then(response => response.json())
-                    .then(products => {
-                        const productContainer = document.getElementById('productContainer');
-                        productContainer.innerHTML = ''; // Clear the existing products
-                        
-                        products.forEach(product => {
-                            productContainer.innerHTML += `
-                                <div class="product-card bg-white rounded-lg shadow-md p-5">
-                                    <img src="/clothing-store/public/images/accessories/${product.image}" alt="${product.name}" class="w-full h-48 object-cover mb-3">
-                                    <h2 class="text-xl font-semibold">${product.name}</h2>
-                                    <p class="text-gray-600">$${product.price}</p>
-                                    ${product.quantity < 5 ? `<p class="text-red-500 text-sm mt-2">Only ${product.quantity} left in stock</p>` : ''}
-                                    <div class="mt-3">
-                                        <button class="view-product bg-blue-500 text-white px-3 py-1 rounded-md" data-id="${product.id}">View Product</button>
-                                        <button class="add-to-cart bg-green-500 text-white px-3 py-1 rounded-md ml-2" data-id="${product.id}">Add to Cart</button>
-                                    </div>
-                                </div>
-                            `;
-                        });
+            // Make an AJAX request to fetch sorted products
+            fetch(`/clothing-store/public/accessories?sort=${sortOption}`, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest' // Indicate this is an AJAX request
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error fetching sorted products.');
+                }
+                return response.json();
+            })
+            .then(products => {
+                const productContainer = document.getElementById('productContainer');
+                productContainer.innerHTML = ''; // Clear the current products
 
-                        // Re-initialize event listeners for the newly added elements
-                        initializeEventListeners();
-                    })
-                    .catch(error => {
-                        console.error('Error fetching sorted products:', error);
-                    });
+                // Loop through sorted products and update the UI
+                products.forEach(product => {
+                    productContainer.innerHTML += `
+                        <div class="product-card bg-white rounded-lg shadow-md p-5">
+                            <img src="/clothing-store/public/images/accessories/${product.image}" alt="${product.name}" class="w-full h-48 object-cover mb-3">
+                            <h2 class="text-xl font-semibold">${product.name}</h2>
+                            <p class="text-gray-600">$${product.price}</p>
+                            <div class="mt-3">
+                                <button class="view-product bg-blue-500 text-white px-3 py-1 rounded-md" data-id="${product.id}">View Product</button>
+                                <button class="add-to-cart bg-green-500 text-white px-3 py-1 rounded-md ml-2" data-id="${product.id}">Add to Cart</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                // Re-initialize event listeners for new products
+                initializeEventListeners();
+            })
+            .catch(error => {
+                alert(error.message);
+                console.error('Error fetching sorted products:', error);
             });
         });
     </script>

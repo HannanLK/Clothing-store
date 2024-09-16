@@ -53,21 +53,21 @@ class ProductController extends Controller {
     // Method for sorting and displaying accessories products
     public function accessories() {
         $sortOption = isset($_GET['sort']) ? $_GET['sort'] : 'date_new';  // Default sort by newest
-
+    
         // Fetch sorted products from the model
         $products = $this->productModel->getSortedProductsByCategory('accessories', $sortOption);
-
+    
         // If it's an AJAX request, return the data as JSON
         if ($this->isAjax()) {
             header('Content-Type: application/json');
             echo json_encode($products);
             exit;
         }
-
+    
         // Render the view with sorted products
         $this->renderView('customer/accessories', ['products' => $products, 'sortOption' => $sortOption]);
     }
-
+    
     // Method for fetching product details for modal view
     public function details() {
         if (isset($_GET['id'])) {
