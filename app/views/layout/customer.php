@@ -7,40 +7,40 @@
     <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 flex flex-col min-h-screen">
 
     <!-- Navigation Bar -->
     <div class="bg-black fixed top-0 w-full z-50">
         <div class="container mx-auto flex items-center justify-between px-8 py-2">
             <div class="logo">
-                <a href="http://localhost/clothing-store/public/"><img src="/clothing-store/public/images/logos/logoWhite.png" alt="Logo" class="h-11"></a>
+                <a href="<?= BASE_URL ?>"><img src="<?= BASE_URL ?>images/logos/logoWhite.png" alt="Logo" class="h-11"></a>
             </div>
             <nav>
                 <ul class="flex space-x-8 text-white">
-                    <li><a href="http://localhost/clothing-store/public/" class="hover:text-gray-300">HOME</a></li>
-                    <li><a href="http://localhost/clothing-store/public/mens" class="hover:text-gray-300">MEN'S</a></li>
-                    <li><a href="http://localhost/clothing-store/public/womens" class="hover:text-gray-300">WOMEN'S</a></li>
-                    <li><a href="http://localhost/clothing-store/public/accessories" class="hover:text-gray-300">ACCESSORIES</a></li>
-                    <li><a href="http://localhost/clothing-store/public/blogs" class="hover:text-gray-300">BLOG</a></li>
-                    <li><a href="http://localhost/clothing-store/public/contact" class="hover:text-gray-300">CONTACT</a></li>
-                    <li><a href="http://localhost/clothing-store/public/profile" class="hover:text-gray-300"><i class="fa-regular fa-circle-user fa-lg"></i></a></li>
-                    <li><a href="http://localhost/clothing-store/public/cart" class="hover:text-gray-300"><i class="fa-solid fa-cart-shopping fa-lg"></i></a></li>
+                    <li><a href="<?= BASE_URL ?>" class="hover:text-gray-300">HOME</a></li>
+                    <li><a href="<?= BASE_URL ?>mens" class="hover:text-gray-300">MEN'S</a></li>
+                    <li><a href="<?= BASE_URL ?>womens" class="hover:text-gray-300">WOMEN'S</a></li>
+                    <li><a href="<?= BASE_URL ?>accessories" class="hover:text-gray-300">ACCESSORIES</a></li>
+                    <li><a href="<?= BASE_URL ?>blogs" class="hover:text-gray-300">BLOG</a></li>
+                    <li><a href="<?= BASE_URL ?>contact" class="hover:text-gray-300">CONTACT</a></li>
+                    <li><a href="<?= BASE_URL ?>profile" class="hover:text-gray-300"><i class="fa-regular fa-circle-user fa-lg"></i></a></li>
+                    <li><a href="<?= BASE_URL ?>cart" class="hover:text-gray-300"><i class="fa-solid fa-cart-shopping fa-lg"></i></a></li>
                 </ul>
             </nav>
         </div>
     </div>
 
     <!-- Main Content -->
-    <div class="mt-14">
+    <div class="flex-grow mt-14">
         <!-- Content from specific views will be rendered here -->
         <?= $content ?>
     </div>
 
     <!-- Footer Section -->
-    <div class="bg-black text-white mt-16">
+    <footer class="bg-black text-white mt-16">
         <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-6 py-6">
             <div>
-                <a href="http://localhost/clothing-store/public/"><img src="/clothing-store/public/images/logos/logoWhite.png" alt="Glitz Logo" class="w-56 pt-8"></a>
+                <a href="<?= BASE_URL ?>"><img src="<?= BASE_URL ?>images/logos/logoWhite.png" alt="Glitz Logo" class="w-56 pt-8"></a>
             </div>
             <div>
                 <p><strong>Store Address:</strong> 388, Union Place, Colombo 02</p>
@@ -50,11 +50,11 @@
             </div>
             <div>
                 <h2 class="text-lg font-semibold">Quick Links</h2>
-                <a href="http://localhost/clothing-store/public/mens" class="hover:underline">Men's</a><br>
-                <a href="http://localhost/clothing-store/public/womens" class="hover:underline">Women's</a><br>
-                <a href="http://localhost/clothing-store/public/accessories" class="hover:underline">Accessories</a><br>
-                <a href="http://localhost/clothing-store/public/blogs" class="hover:underline">Blog</a><br>
-                <a href="http://localhost/clothing-store/public/contact" class="hover:underline">Contact</a>
+                <a href="<?= BASE_URL ?>mens" class="hover:underline">Men's</a><br>
+                <a href="<?= BASE_URL ?>womens" class="hover:underline">Women's</a><br>
+                <a href="<?= BASE_URL ?>accessories" class="hover:underline">Accessories</a><br>
+                <a href="<?= BASE_URL ?>blogs" class="hover:underline">Blog</a><br>
+                <a href="<?= BASE_URL ?>contact" class="hover:underline">Contact</a>
             </div>
             <div>
                 <h2 class="font-semibold text-lg">Newsletter</h2>
@@ -71,7 +71,7 @@
             <p>&copy; 2024 Glitz. All rights reserved.</p>
             <p>Designed by <a href="https://www.linkedin.com/in/hannan76/" class="hover:underline">Hannan Munas</a></p>
         </div>
-    </div>
+    </footer>
 
 </body>
 </html>

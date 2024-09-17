@@ -16,7 +16,7 @@ class App {
         if (isset($url[0]) && strtolower($url[0]) == 'admin') {
             if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                 $_SESSION['redirect_url'] = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-                header('Location: /clothing-store/public/login');
+                header('Location: ' . BASE_URL . 'login');
                 exit;
             }
             $this->layout = 'layout/admin';  
@@ -42,7 +42,7 @@ class App {
         } else if (isset($url[0]) && strtolower($url[0]) == 'cart') {
             if (!isset($_SESSION['user_id'])) {
                 $_SESSION['redirect_url'] = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-                header('Location: /clothing-store/public/login');
+                header('Location: ' . BASE_URL . 'login');
                 exit;
             }
             $this->controller = 'CartController';
@@ -63,7 +63,7 @@ class App {
         } else if (isset($url[0]) && strtolower($url[0]) == 'profile') {
             if (!isset($_SESSION['user_id'])) {
                 $_SESSION['redirect_url'] = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-                header('Location: /clothing-store/public/login');
+                header('Location: ' . BASE_URL . 'login');
                 exit;
             }
             $this->controller = 'ProfileController';

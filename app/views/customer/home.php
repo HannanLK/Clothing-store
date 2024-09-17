@@ -5,26 +5,26 @@
         <div class="slides flex transition-transform duration-500 ease-in-out">
             <!-- Slide 1 -->
             <div class="min-w-full relative slide">
-                <img src="/clothing-store/public/images/banners/bannerHomeMens.png" alt="Banner 1" class="w-full h-full object-cover">
+                <img src="<?= BASE_URL ?>images/banners/bannerHomeMens.png" alt="Banner 1" class="w-full h-full object-cover">
                 <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white">
                     <h2 class="text-5xl font-light text-sky-950 mb-6">Exclusive Men's Wear</h2>
-                    <a href="/clothing-store/public/products/mens" class="bg-sky-900 text-white px-4 py-2 rounded-sm">Shop Mens</a>
+                    <a href="<?= BASE_URL ?>/mens" class="bg-sky-900 text-white px-4 py-2 rounded-sm">Shop Mens</a>
                 </div>
             </div>
             <!-- Slide 2 -->
             <div class="min-w-full relative slide">
-                <img src="/clothing-store/public/images/banners/bannerHome2.png" alt="Banner 2" class="w-full h-full object-cover">
+                <img src="<?= BASE_URL ?>images/banners/bannerHome2.png" alt="Banner 2" class="w-full h-full object-cover">
                 <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
                     <h2 class="text-5xl font-light mb-6 text-pink-800">Exclusive Women's Wear</h2>
-                    <a href="/clothing-store/public/products/womens" class="bg-pink-500 text-white px-4 py-2 rounded-sm mb-2">Shop Women's</a>
+                    <a href="<?= BASE_URL ?>/womens" class="bg-pink-500 text-white px-4 py-2 rounded-sm mb-2">Shop Women's</a>
                 </div>
             </div>
             <!-- Slide 3 -->
             <div class="min-w-full relative slide">
-                <img src="/clothing-store/public/images/banners/bannerHome3.png" alt="Banner 3" class="w-full h-full object-cover">
+                <img src="<?= BASE_URL ?>images/banners/bannerHome3.png" alt="Banner 3" class="w-full h-full object-cover">
                 <div class="absolute top-1/2 left-2/3 transform -translate-x-1/2 -translate-y-1/2">
                     <h2 class="text-5xl font-light mb-6 text-emerald-700">Exclusive Accessories</h2>
-                    <a href="/clothing-store/public/products/accessories" class="bg-emerald-800 text-white px-4 py-2 rounded-sm">Shop Accessories</a>
+                    <a href="<?= BASE_URL ?>/accessories" class="bg-emerald-800 text-white px-4 py-2 rounded-sm">Shop Accessories</a>
                 </div>
             </div>
         </div>
@@ -50,7 +50,7 @@
                 $categoryFolder = isset($categoryMap[$product['category_id']]) ? $categoryMap[$product['category_id']] : 'unknown';
             ?>
                 <div class="relative product-card rounded-lg p-5">
-                    <img src="/clothing-store/public/images/<?= $categoryFolder ?>/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full h-80 object-cover mb-3 rounded-md shadow-md">
+                    <img src="<?= BASE_URL ?>images/<?= $categoryFolder ?>/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full h-80 object-cover mb-3 rounded-md shadow-md">
                     <p class="font-semibold text-lg"><?= htmlspecialchars($product['name']) ?></p>
                     <p class="text-gray-600">$<?= htmlspecialchars($product['price']) ?></p>
                     <button class="view-product bg-white text-black px-3 py-2 rounded-sm outline outline-1" data-id="<?= $product['id'] ?>">View Product</button>
@@ -67,7 +67,7 @@
                 $categoryFolder = isset($categoryMap[$product['category_id']]) ? $categoryMap[$product['category_id']] : 'unknown';
             ?>
                 <div class="relative product-card rounded-lg p-5">
-                    <img src="/clothing-store/public/images/<?= $categoryFolder ?>/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full h-80 object-cover mb-3 rounded-md shadow-md">
+                    <img src="<?= BASE_URL ?>images/<?= $categoryFolder ?>/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full h-80 object-cover mb-3 rounded-md shadow-md">
                     <p class="font-semibold text-lg"><?= htmlspecialchars($product['name']) ?></p>
                     <p class="text-gray-600">$<?= htmlspecialchars($product['price']) ?></p>
                     <button class="view-product bg-white text-black px-3 py-2 rounded-sm outline outline-1" data-id="<?= $product['id'] ?>">View Product</button>
@@ -104,7 +104,7 @@
                 button.addEventListener('click', function() {
                     const productId = this.getAttribute('data-id');
 
-                    fetch(`/clothing-store/public/product/details?id=${productId}`)
+                    fetch('<?= BASE_URL ?>product/details?id=' + productId)
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error('Error fetching product details.');
@@ -112,25 +112,20 @@
                             return response.json();
                         })
                         .then(product => {
-                            // Assuming the category field is category_id
                             const categoryMap = {
                                 1: 'mens',
                                 2: 'womens',
                                 3: 'accessories'
                             };
 
-                            // Use category_id to get the correct category folder name
                             const categoryFolder = categoryMap[product.category_id] || 'unknown';
-                            const imagePath = `/clothing-store/public/images/${categoryFolder}/${product.image}`;
-                            console.log('Corrected Image Path:', imagePath);
+                            const imagePath = '<?= BASE_URL ?>images/' + categoryFolder + '/' + product.image;
 
-                            // Update modal with product data
                             document.getElementById('modalProductName').innerText = product.name;
-                            document.getElementById('modalProductPrice').innerText = `$${product.price}`;
+                            document.getElementById('modalProductPrice').innerText = '$' + product.price;
                             document.getElementById('modalProductDescription').innerText = product.description;
                             document.getElementById('modalProductImage').src = imagePath;
 
-                            // Show modal by adding flex and removing hidden
                             modal.classList.remove('hidden');
                             modal.classList.add('flex');
                         })
@@ -158,10 +153,10 @@
                 button.addEventListener('click', function() {
                     const productId = this.getAttribute('data-id');
 
-                    fetch(`/clothing-store/public/cart/addToCart`, {
+                    fetch('<?= BASE_URL ?>cart/addToCart', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: `product_id=${productId}`
+                        body: 'product_id=' + productId
                     })
                     .then(response => {
                         if (!response.ok) {
@@ -184,10 +179,10 @@
             document.getElementById('modalAddToCart').addEventListener('click', function() {
                 const productId = this.getAttribute('data-id');
 
-                fetch(`/clothing-store/public/cart/addToCart`, {
+                fetch('<?= BASE_URL ?>cart/addToCart', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: `product_id=${productId}`
+                    body: 'product_id=' + productId
                 })
                 .then(response => {
                     if (!response.ok) {

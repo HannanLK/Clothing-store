@@ -18,26 +18,28 @@
     <!-- Profile Information -->
     <div class="bg-white p-5 mb-5 shadow-md rounded">
         <h2 class="text-xl font-bold mb-3">Customer Information</h2>
-        <form id="profile-info-form">
+        <form id="profile-info-form" action="/clothing-store/public/profile/edit" method="POST">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label for="name" class="block font-semibold">Name:</label>
-                    <input type="text" value="<?= htmlspecialchars($customer['name']) ?>" class="w-full p-2 border rounded-md" disabled>
+                    <input type="text" name="name" value="<?= htmlspecialchars($customer['name']) ?>" class="w-full p-2 border rounded-md" disabled>
                 </div>
                 <div>
                     <label for="username" class="block font-semibold">Username:</label>
-                    <input type="text" value="<?= htmlspecialchars($customer['username']) ?>" class="w-full p-2 border rounded-md" disabled>
+                    <input type="text" name="username" value="<?= htmlspecialchars($customer['username']) ?>" class="w-full p-2 border rounded-md" disabled>
                 </div>
                 <div>
                     <label for="address" class="block font-semibold">Address:</label>
-                    <input type="text" name="address" value="<?= htmlspecialchars($customer['address']) ?>" class="w-full p-2 border rounded-md">
+                    <input type="text" name="address" value="<?= htmlspecialchars($customer['address']) ?>" class="w-full p-2 border rounded-md" disabled>
                 </div>
                 <div>
                     <label for="phone" class="block font-semibold">Phone:</label>
-                    <input type="text" name="phone" value="<?= htmlspecialchars($customer['phone']) ?>" class="w-full p-2 border rounded-md">
+                    <input type="text" name="phone" value="<?= htmlspecialchars($customer['phone']) ?>" class="w-full p-2 border rounded-md" disabled>
                 </div>
             </div>
-            <button class="bg-blue-500 text-white px-4 py-2 mt-3 rounded-md">Edit Profile</button>
+            <!-- Buttons for Edit/Save -->
+            <button type="button" id="editButton" class="bg-blue-500 text-white px-4 py-2 mt-3 rounded-md">Edit Profile</button>
+            <button type="submit" id="saveButton" class="bg-green-500 text-white px-4 py-2 mt-3 rounded-md hidden">Save</button>
         </form>
     </div>
 
@@ -69,6 +71,22 @@
     </div>
 
 </div>
+
+<script>
+    // Get the edit and save buttons and the input fields
+    const editButton = document.getElementById('editButton');
+    const saveButton = document.getElementById('saveButton');
+    const inputs = document.querySelectorAll('#profile-info-form input');
+
+    // Enable input fields and switch buttons when "Edit Profile" is clicked
+    editButton.addEventListener('click', function() {
+        inputs.forEach(input => {
+            input.disabled = false;  // Enable input fields
+        });
+        editButton.classList.add('hidden'); // Hide the "Edit Profile" button
+        saveButton.classList.remove('hidden'); // Show the "Save" button
+    });
+</script>
 
 </body>
 </html>

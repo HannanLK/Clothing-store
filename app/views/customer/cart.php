@@ -1,15 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Cart</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-
-<body class="bg-gray-100">
-
+<script src="https://cdn.tailwindcss.com"></script>
 <div class="container mx-auto p-5">
     <h1 class="text-3xl font-bold mb-5">Your Cart</h1>
 
@@ -172,5 +162,3 @@
     }
 </script>
 
-</body>
-</html>

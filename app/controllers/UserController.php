@@ -75,4 +75,6 @@ class UserController extends Controller {
             header('Location: /clothing-store/public/admin/users');
         }
     }
+
+
 }
