@@ -33,15 +33,17 @@ class LoginController extends Controller {
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role'] = $user['role'];
 
-                // Check if there was a referrer before login
+                // Check if a redirect URL is set
                 if (isset($_SESSION['redirect_url'])) {
                     $redirect_url = $_SESSION['redirect_url'];
-                    unset($_SESSION['redirect_url']);  // Clear the redirect URL
+                    unset($_SESSION['redirect_url']);  // Clear the redirect URL after using it
+                    
+                    // Redirect to the stored URL (checkout page)
                     header("Location: $redirect_url");
                     exit;
                 } else {
                     // Default redirection after login: profile page
-                    header('Location: /clothing-store/public/profile');
+                    header('Location: ' . BASE_URL . 'profile');
                     exit;
                 }
             } else {

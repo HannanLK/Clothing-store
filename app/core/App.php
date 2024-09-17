@@ -12,57 +12,43 @@ class App {
 
         $url = $this->parseUrl();  
 
-        // Check if the URL starts with 'admin'
+        // Handle admin section routing
         if (isset($url[0]) && strtolower($url[0]) == 'admin') {
-            if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-                $_SESSION['redirect_url'] = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-                header('Location: ' . BASE_URL . 'login');
-                exit;
-            }
             $this->layout = 'layout/admin';  
-
-            if (isset($url[1]) && in_array(strtolower($url[1]), ['users', 'adduser', 'edituser', 'deleteuser'])) {
-                $this->controller = 'UserController';
-            } else if (isset($url[1]) && in_array(strtolower($url[1]), ['inquiries', 'addinquiry', 'editinquiry', 'deleteinquiry', 'updatestatus'])) {
-                $this->controller = 'InquiryController';
-            } else {
-                $this->controller = 'AdminController';
-            }
-        } else if (isset($url[0]) && in_array(strtolower($url[0]), ['mens', 'womens', 'accessories'])) {
-            $this->controller = 'ProductController';
-            $this->method = strtolower($url[0]);
-        } else if (isset($url[0]) && strtolower($url[0]) == 'blogs') {
-            $this->controller = 'BlogController';
-            if (isset($url[1]) && strtolower($url[1]) == 'view' && isset($url[2])) {
-                $this->method = 'view';
-                $this->params = [$url[2]];  
-            } else {
-                $this->method = 'list';
-            }
-        } else if (isset($url[0]) && strtolower($url[0]) == 'cart') {
-            if (!isset($_SESSION['user_id'])) {
-                $_SESSION['redirect_url'] = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+            if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+                $_SESSION['redirect_url'] = BASE_URL . implode('/', $url);
                 header('Location: ' . BASE_URL . 'login');
                 exit;
             }
+            $this->controller = 'AdminController';
+        }
+
+        // Handle cart routing
+        else if (isset($url[0]) && strtolower($url[0]) == 'cart') {
             $this->controller = 'CartController';
-        } else if (isset($url[0]) && strtolower($url[0]) == 'login') {
-            $this->controller = 'LoginController';
-        } else if (isset($url[0]) && strtolower($url[0]) == 'logout') {
-            $this->controller = 'LoginController';
-            $this->method = 'logout';
-        } else if (isset($url[0]) && strtolower($url[0]) == 'checkout') {
-            $this->controller = 'OrderController';
-            if (isset($url[1]) && strtolower($url[1]) == 'placeOrder') {
-                $this->method = 'placeOrder';
-            } else if (isset($url[1]) && strtolower($url[1]) == 'thankyou') {
-                $this->method = 'thankYou';
+            if (isset($url[1]) && method_exists($this->controller, $url[1])) {
+                $this->method = $url[1];
             } else {
                 $this->method = 'index';
             }
-        } else if (isset($url[0]) && strtolower($url[0]) == 'profile') {
+        } 
+
+        // Handle login routing
+        else if (isset($url[0]) && strtolower($url[0]) == 'login') {
+            $this->controller = 'LoginController';
+            $this->method = 'index';
+        } 
+
+        // Handle logout routing
+        else if (isset($url[0]) && strtolower($url[0]) == 'logout') {
+            $this->controller = 'LoginController';
+            $this->method = 'logout';
+        } 
+
+        // Handle profile routing
+        else if (isset($url[0]) && strtolower($url[0]) == 'profile') {
             if (!isset($_SESSION['user_id'])) {
-                $_SESSION['redirect_url'] = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                $_SESSION['redirect_url'] = BASE_URL . implode('/', $url);
                 header('Location: ' . BASE_URL . 'login');
                 exit;
             }
@@ -72,11 +58,49 @@ class App {
             } else {
                 $this->method = 'index';
             }
-        } else if (isset($url[0]) && file_exists('../app/controllers/' . ucfirst($url[0]) . 'Controller.php')) {
+        } 
+
+        // Handle checkout routing
+        else if (isset($url[0]) && strtolower($url[0]) == 'checkout') {
+            $this->controller = 'OrderController';
+            if (isset($url[1]) && strtolower($url[1]) == 'placeOrder') {
+                $this->method = 'placeOrder';
+            } else if (isset($url[1]) && strtolower($url[1]) == 'thankyou') {
+                $this->method = 'thankYou';
+            } else {
+                $this->method = 'index';
+            }
+        } 
+
+        // Handle product category routing (mens, womens, accessories)
+        else if (isset($url[0]) && in_array(strtolower($url[0]), ['mens', 'womens', 'accessories'])) {
+            $this->controller = 'ProductController';
+            $this->method = strtolower($url[0]);
+        } 
+
+        // Handle blog routing
+        else if (isset($url[0]) && strtolower($url[0]) == 'blogs') {
+            $this->controller = 'BlogController';
+            if (isset($url[1]) && strtolower($url[1]) == 'view' && isset($url[2])) {
+                $this->method = 'view';
+                $this->params = [$url[2]];
+            } else {
+                $this->method = 'list';
+            }
+        }
+
+        // Default routing (home page)
+        else if (!isset($url[0]) || strtolower($url[0]) == '') {
+            $this->controller = 'HomeController';
+            $this->method = 'index';
+        }
+
+        // Handle other controllers
+        else if (file_exists('../app/controllers/' . ucfirst($url[0]) . 'Controller.php')) {
             $this->controller = ucfirst($url[0]) . 'Controller';
         }
 
-        // Check if the controller exists
+        // Include the controller file
         if (file_exists('../app/controllers/' . $this->controller . '.php')) {
             require_once '../app/controllers/' . $this->controller . '.php';
         } else {
@@ -85,7 +109,7 @@ class App {
 
         $this->controller = new $this->controller;
 
-        // Check if the method exists in the controller
+        // Check if method exists in the controller
         if (isset($url[1]) && method_exists($this->controller, $url[1])) {
             $this->method = $url[1];
             unset($url[1]);
@@ -102,6 +126,7 @@ class App {
         require_once '../app/views/' . $this->layout . '.php';
     }
 
+    // Parse the URL
     public function parseUrl() {
         if (isset($_GET['url'])) {
             return explode('/', filter_var(rtrim($_GET['url'], '/'), FILTER_SANITIZE_URL));

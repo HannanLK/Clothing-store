@@ -107,11 +107,18 @@ class ProductModel {
         return $this->db->resultSet();
     }
 
-    // ProductModel.php
-    public function getProductById($id) {
-        $this->db->query('SELECT * FROM products WHERE id = :id');
-        $this->db->bind(':id', $id);
-        return $this->db->single();
+    // ProductModel.php    // Method to get a product by its ID
+    public function getProductById($productId) {
+        $this->db->query('SELECT * FROM products WHERE id = :product_id');
+        $this->db->bind(':product_id', $productId);
+        $product = $this->db->single(); // Fetches a single row
+
+        // Return the product or false if not found
+        if ($product) {
+            return $product;
+        } else {
+            return false;
+        }
     }
 
     public function updateProductQuantity($productId, $newQuantity) {

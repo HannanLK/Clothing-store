@@ -153,10 +153,10 @@
                 button.addEventListener('click', function() {
                     const productId = this.getAttribute('data-id');
 
-                    fetch('<?= BASE_URL ?>cart/addToCart', {
+                    fetch('/clothing-store/public/cart/addToCart', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: 'product_id=' + productId
+                        body: `product_id=${productId}&quantity=1`  // Adding 1 quantity for simplicity
                     })
                     .then(response => {
                         if (!response.ok) {
@@ -170,7 +170,6 @@
                         setTimeout(() => { notification.classList.add('hidden'); }, 2000);
                     })
                     .catch(error => {
-                        alert(error.message);
                         console.error('Error adding product to cart:', error);
                     });
                 });

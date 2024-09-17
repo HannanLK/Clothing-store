@@ -1,4 +1,3 @@
-
 <script src="https://cdn.tailwindcss.com"></script>
 <div class="container mx-auto p-5">
     <h1 class="text-3xl font-bold mb-5">Your Cart</h1>
@@ -15,22 +14,28 @@
             </thead>
             <tbody id="cartItems">
             <?php foreach ($cartItems as $item): ?>
+                <?php
+                // Ensure category_id exists in the array
+                if (isset($item['category_id'])) {
+                    switch ($item['category_id']) {
+                        case 1: $categoryFolder = 'mens'; break;
+                        case 2: $categoryFolder = 'womens'; break;
+                        case 3: $categoryFolder = 'accessories'; break;
+                        default: $categoryFolder = 'unknown';
+                    }
+                } else {
+                    // Fallback if category_id is missing
+                    $categoryFolder = 'unknown';
+                }
+                ?>
                 <tr data-product-id="<?= $item['id'] ?>">
                     <td class="border px-4 py-2">
-                        <?php
-                        $categoryFolder = '';
-                        switch ($item['category_id']) {
-                            case 1: $categoryFolder = 'mens'; break;
-                            case 2: $categoryFolder = 'womens'; break;
-                            case 3: $categoryFolder = 'accessories'; break;
-                            default: $categoryFolder = 'unknown';
-                        }
-                        ?>
                         <div class="flex items-center gap-4">
-                            <img src="/clothing-store/public/images/<?= $categoryFolder ?>/<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="w-24 h-24 object-cover ml-2">
+                            <!-- Product Image -->
+                            <img src="<?= BASE_URL ?>images/<?= $categoryFolder ?>/<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="w-24 h-24 object-cover ml-2">
                             <div>
                                 <span class="font-semibold"><?= htmlspecialchars($item['name']) ?></span><br>
-                                <form action="/clothing-store/public/cart/removeItem" method="POST" class="inline">
+                                <form action="<?= BASE_URL ?>cart/removeItem" method="POST" class="inline">
                                     <input type="hidden" name="product_id" value="<?= $item['id'] ?>">
                                     <button type="submit" class="text-red-600 hover:underline">Remove</button>
                                 </form>
@@ -73,11 +78,11 @@
 
             <!-- Proceed to Checkout Button -->
             <div class="flex justify-end px-4">
-                <!-- Direct link to the checkout page -->
-                <a href="/clothing-store/public/checkout" class="bg-black text-white px-5 py-2 rounded-md uppercase hover:bg-white hover:text-black hover:border hover:border-black">Proceed to Checkout</a>
+                <div class="flex justify-end px-4">
+                    <a href="<?= BASE_URL ?>cart/proceedToCheckout" class="bg-black text-white px-5 py-2 rounded-md uppercase hover:bg-white hover:text-black hover:border hover:border-black">Proceed to Checkout</a>
+                </div>
             </div>
         </div>
-
     <?php else: ?>
         <p>Your cart is empty.</p>
     <?php endif; ?>
@@ -116,7 +121,6 @@
 
             quantityInput.value = quantity + 1;
             updateQuantity(productId, quantity + 1);
-            recalculateTotals();
         });
     });
 
@@ -130,14 +134,15 @@
             if (quantity > 1) {
                 quantityInput.value = quantity - 1;
                 updateQuantity(productId, quantity - 1);
-                recalculateTotals();
             }
         });
     });
 
     // Function to send updated quantity to the server
     function updateQuantity(productId, quantity) {
-        fetch('/clothing-store/public/cart/updateQuantity', {
+        console.log('Updating quantity for product ID:', productId, 'with quantity:', quantity);
+
+        fetch('<?= BASE_URL ?>cart/updateQuantity', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -148,10 +153,11 @@
                 quantity: quantity
             })
         })
-        .then(response => response.json())
+        .then(response => response.json()) // Ensure response is parsed as JSON
         .then(data => {
+            console.log('Response from server:', data);
             if (data.success) {
-                console.log('Quantity updated successfully.');
+                recalculateTotals();  // Update the totals after successful quantity change
             } else {
                 console.error('Failed to update quantity.');
             }
@@ -161,4 +167,3 @@
         });
     }
 </script>
-
