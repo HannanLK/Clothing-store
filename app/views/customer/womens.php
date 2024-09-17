@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Women's Products</title>
-    <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS -->
-</head>
-<body class="bg-gray-100">
-
+<script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS -->
+<div>
     <!-- Banner Image -->
     <div class="relative w-full h-80">
         <img src="/clothing-store/public/images/banners/bannerWomens.png" alt="women's banner img" class="w-full h-full object-cover">
@@ -16,9 +8,7 @@
         </h1>
     </div>
 
-
     <div id="main-content" class="container mx-auto p-5">
-
         <!-- Sort Options -->
         <div class="mb-5">
             <label for="sortOptions" class="font-semibold mr-3">Sort by:</label>
@@ -214,5 +204,4 @@
         });
     </script>
 
-</body>
-</html>
+</div>

@@ -120,6 +120,10 @@ class ProductModel {
         $this->db->bind(':id', $productId);
         $this->db->execute();
     }
-    
 
+    public function getProductCount() {
+        $this->db->query("SELECT COUNT(*) AS count FROM products");
+        return $this->db->single()['count'];  // Return the count from the array
+    }
+    
 }

@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Clothing Store</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
-
+<script src="https://cdn.tailwindcss.com"></script>
+<div>
     <!-- Sliding Banner Section -->
     <header class="relative overflow-hidden w-full h-80 slider">
         <div class="slides flex transition-transform duration-500 ease-in-out">
@@ -245,5 +237,4 @@
             showSlide(currentIndex);
         }, 5000);
     </script>
-</body>
-</html>
+</div>

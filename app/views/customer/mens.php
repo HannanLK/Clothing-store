@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mens Products</title>
-    <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS -->
-</head>
-<body class="bg-gray-100">
 
-    <!-- Banner Image -->
-    <div class="relative w-full h-80"> <!-- Set a height for the banner -->
+<script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS -->
+<div>
+        <!-- Banner Image -->
+        <div class="relative w-full h-80"> <!-- Set a height for the banner -->
         <img src="/clothing-store/public/images/banners/bannerMens.png" alt="mens banner img" class="w-full h-full object-cover">
         <h1 class="absolute inset-0 flex items-center justify-center text-white text-4xl font-light">
             #Glitz for Mens
@@ -87,7 +80,7 @@
     </div>
 
     <!-- Notification -->
-    <div id="notification" class="fixed top-5 right-5 bg-orange-500 text-white px-4 py-2 rounded-md hidden">Product added to cart!</div>
+    <div id="notification" class="fixed top-20 right-5 bg-orange-500 text-white px-4 py-2 rounded-md hidden">Product added to cart!</div>
 
     <script>
         // Function to initialize event listeners for View Product and Add to Cart
@@ -212,6 +205,4 @@
             });
         });
     </script>
-
-</body>
-</html>
+</div>

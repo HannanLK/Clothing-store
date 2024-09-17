@@ -66,4 +66,11 @@ class BlogModel {
         $this->db->bind(':id', $currentBlogId);
         return $this->db->resultSet();
     }
+
+    public function getBlogCount() {
+        $this->db->query("SELECT COUNT(*) AS count FROM blogs");
+        return $this->db->single()['count'];  // Access count as an array
+    }
+    
+    
 }

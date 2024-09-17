@@ -1,15 +1,16 @@
 <?php
 class App {
-    protected $controller = 'HomeController';  // Default controller
-    protected $method = 'index';               // Default method
-    protected $params = [];                    // Parameters passed in the URL
+    protected $controller = 'HomeController';  
+    protected $method = 'index';               
+    protected $params = [];                    
+    protected $layout = 'layout/customer';     
 
     public function __construct() {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
-        $url = $this->parseUrl();  // Get the URL as an array
+        $url = $this->parseUrl();  
 
         // Check if the URL starts with 'admin'
         if (isset($url[0]) && strtolower($url[0]) == 'admin') {
@@ -17,6 +18,7 @@ class App {
                 header('Location: /clothing-store/public/login');
                 exit;
             }
+            $this->layout = 'layout/admin';  
 
             if (isset($url[1]) && in_array(strtolower($url[1]), ['users', 'adduser', 'edituser', 'deleteuser'])) {
                 $this->controller = 'UserController';
@@ -25,45 +27,29 @@ class App {
             } else {
                 $this->controller = 'AdminController';
             }
-        }
-        // Check if the URL is related to mens, womens, or accessories
-        else if (isset($url[0]) && in_array(strtolower($url[0]), ['mens', 'womens', 'accessories'])) {
+        } else if (isset($url[0]) && in_array(strtolower($url[0]), ['mens', 'womens', 'accessories'])) {
             $this->controller = 'ProductController';
-            $this->method = strtolower($url[0]);  // Set the method based on the URL (mens, womens, accessories)
-        }
-        // Check if the URL is related to blogs
-        else if (isset($url[0]) && strtolower($url[0]) == 'blogs') {
+            $this->method = strtolower($url[0]);
+        } else if (isset($url[0]) && strtolower($url[0]) == 'blogs') {
             $this->controller = 'BlogController';
             if (isset($url[1]) && strtolower($url[1]) == 'view' && isset($url[2])) {
                 $this->method = 'view';
-                $this->params = [$url[2]];  // Blog ID
+                $this->params = [$url[2]];  
             } else {
-                $this->method = 'list';  // Default to the blog list method
+                $this->method = 'list';
             }
-        }
-        // Check if the URL is related to the cart
-        else if (isset($url[0]) && strtolower($url[0]) == 'cart') {
+        } else if (isset($url[0]) && strtolower($url[0]) == 'cart') {
             if (!isset($_SESSION['user_id'])) {
                 header('Location: /clothing-store/public/login');
                 exit;
             }
             $this->controller = 'CartController';
-        }
-        // Check if the URL is related to login or logout
-        else if (isset($url[0]) && strtolower($url[0]) == 'login') {
+        } else if (isset($url[0]) && strtolower($url[0]) == 'login') {
             $this->controller = 'LoginController';
-        }
-        else if (isset($url[0]) && strtolower($url[0]) == 'logout') {
+        } else if (isset($url[0]) && strtolower($url[0]) == 'logout') {
             $this->controller = 'LoginController';
             $this->method = 'logout';
-        }
-        // Check if the URL is related to products
-        else if (isset($url[0]) && strtolower($url[0]) == 'products') {
-            $this->controller = 'ProductController';
-        }
-
-        // Check if the URL is related to orders
-        else if (isset($url[0]) && strtolower($url[0]) == 'checkout') {
+        } else if (isset($url[0]) && strtolower($url[0]) == 'checkout') {
             $this->controller = 'OrderController';
             if (isset($url[1]) && strtolower($url[1]) == 'placeOrder') {
                 $this->method = 'placeOrder';
@@ -72,19 +58,14 @@ class App {
             } else {
                 $this->method = 'index';
             }
-        }
-
-        // Check if the URL is related to the profile page
-        else if (isset($url[0]) && strtolower($url[0]) == 'profile') {
+        } else if (isset($url[0]) && strtolower($url[0]) == 'profile') {
             $this->controller = 'ProfileController';
             if (isset($url[1]) && strtolower($url[1]) == 'edit') {
                 $this->method = 'edit';
             } else {
-                $this->method = 'index';  // Default to viewing profile
+                $this->method = 'index';
             }
-        }
-        // Check for dynamically loaded controllers
-        else if (isset($url[0]) && file_exists('../app/controllers/' . ucfirst($url[0]) . 'Controller.php')) {
+        } else if (isset($url[0]) && file_exists('../app/controllers/' . ucfirst($url[0]) . 'Controller.php')) {
             $this->controller = ucfirst($url[0]) . 'Controller';
         }
 
@@ -95,20 +76,22 @@ class App {
             die("Controller file not found: " . $this->controller . '.php');
         }
 
-        // Instantiate the controller class
         $this->controller = new $this->controller;
 
-        // Check if a method is specified in the URL
         if (isset($url[1]) && method_exists($this->controller, $url[1])) {
             $this->method = $url[1];
             unset($url[1]);
         }
 
-        // Any remaining parts of the URL are considered parameters
         $this->params = $url ? array_values($url) : [];
 
-        // Call the controller method with the parameters
+        // Capture view output into $content
+        ob_start();  // Start output buffering
         call_user_func_array([$this->controller, $this->method], $this->params);
+        $content = ob_get_clean();  // Get the content and clean the buffer
+
+        // Load the layout and pass the view content to it
+        require_once '../app/views/' . $this->layout . '.php';
     }
 
     public function parseUrl() {

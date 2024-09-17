@@ -94,5 +94,21 @@ class UserModel {
         $this->db->bind(':user_id', $userId);
         return $this->db->single();
     }
+
+    public function getUserCount() {
+        $this->db->query("SELECT COUNT(*) AS count FROM users");
+        return $this->db->single()['count'];  // Access count as an array
+    }
+    
+    public function getAdminCount() {
+        $this->db->query("SELECT COUNT(*) AS count FROM users WHERE role = 'admin'");
+        return $this->db->single()['count'];  // Access count as an array
+    }
+    
+    public function getCustomerCount() {
+        $this->db->query("SELECT COUNT(*) AS count FROM users WHERE role = 'customer'");
+        return $this->db->single()['count'];  // Access count as an array
+    }
+    
     
 }

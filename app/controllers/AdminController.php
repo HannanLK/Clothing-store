@@ -2,10 +2,46 @@
 
 class AdminController extends Controller {
 
-    public function dashboard() {
-        $this->renderView('admin/dashboard');
+    private $productModel;
+    private $userModel;
+    private $blogModel;
+    private $orderModel;
+    private $inquiryModel;
+
+    public function __construct() {
+        $this->productModel = $this->model('ProductModel');
+        $this->userModel = $this->model('UserModel');
+        $this->blogModel = $this->model('BlogModel');
+        $this->orderModel = $this->model('OrderModel');
+        $this->inquiryModel = $this->model('InquiryModel');
     }
-    
+
+    public function dashboard() {
+        // Fetch counts from database
+        $productCount = $this->productModel->getProductCount();
+        $userCount = $this->userModel->getUserCount();
+        $adminCount = $this->userModel->getAdminCount();
+        $customerCount = $this->userModel->getCustomerCount();
+        $blogCount = $this->blogModel->getBlogCount();
+        $salesRevenue = $this->orderModel->getSalesRevenue();
+        $inquiryCount = $this->inquiryModel->getInquiryCount();
+        $pendingInquiryCount = $this->inquiryModel->getPendingInquiryCount();
+        $sales = $this->orderModel->getAllSales();
+
+        // Pass data to view
+        $this->renderView('admin/dashboard', [
+            'productCount' => $productCount,
+            'userCount' => $userCount,
+            'adminCount' => $adminCount,
+            'customerCount' => $customerCount,
+            'blogCount' => $blogCount,
+            'salesRevenue' => $salesRevenue,
+            'inquiryCount' => $inquiryCount,
+            'pendingInquiryCount' => $pendingInquiryCount,
+            'sales' => $sales
+        ]);
+    }
+
     // Helper method to fetch sorted products with optional stock filter
     private function getSortedProducts($category) {
         $sortOption = isset($_GET['sort']) ? $_GET['sort'] : 'date_new';  // Default sort option

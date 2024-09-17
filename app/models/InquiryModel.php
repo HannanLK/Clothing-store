@@ -66,4 +66,16 @@ class InquiryModel {
         $this->db->bind(':id', $id);
         return $this->db->execute();
     }
+
+    public function getInquiryCount() {
+        $this->db->query("SELECT COUNT(*) AS count FROM inquiries");
+        return $this->db->single()['count'];  // Access count as an array
+    }
+    
+    public function getPendingInquiryCount() {
+        $this->db->query("SELECT COUNT(*) AS count FROM inquiries WHERE status = 'pending'");
+        return $this->db->single()['count'];  // Access count as an array
+    }
+    
+    
 }
