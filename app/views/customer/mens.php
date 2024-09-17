@@ -11,7 +11,7 @@
     <!-- Banner Image -->
     <div class="relative w-full h-80"> <!-- Set a height for the banner -->
         <img src="/clothing-store/public/images/banners/bannerMens.png" alt="mens banner img" class="w-full h-full object-cover">
-        <h1 class="absolute inset-0 flex items-center justify-center text-white text-4xl font-bold">
+        <h1 class="absolute inset-0 flex items-center justify-center text-white text-4xl font-light">
             #Glitz for Mens
         </h1>
     </div>

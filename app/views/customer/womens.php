@@ -5,68 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Women's Products</title>
     <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS -->
-    <style>
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-        .modal-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 600px;
-            border-radius: 10px;
-            display: flex;
-        }
-        .modal-content img {
-            width: 50%;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-        .modal-details {
-            width: 50%;
-            padding-left: 20px;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        /* Notification style */
-        #notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            display: none;
-        }
-    </style>
 </head>
 <body class="bg-gray-100">
 
+    <!-- Banner Image -->
+    <div class="relative w-full h-80">
+        <img src="/clothing-store/public/images/banners/bannerWomens.png" alt="women's banner img" class="w-full h-full object-cover">
+        <h1 class="absolute inset-0 flex items-center justify-center text-black text-5xl font-light ml-6">
+            WOMENS COLLECTION
+        </h1>
+    </div>
+
+
     <div id="main-content" class="container mx-auto p-5">
-        <h1 class="text-3xl font-bold mb-5">Women's Products</h1>
 
         <!-- Sort Options -->
         <div class="mb-5">
@@ -79,23 +30,41 @@
             </select>
         </div>
 
+        <!-- Retrieving Products as Cards -->
         <div id="productContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <?php if (!empty($products)): ?>
                 <?php foreach ($products as $product): ?>
-                    <div class="product-card bg-white rounded-lg shadow-md p-5">
-                        <img src="/clothing-store/public/images/womens/<?= $product['image'] ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full h-48 object-cover mb-3">
-                        <h2 class="text-xl font-semibold"><?= htmlspecialchars($product['name']) ?></h2>
-                        <p class="text-gray-600">$<?= htmlspecialchars($product['price']) ?></p>
-                        
-                        <!-- Stock notice -->
-                        <?php if ($product['quantity'] < 5): ?>
-                            <p class="text-red-500 text-sm mt-2">Only <?= $product['quantity'] ?> left in stock</p>
+                    <div class="relative product-card rounded-lg p-5">
+                        <div class="relative">
+                            <img src="/clothing-store/public/images/womens/<?= $product['image'] ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full h-80 object-cover mb-3 rounded-md shadow-md">
+
+                            <!-- Out of Stock Overlay, limited to the image -->
+                            <?php if ($product['quantity'] <= 0): ?>
+                                <div class="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center rounded-lg">
+                                    <span class="text-black font-normal text-center text-lg">Will Be <br> Available Soon! </span>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <div>
+                            <h2 class="text-xl font-semibold"><?= htmlspecialchars($product['name']) ?></h2>
+                            <p class="text-gray-600">$<?= htmlspecialchars($product['price']) ?></p>
+                        </div>
+
+                        <!-- Add to Cart Button -->
+                        <?php if ($product['quantity'] > 0): ?>
+                            <div class="mt-2">
+                                <button class="view-product bg-white text-black px-3 py-2 rounded-sm outline outline-1" data-id="<?= $product['id'] ?>">View Product</button>
+                                <button class="add-to-cart bg-black text-white px-3 py-2 rounded-sm ml-2" data-id="<?= $product['id'] ?>">Add to Cart</button>
+                            </div>
+                        <?php else: ?>
+                            <button class="bg-gray-400 text-white px-3 py-1 rounded-md mt-3 w-full cursor-not-allowed" disabled>Out of Stock</button>
                         <?php endif; ?>
 
-                        <div class="mt-3">
-                            <button class="view-product bg-blue-500 text-white px-3 py-1 rounded-md" data-id="<?= $product['id'] ?>">View Product</button>
-                            <button class="add-to-cart bg-green-500 text-white px-3 py-1 rounded-md ml-2" data-id="<?= $product['id'] ?>">Add to Cart</button>
-                        </div>
+                        <!-- Stock notice -->
+                        <?php if ($product['quantity'] < 5 && $product['quantity'] > 0): ?>
+                            <p class="text-red-500 text-sm mt-2">Only <?= $product['quantity'] ?> left in stock</p>
+                        <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
@@ -105,21 +74,21 @@
     </div>
 
     <!-- Product Modal -->
-    <div id="productModal" class="modal">
-        <div class="modal-content">
-            <img id="modalProductImage" src="" alt="Product Image">
-            <div class="modal-details">
-                <span class="close">&times;</span>
-                <h2 id="modalProductName" class="text-xl font-bold"></h2>
-                <p id="modalProductPrice" class="text-gray-600"></p>
-                <p id="modalProductDescription"></p>
-                <button id="modalAddToCart" class="bg-green-500 text-white px-4 py-2 rounded-md mt-3">Add to Cart</button>
+    <div id="productModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50">
+        <div class="modal-content bg-white mx-auto my-10 p-5 border border-gray-300 rounded-lg max-w-2xl flex">
+            <img id="modalProductImage" class="w-1/2 object-cover rounded-lg" src="" alt="Product Image">
+            <div class="modal-details w-1/2 pl-5">
+                <span class="close text-gray-500 text-2xl font-bold cursor-pointer">&times;</span>
+                <h2 id="modalProductName" class="text-xl font-bold mt-3"></h2>
+                <p id="modalProductPrice" class="text-gray-600 mt-2"></p>
+                <p id="modalProductDescription" class="mt-3"></p>
+                <button id="modalAddToCart" class="bg-black text-white px-3 py-3 rounded-sm mt-5">Add to Cart</button>
             </div>
         </div>
     </div>
 
     <!-- Notification -->
-    <div id="notification">Product added to cart!</div>
+    <div id="notification" class="fixed top-5 right-5 bg-orange-500 text-white px-4 py-2 rounded-md hidden">Product added to cart!</div>
 
     <script>
         // Function to initialize event listeners for View Product and Add to Cart
@@ -134,34 +103,28 @@
 
                     // Use AJAX to fetch product details
                     fetch(`/clothing-store/public/product/details?id=${productId}`)
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Error fetching product details.');
-                            }
-                            return response.json();
-                        })
+                        .then(response => response.json())
                         .then(product => {
                             document.getElementById('modalProductName').innerText = product.name;
                             document.getElementById('modalProductPrice').innerText = `$${product.price}`;
                             document.getElementById('modalProductDescription').innerText = product.description;
                             document.getElementById('modalProductImage').src = `/clothing-store/public/images/womens/${product.image}`;
                             document.getElementById('modalAddToCart').setAttribute('data-id', product.id); // Update product ID for "Add to Cart"
-                            modal.style.display = 'block';
+                            modal.classList.remove('hidden');
                         })
                         .catch(error => {
-                            alert(error.message);
                             console.error('Error fetching product details:', error);
                         });
                 });
             });
 
             closeModal.onclick = function() {
-                modal.style.display = 'none';
+                modal.classList.add('hidden');
             }
 
             window.onclick = function(event) {
                 if (event.target == modal) {
-                    modal.style.display = 'none';
+                    modal.classList.add('hidden');
                 }
             }
 
@@ -176,21 +139,12 @@
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: `product_id=${productId}`
                     })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Error adding product to cart.');
-                        }
-                        return response.text();
-                    })
+                    .then(response => response.text())
                     .then(() => {
                         // Show notification
                         const notification = document.getElementById('notification');
-                        notification.style.display = 'block';
-                        setTimeout(() => { notification.style.display = 'none'; }, 2000);
-                    })
-                    .catch(error => {
-                        alert(error.message);
-                        console.error('Error adding product to cart:', error);
+                        notification.classList.remove('hidden');
+                        setTimeout(() => { notification.classList.add('hidden'); }, 2000);
                     });
                 });
             });
@@ -205,23 +159,14 @@
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: `product_id=${productId}`
                 })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error adding product to cart.');
-                    }
-                    return response.text();
-                })
+                .then(response => response.text())
                 .then(() => {
-                    modal.style.display = 'none'; // Close modal after adding to cart
+                    modal.classList.add('hidden'); // Close modal after adding to cart
 
                     // Show notification
                     const notification = document.getElementById('notification');
-                    notification.style.display = 'block';
-                    setTimeout(() => { notification.style.display = 'none'; }, 2000);
-                })
-                .catch(error => {
-                    alert(error.message);
-                    console.error('Error adding product to cart:', error);
+                    notification.classList.remove('hidden');
+                    setTimeout(() => { notification.classList.add('hidden'); }, 2000);
                 });
             });
         }
@@ -240,12 +185,7 @@
                     'X-Requested-With': 'XMLHttpRequest' // Indicate this is an AJAX request
                 }
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error fetching sorted products.');
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(products => {
                 const productContainer = document.getElementById('productContainer');
                 productContainer.innerHTML = ''; // Clear the current products
@@ -254,25 +194,25 @@
                 products.forEach(product => {
                     productContainer.innerHTML += `
                         <div class="product-card bg-white rounded-lg shadow-md p-5">
-                            <img src="/clothing-store/public/images/womens/${product.image}" alt="${product.name}" class="w-full h-48 object-cover mb-3">
+                            <img src="/clothing-store/public/images/womens/${product.image}" alt="${product.name}" class="w-full h-48 object-cover mb-3 rounded-lg">
                             <h2 class="text-xl font-semibold">${product.name}</h2>
                             <p class="text-gray-600">$${product.price}</p>
                             <div class="mt-3">
-                                <button class="view-product bg-blue-500 text-white px-3 py-1 rounded-md" data-id="${product.id}">View Product</button>
-                                <button class="add-to-cart bg-green-500 text-white px-3 py-1 rounded-md ml-2" data-id="${product.id}">Add to Cart</button>
+                                <button class="view-product bg-blue-500 text-white px-3 py-2 rounded-sm" data-id="${product.id}">View Product</button>
+                                <button class="add-to-cart bg-green-500 text-white px-3 py-2 rounded-sm ml-2" data-id="${product.id}">Add to Cart</button>
                             </div>
                         </div>
                     `;
                 });
 
-                // Re-initialize event listeners for new products
+                // Re-initialize event listeners after updating the DOM
                 initializeEventListeners();
             })
             .catch(error => {
-                alert(error.message);
                 console.error('Error fetching sorted products:', error);
             });
         });
     </script>
+
 </body>
 </html>

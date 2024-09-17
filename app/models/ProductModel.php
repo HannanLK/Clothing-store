@@ -95,7 +95,7 @@ class ProductModel {
     }
 
     public function getFeaturedProducts() {
-        $this->db->query("SELECT * FROM products WHERE is_featured = 1 LIMIT 4");
+        $this->db->query("SELECT * FROM products WHERE is_featured = 1 LIMIT 8");
         return $this->db->resultSet();
     }
 
