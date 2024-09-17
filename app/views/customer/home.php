@@ -44,7 +44,8 @@
 
     <div class="container mx-auto p-5">
         <!-- New Arrivals Section -->
-        <h2 class="text-3xl font-bold mb-5">NEW ARRIVALS</h2>
+        <h2 class="text-3xl font-bold mb-3 text-center mt-2">NEW ARRIVALS</h2>
+        <hr class=" w-10 border-t-2 border-blue-950 mx-auto mb-2">
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <?php 
             $categoryMap = [
@@ -67,7 +68,8 @@
         </div>
 
         <!-- Featured Products Section -->
-        <h2 class="text-3xl font-bold my-10">Featured Products</h2>
+        <h2 class="text-3xl font-bold my-3 text-center pt-2">FEATURED PRODUCTS</h2>
+        <hr class=" w-10 border-t-2 border-blue-950 mx-auto mb-2">
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <?php foreach ($featuredProducts as $product): 
                 $categoryFolder = isset($categoryMap[$product['category_id']]) ? $categoryMap[$product['category_id']] : 'unknown';
