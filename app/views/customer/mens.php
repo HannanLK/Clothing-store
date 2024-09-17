@@ -1,4 +1,3 @@
-
 <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS -->
 <div>
         <!-- Banner Image -->

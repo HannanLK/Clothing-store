@@ -9,7 +9,11 @@
 <body class="bg-gray-100">
 
 <div class="container mx-auto p-5">
-    <h1 class="text-3xl font-bold mb-5">Profile</h1>
+    <!-- Profile Header with Logout Button -->
+    <div class="flex justify-between items-center mb-5">
+        <h1 class="text-3xl font-bold">Profile</h1>
+        <a href="http://localhost/clothing-store/public/logout" class="bg-red-500 text-white px-4 py-2 rounded-md">Logout</a>
+    </div>
 
     <!-- Profile Information -->
     <div class="bg-white p-5 mb-5 shadow-md rounded">

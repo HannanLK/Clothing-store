@@ -52,6 +52,13 @@
             <option value="time_desc" <?= isset($_GET['sort']) && $_GET['sort'] == 'time_desc' ? 'selected' : '' ?>>Time Descending</option>
         </select>
 
+        <!-- Display error message if exists -->
+        <?php if (isset($error)): ?>
+            <div class="bg-red-500 text-white p-4 mb-4">
+                <?= $error; ?>
+            </div>
+        <?php endif; ?>
+
         <!-- Add User Form (initially hidden) -->
         <div id="addUserForm" class="bg-white p-6 rounded-md shadow-md hidden">
             <h2 class="text-2xl font-semibold mb-4">Add User</h2>

@@ -37,6 +37,9 @@
                     <li class="border-b border-gray-700">
                         <a href="http://localhost/clothing-store/public/admin/inquiries" class="block px-5 py-3 hover:bg-gray-700 transition">Manage Inquiries</a>
                     </li>
+                    <li class="border-b border-gray-700">
+                        <a href="http://localhost/clothing-store/public/logout" class="block px-5 py-3 hover:bg-red-600 transition">Logout</a>
+                    </li>
                 </ul>
             </nav>
         </aside>

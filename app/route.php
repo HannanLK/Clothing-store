@@ -26,6 +26,7 @@ $routes = [
     'login' => 'LoginController@index',
     'login/login' => 'LoginController@login',
     'logout' => 'LoginController@logout',
+    'register' => 'RegisterController@register',
 
     // 'checkout' => 'CartController@checkout',  // Route for checkout page
     'checkout' => 'CheckoutController@index',

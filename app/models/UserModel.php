@@ -42,6 +42,17 @@ class UserModel {
 
     // Method to add a new user
     public function addUser($data) {
+        // Check if the email already exists
+        $this->db->query("SELECT * FROM users WHERE email = :email");
+        $this->db->bind(':email', $data['email']);
+        $existingUser = $this->db->single();
+    
+        // If an existing user with the same email is found, return an error
+        if ($existingUser) {
+            return ['error' => 'Email already exists. Please use a different email.'];
+        }
+    
+        // Proceed with the insertion if no duplicate email is found
         $this->db->query('INSERT INTO users (name, email, address, phone, username, password, role) 
                           VALUES (:name, :email, :address, :phone, :username, :password, :role)');
         $this->db->bind(':name', $data['name']);
@@ -51,9 +62,15 @@ class UserModel {
         $this->db->bind(':username', $data['username']);
         $this->db->bind(':password', password_hash($data['password'], PASSWORD_DEFAULT)); // Hash the password
         $this->db->bind(':role', $data['role']);
-        return $this->db->execute();
+        
+        if ($this->db->execute()) {
+            return true;  // Return true if the insert was successful
+        } else {
+            return ['error' => 'There was an error adding the user.'];  // Return a general error message if insert fails
+        }
     }
-
+    
+    
     // Method to update an existing user
     public function updateUser($userId, $data) {
         $this->db->query('UPDATE users SET name = :name, email = :email, address = :address, phone = :phone, username = :username, role = :role WHERE user_id = :id');

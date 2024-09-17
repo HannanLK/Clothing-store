@@ -15,6 +15,7 @@ class App {
         // Check if the URL starts with 'admin'
         if (isset($url[0]) && strtolower($url[0]) == 'admin') {
             if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+                $_SESSION['redirect_url'] = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
                 header('Location: /clothing-store/public/login');
                 exit;
             }
@@ -40,6 +41,7 @@ class App {
             }
         } else if (isset($url[0]) && strtolower($url[0]) == 'cart') {
             if (!isset($_SESSION['user_id'])) {
+                $_SESSION['redirect_url'] = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
                 header('Location: /clothing-store/public/login');
                 exit;
             }
@@ -59,6 +61,11 @@ class App {
                 $this->method = 'index';
             }
         } else if (isset($url[0]) && strtolower($url[0]) == 'profile') {
+            if (!isset($_SESSION['user_id'])) {
+                $_SESSION['redirect_url'] = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                header('Location: /clothing-store/public/login');
+                exit;
+            }
             $this->controller = 'ProfileController';
             if (isset($url[1]) && strtolower($url[1]) == 'edit') {
                 $this->method = 'edit';
@@ -69,7 +76,7 @@ class App {
             $this->controller = ucfirst($url[0]) . 'Controller';
         }
 
-        // Include the controller file
+        // Check if the controller exists
         if (file_exists('../app/controllers/' . $this->controller . '.php')) {
             require_once '../app/controllers/' . $this->controller . '.php';
         } else {
@@ -78,6 +85,7 @@ class App {
 
         $this->controller = new $this->controller;
 
+        // Check if the method exists in the controller
         if (isset($url[1]) && method_exists($this->controller, $url[1])) {
             $this->method = $url[1];
             unset($url[1]);
