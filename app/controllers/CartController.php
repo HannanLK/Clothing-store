@@ -145,16 +145,14 @@ class CartController extends Controller {
             // Store the intended URL (checkout) in session
             $_SESSION['redirect_url'] = BASE_URL . 'checkout';
             
-            // Redirect to login page
-            header('Location: ' . BASE_URL . 'login');
-            exit;
+            // Redirect to login/register page
+            header('Location: ' . BASE_URL . 'auth');
+            exit();
         }
-        
+    
         // If logged in, proceed to checkout
         header('Location: ' . BASE_URL . 'checkout');
         exit;
     }
-
     
-
 }

@@ -24,11 +24,11 @@ class OrderModel {
 
     // Fetch orders by user ID
     public function getOrdersByUser($userId) {
-        $this->db->query("SELECT * FROM orders WHERE user_id = :user_id");
+        $this->db->query('SELECT * FROM orders WHERE user_id = :user_id');
         $this->db->bind(':user_id', $userId);
-        return $this->db->resultSet();  // Return the list of orders
+        return $this->db->resultSet();
     }
-
+    
     public function getSalesRevenue() {
         $this->db->query("SELECT SUM(total) AS revenue FROM orders");
         return $this->db->single()['revenue'];  // Access revenue as an array

@@ -15,12 +15,58 @@ class App {
         // Handle admin section routing
         if (isset($url[0]) && strtolower($url[0]) == 'admin') {
             $this->layout = 'layout/admin';  
+
+            // Admin dashboard and sections
             if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                 $_SESSION['redirect_url'] = BASE_URL . implode('/', $url);
-                header('Location: ' . BASE_URL . 'login');
+                header('Location: ' . BASE_URL . 'auth');
                 exit;
             }
-            $this->controller = 'AdminController';
+
+            // Admin-specific routing
+            if (isset($url[1])) {
+                switch (strtolower($url[1])) {
+                    case 'users':
+                        $this->controller = 'UserController';
+                        $this->method = 'users';
+                        break;
+                    case 'inquiries':
+                        $this->controller = 'InquiryController';
+                        $this->method = 'inquiries';
+                        break;
+                    case 'adduser':
+                        $this->controller = 'UserController';
+                        $this->method = 'addUser';
+                        break;
+                    case 'edituser':
+                        $this->controller = 'UserController';
+                        $this->method = 'editUser';
+                        break;
+                    case 'deleteuser':
+                        $this->controller = 'UserController';
+                        $this->method = 'deleteUser';
+                        break;
+                    case 'editinquiry':
+                        $this->controller = 'InquiryController';
+                        $this->method = 'editInquiry';
+                        break;
+                    case 'deleteinquiry':
+                        $this->controller = 'InquiryController';
+                        $this->method = 'deleteInquiry';
+                        break;
+                    case 'updatestatus':
+                        $this->controller = 'InquiryController';
+                        $this->method = 'updateStatus';
+                        break;
+                    default:
+                        $this->controller = 'AdminController';
+                        $this->method = 'dashboard';
+                        break;
+                }
+            } else {
+                $this->controller = 'AdminController';
+                $this->method = 'dashboard';
+            }
         }
 
         // Handle cart routing
@@ -33,15 +79,15 @@ class App {
             }
         } 
 
-        // Handle login routing
-        else if (isset($url[0]) && strtolower($url[0]) == 'login') {
-            $this->controller = 'LoginController';
+        // Handle login and registration routing
+        else if (isset($url[0]) && strtolower($url[0]) == 'auth') {
+            $this->controller = 'AuthController';
             $this->method = 'index';
         } 
 
         // Handle logout routing
         else if (isset($url[0]) && strtolower($url[0]) == 'logout') {
-            $this->controller = 'LoginController';
+            $this->controller = 'AuthController';
             $this->method = 'logout';
         } 
 
@@ -49,7 +95,7 @@ class App {
         else if (isset($url[0]) && strtolower($url[0]) == 'profile') {
             if (!isset($_SESSION['user_id'])) {
                 $_SESSION['redirect_url'] = BASE_URL . implode('/', $url);
-                header('Location: ' . BASE_URL . 'login');
+                header('Location: ' . BASE_URL . 'auth');
                 exit;
             }
             $this->controller = 'ProfileController';
@@ -58,7 +104,7 @@ class App {
             } else {
                 $this->method = 'index';
             }
-        } 
+        }
 
         // Handle checkout routing
         else if (isset($url[0]) && strtolower($url[0]) == 'checkout') {
@@ -70,13 +116,13 @@ class App {
             } else {
                 $this->method = 'index';
             }
-        } 
+        }
 
         // Handle product category routing (mens, womens, accessories)
         else if (isset($url[0]) && in_array(strtolower($url[0]), ['mens', 'womens', 'accessories'])) {
             $this->controller = 'ProductController';
             $this->method = strtolower($url[0]);
-        } 
+        }
 
         // Handle blog routing
         else if (isset($url[0]) && strtolower($url[0]) == 'blogs') {

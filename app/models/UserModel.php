@@ -90,18 +90,24 @@ class UserModel {
 
     // Authenticate a user by username and password
     public function authenticate($username, $password) {
+        // Fetch the user by username
         $this->db->query('SELECT * FROM users WHERE username = :username');
         $this->db->bind(':username', $username);
         $user = $this->db->single();
-
-        // If user is found and password matches
+    
+        // Debugging: Check if the user was found
+        error_log('User found: ' . print_r($user, true));
+    
+        // Check if the user exists and verify the password
         if ($user && password_verify($password, $user['password'])) {
+            error_log('Password verification passed.');
             return $user;
-        } else {
-            return false;
         }
+    
+        error_log('Authentication failed. Password or user mismatch.');
+        return false;
     }
-
+    
     // Get user by ID
     public function getUserById($userId) {
         $this->db->query("SELECT * FROM users WHERE user_id = :user_id");
