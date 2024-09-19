@@ -45,41 +45,57 @@
 
     <!-- Order History Section -->
     <div class="bg-white p-5 mb-5 shadow-md rounded">
-    <h2 class="text-xl font-bold mb-3">Order History</h2>
-    <?php if (!empty($orders) && is_array($orders)): ?>
-        <table class="min-w-full bg-white border border-gray-200">
-            <thead>
-                <tr>
-                    <th class="px-4 py-2 border">Order ID</th>
-                    <th class="px-4 py-2 border">Date</th>
-                    <th class="px-4 py-2 border">Products Ordered</th>
-                    <th class="px-4 py-2 border">Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($orders as $order): ?>
-                    <tr>
-                        <td class="px-4 py-2 border"><?= htmlspecialchars($order['id']) ?></td>
-                        <td class="px-4 py-2 border"><?= htmlspecialchars($order['created_at']) ?></td>
-                        <td class="px-4 py-2 border">
-                            <ul>
-                                <?php if (!empty($order['products'])): ?>
-                                    <?php foreach ($order['products'] as $product): ?>
-                                        <li class="flex items-center">
-                                            <img src="/clothing-store/public/images/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-12 h-12 mr-3">
-                                            <span class="font-semibold"><?= htmlspecialchars($product['name']) ?></span> (x<?= htmlspecialchars($product['quantity']) ?>)
-                                        </li>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <p>No products found for this order.</p>
-                                <?php endif; ?>
-                            </ul>
-                        </td>
-                        <td class="px-4 py-2 border">$<?= htmlspecialchars($order['total']) ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <h2 class="text-xl font-bold mb-3">Order History</h2>
+        
+        <?php if (!empty($orders) && is_array($orders)): ?>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-200">
+                    <thead>
+                        <tr>
+                            <th class="px-2 py-2 border w-1/6">Order ID</th>
+                            <th class="px-2 py-2 border w-1/6">Date</th>
+                            <th class="px-4 py-2 border">Products Ordered</th>
+                            <th class="px-4 py-2 border w-1/6">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($orders as $order): ?>
+                            <tr>
+                                <td class="px-2 py-2 border"><?= htmlspecialchars($order['id']) ?></td>
+                                <td class="px-2 py-2 border"><?= htmlspecialchars($order['created_at']) ?></td>
+                                <td class="px-4 py-2 border">
+                                    <ul>
+                                        <?php if (!empty($order['products'])): ?>
+                                            <?php foreach ($order['products'] as $product): ?>
+                                                <?php
+                                                // Determine the category folder based on the category_id
+                                                $categoryFolder = '';
+                                                switch ($product['category_id']) {
+                                                    case 1: $categoryFolder = 'mens'; break;
+                                                    case 2: $categoryFolder = 'womens'; break;
+                                                    case 3: $categoryFolder = 'accessories'; break;
+                                                    default: $categoryFolder = 'unknown';
+                                                }
+
+                                                // Construct the full image URL using the base URL and category folder
+                                                $imageUrl = BASE_URL . "/images/{$categoryFolder}/" . htmlspecialchars($product['image']);
+                                                ?>
+                                                <li class="flex items-center">
+                                                    <img src="<?= $imageUrl ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-20 h-20 object-cover mr-4">
+                                                    <span class="font-semibold"><?= htmlspecialchars($product['name']) ?></span> (x<?= htmlspecialchars($product['quantity']) ?>)
+                                                </li>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <p>No products found for this order.</p>
+                                        <?php endif; ?>
+                                    </ul>
+                                </td>
+                                <td class="px-4 py-2 border">$<?= number_format($order['total'], 2) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         <?php else: ?>
             <p>No orders found.</p>
         <?php endif; ?>
