@@ -91,33 +91,48 @@
     </div>
 
     <script>
-        // JavaScript to handle the view button click and display the order details modal
         document.querySelectorAll('.view-order-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const orderId = this.getAttribute('data-order-id');
-                
-                // Fetch order details using AJAX (this is a placeholder)
-                fetch(`/clothing-store/public/admin/getOrderDetails?id=${orderId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const orderDetails = document.getElementById('orderDetails');
-                        orderDetails.innerHTML = `
-                            <p><strong>Order ID:</strong> ${data.order_id}</p>
-                            <p><strong>Customer:</strong> ${data.customer_name}</p>
-                            <p><strong>Total:</strong> $${data.total}</p>
-                            <p><strong>Products:</strong> ${data.products}</p>
-                            <p><strong>Date:</strong> ${data.date}</p>
-                        `;
-                        
-                        // Show the modal and apply flex properties
-                        const modal = document.getElementById('orderModal');
-                        modal.classList.remove('hidden');
-                        modal.classList.add('flex', 'items-center', 'justify-center');
-                    });
-            });
-        });
+        button.addEventListener('click', function() {
+        const orderId = this.getAttribute('data-order-id');
 
-        // Close the modal
+        console.log(`Fetching details for Order ID: ${orderId}`);
+
+        fetch(`/clothing-store/public/admin/getOrderDetails?id=${orderId}`)
+            .then(response => {
+                console.log(response);  // Log the response for debugging
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                    return;
+                }
+
+                const orderDetails = document.getElementById('orderDetails');
+                orderDetails.innerHTML = `
+                    <p><strong>Order ID:</strong> ${data.order_id}</p>
+                    <p><strong>Customer:</strong> ${data.customer_name}</p>
+                    <p><strong>Total:</strong> $${data.total}</p>
+                    <p><strong>Products:</strong> ${data.products}</p>
+                    <p><strong>Date:</strong> ${data.date}</p>
+                `;
+
+                const modal = document.getElementById('orderModal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex', 'items-center', 'justify-center');
+            })
+            .catch(error => {
+                console.error('Error fetching order details:', error);
+                alert('An error occurred while fetching the order details.');
+            });
+
+        });
+    });
+
+        // Close the modal when clicking the close button
         document.getElementById('closeModal').addEventListener('click', function() {
             const modal = document.getElementById('orderModal');
             modal.classList.add('hidden');

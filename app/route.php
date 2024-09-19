@@ -44,7 +44,9 @@ $routes = [
     'admin/accessories' => 'AdminController@accessories',// Accessories product management
     'admin/addProduct' => 'AdminController@addProduct',  // Add product form
     'admin/editProduct' => 'AdminController@editProduct',// Edit product form
-    
+    // Other routes...
+    'admin/getOrderDetails' => 'OrderController@getOrderDetails',
+
     // Blog management routes
     'admin/blogs' => 'AdminController@blogs',              // Blog management page
     'admin/addOrEditBlog' => 'AdminController@addOrEditBlog', // Add or Edit blog form

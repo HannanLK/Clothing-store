@@ -22,12 +22,27 @@ class OrderModel {
         }
     }
 
-    // Fetch orders by user ID
     public function getOrdersByUser($userId) {
-        $this->db->query('SELECT * FROM orders WHERE user_id = :user_id');
+        // Fetch the orders for the user
+        $this->db->query("SELECT * FROM orders WHERE user_id = :user_id");
         $this->db->bind(':user_id', $userId);
-        return $this->db->resultSet();
+        $orders = $this->db->resultSet();  // Fetch all orders
+        
+        // Loop through each order and fetch the products
+        foreach ($orders as &$order) {
+            $this->db->query("
+                SELECT products.id, products.name, products.image, order_items.quantity
+                FROM order_items
+                JOIN products ON order_items.product_id = products.id
+                WHERE order_items.order_id = :order_id
+            ");
+            $this->db->bind(':order_id', $order['id']);
+            $order['products'] = $this->db->resultSet();  // Add products to each order
+        }
+        
+        return $orders;
     }
+    
     
     public function getSalesRevenue() {
         $this->db->query("SELECT SUM(total) AS revenue FROM orders");
@@ -48,6 +63,38 @@ class OrderModel {
         ");
         return $this->db->resultSet();
     }
+
+    // Get order by ID with details
+    public function getOrderById($orderId) {
+        $this->db->query("
+            SELECT 
+                orders.id AS order_id, 
+                users.name AS customer_name, 
+                orders.total, 
+                GROUP_CONCAT(products.name SEPARATOR ', ') AS products, 
+                orders.created_at AS date 
+            FROM orders 
+            JOIN users ON orders.user_id = users.user_id
+            JOIN order_items ON orders.id = order_items.order_id  -- Correct join to order_items
+            JOIN products ON order_items.product_id = products.id
+            WHERE orders.id = :order_id
+            GROUP BY orders.id
+        ");
+        $this->db->bind(':order_id', $orderId);
+        return $this->db->single();  // Fetch the order details
+    }
+    
+    public function addOrderItem($orderId, $productId, $quantity, $price) {
+        $this->db->query("INSERT INTO order_items (order_id, product_id, quantity, price) 
+                          VALUES (:order_id, :product_id, :quantity, :price)");
+        $this->db->bind(':order_id', $orderId);
+        $this->db->bind(':product_id', $productId);
+        $this->db->bind(':quantity', $quantity);
+        $this->db->bind(':price', $price);
+        return $this->db->execute();
+
+    }
+    
     
     
 }

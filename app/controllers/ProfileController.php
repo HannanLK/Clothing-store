@@ -8,6 +8,7 @@ class ProfileController extends Controller {
         $this->orderModel = $this->model('OrderModel');
     }
 
+    // This method will be used to load the profile page
     public function index() {
         if (!isset($_SESSION['user_id'])) {
             header('Location: ' . BASE_URL . 'auth');
@@ -19,16 +20,17 @@ class ProfileController extends Controller {
     
         // Fetch the correct user information from the database
         $customer = $this->userModel->getUserById($userId);
+        $orders = $this->orderModel->getOrdersByUser($userId);  // Fetch the user's orders
     
-        // Debugging: Check which user data is fetched
-        error_log('User data fetched on profile page: ' . print_r($customer, true));
-    
-        // Render the profile page with user data
-        $this->renderView('customer/profile', ['customer' => $customer]);
+        // Render the profile page with user data and orders
+        $this->renderView('customer/profile', [
+            'customer' => $customer,
+            'orders' => $orders  // Pass 'orders' data to the view
+        ]);
     }
     
     
-
+    // This method handles profile updates
     public function edit() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Get user ID from session

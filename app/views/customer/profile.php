@@ -43,33 +43,47 @@
         </form>
     </div>
 
-    <!-- Order History -->
+    <!-- Order History Section -->
     <div class="bg-white p-5 mb-5 shadow-md rounded">
-        <h2 class="text-xl font-bold mb-3">Order History</h2>
-        <?php if (!empty($orders)): ?>
-            <table class="min-w-full bg-white border border-gray-200">
-                <thead>
+    <h2 class="text-xl font-bold mb-3">Order History</h2>
+    <?php if (!empty($orders) && is_array($orders)): ?>
+        <table class="min-w-full bg-white border border-gray-200">
+            <thead>
                 <tr>
                     <th class="px-4 py-2 border">Order ID</th>
-                    <th class="px-4 py-2 border">Total</th>
                     <th class="px-4 py-2 border">Date</th>
+                    <th class="px-4 py-2 border">Products Ordered</th>
+                    <th class="px-4 py-2 border">Total</th>
                 </tr>
-                </thead>
-                <tbody>
+            </thead>
+            <tbody>
                 <?php foreach ($orders as $order): ?>
                     <tr>
-                        <td class="border px-4 py-2"><?= $order['id'] ?></td>
-                        <td class="border px-4 py-2">$<?= number_format($order['total'], 2) ?></td>
-                        <td class="border px-4 py-2"><?= date('F j, Y', strtotime($order['created_at'])) ?></td>
+                        <td class="px-4 py-2 border"><?= htmlspecialchars($order['id']) ?></td>
+                        <td class="px-4 py-2 border"><?= htmlspecialchars($order['created_at']) ?></td>
+                        <td class="px-4 py-2 border">
+                            <ul>
+                                <?php if (!empty($order['products'])): ?>
+                                    <?php foreach ($order['products'] as $product): ?>
+                                        <li class="flex items-center">
+                                            <img src="/clothing-store/public/images/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-12 h-12 mr-3">
+                                            <span class="font-semibold"><?= htmlspecialchars($product['name']) ?></span> (x<?= htmlspecialchars($product['quantity']) ?>)
+                                        </li>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <p>No products found for this order.</p>
+                                <?php endif; ?>
+                            </ul>
+                        </td>
+                        <td class="px-4 py-2 border">$<?= htmlspecialchars($order['total']) ?></td>
                     </tr>
                 <?php endforeach; ?>
-                </tbody>
-            </table>
+            </tbody>
+        </table>
         <?php else: ?>
             <p>No orders found.</p>
         <?php endif; ?>
     </div>
-
 </div>
 
 <script>

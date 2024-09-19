@@ -1,4 +1,10 @@
+
+
 <?php
+
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 
 class OrderController extends Controller {
 
@@ -45,24 +51,16 @@ class OrderController extends Controller {
     public function placeOrder() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $userId = $_SESSION['user_id'];
-            $cartItems = $this->cartModel->getCartItems($userId);
+            $cartItems = $this->cartModel->getCartItems($userId);  // Make sure this returns the correct items
             $totalAmount = $_POST['total'];
     
             // Insert the order into the database
             $orderId = $this->orderModel->createOrder($userId, $totalAmount, $_POST['address'], $_POST['phone']);
     
-            // Update product quantities and clear the cart
+            // Insert each cart item into the order_items table
             foreach ($cartItems as $item) {
-                // Fetch current product quantity
-                $product = $this->productModel->getProductById($item['id']);
-                $newQuantity = $product['quantity'] - $item['quantity'];
-    
-                // Ensure the quantity doesn't go below 0
-                if ($newQuantity >= 0) {
-                    $this->productModel->updateProductQuantity($item['id'], $newQuantity);
-                } else {
-                    $this->productModel->updateProductQuantity($item['id'], 0);
-                }
+                // Check if orderId and cartItems are correct at this point
+                $this->orderModel->addOrderItem($orderId, $item['id'], $item['quantity'], $item['price']);
             }
     
             // Clear the cart for the user
@@ -74,6 +72,34 @@ class OrderController extends Controller {
         }
     }
     
+    // Fetch and return order details as JSON
+    public function getOrderDetails() {
+        // Validate the order ID from the request
+        if (isset($_GET['id'])) {
+            $orderId = htmlspecialchars($_GET['id']);
+
+            // Fetch the order details
+            $orderDetails = $this->orderModel->getOrderById($orderId);
+
+            if ($orderDetails) {
+                // Set response as JSON and output the details
+                header('Content-Type: application/json');
+                echo json_encode($orderDetails);
+                exit();
+            } else {
+                // If order not found, return an error in JSON format
+                header('Content-Type: application/json');
+                echo json_encode(['error' => 'Order not found']);
+                exit();
+            }
+        } else {
+            // Return an error if the ID is missing
+            header('Content-Type: application/json');
+            echo json_encode(['error' => 'Order ID not provided']);
+            exit();
+        }
+    }
+
     // Thank you method
     public function thankYou() {
         $this->renderView('customer/thankyou');
