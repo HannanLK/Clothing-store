@@ -1,88 +1,91 @@
 <script src="https://cdn.tailwindcss.com"></script>
-<div class="container mx-auto p-5">
-    <h1 class="text-3xl font-bold mb-5">Your Cart</h1>
+<div class="container mx-auto p-5 max-w-screen-lg"> <!-- Center the container and limit width -->
+    <h1 class="text-3xl font-bold mb-5">YOUR CART</h1> <!-- Center the title -->
 
     <?php if (!empty($cartItems)): ?>
-        <table class="min-w-full bg-white border border-gray-200">
-            <thead>
-            <tr>
-                <th class="bg-gray-100 text-gray-800 px-4 py-3 border">Product</th>
-                <th class="bg-gray-100 text-gray-800 px-4 py-3 border">Price</th>
-                <th class="bg-gray-100 text-gray-800 px-4 py-3 border">Quantity</th>
-                <th class="bg-gray-100 text-gray-800 px-4 py-3 border">Total</th>
-            </tr>
-            </thead>
-            <tbody id="cartItems">
-            <?php foreach ($cartItems as $item): ?>
-                <?php
-                // Ensure category_id exists in the array
-                if (isset($item['category_id'])) {
-                    switch ($item['category_id']) {
-                        case 1: $categoryFolder = 'mens'; break;
-                        case 2: $categoryFolder = 'womens'; break;
-                        case 3: $categoryFolder = 'accessories'; break;
-                        default: $categoryFolder = 'unknown';
-                    }
-                } else {
-                    // Fallback if category_id is missing
-                    $categoryFolder = 'unknown';
-                }
-                ?>
-                <tr data-product-id="<?= $item['id'] ?>">
-                    <td class="border px-4 py-2">
-                        <div class="flex items-center gap-4">
-                            <!-- Product Image -->
-                            <img src="<?= BASE_URL ?>images/<?= $categoryFolder ?>/<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="w-24 h-24 object-cover ml-2">
-                            <div>
-                                <span class="font-semibold"><?= htmlspecialchars($item['name']) ?></span><br>
-                                <form action="<?= BASE_URL ?>cart/removeItem" method="POST" class="inline">
-                                    <input type="hidden" name="product_id" value="<?= $item['id'] ?>">
-                                    <button type="submit" class="text-red-600 hover:underline">Remove</button>
-                                </form>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="border px-4 py-2">$<?= number_format($item['price'], 2) ?></td>
+        <div class="overflow-x-auto"> <!-- Make table scrollable on small screens -->
+            <table class="min-w-full bg-white border border-gray-200">
+                <thead>
+                    <tr>
+                        <th class="bg-gray-100 text-gray-800 px-4 py-3 border w-1/2 sm:w-1/4">Product</th> <!-- Reduce width on mobile -->
+                        <th class="bg-gray-100 text-gray-800 px-4 py-3 border w-1/4">Price</th>
+                        <th class="bg-gray-100 text-gray-800 px-4 py-3 border w-1/4">Quantity</th>
+                        <th class="bg-gray-100 text-gray-800 px-4 py-3 border w-1/4">Total</th>
+                    </tr>
+                </thead>
+                <tbody id="cartItems">
+                    <?php foreach ($cartItems as $item): ?>
+                        <?php
+                        // Ensure category_id exists in the array
+                        $categoryFolder = 'unknown';
+                        if (isset($item['category_id'])) {
+                            switch ($item['category_id']) {
+                                case 1: $categoryFolder = 'mens'; break;
+                                case 2: $categoryFolder = 'womens'; break;
+                                case 3: $categoryFolder = 'accessories'; break;
+                            }
+                        }
+                        ?>
+                        <tr data-product-id="<?= $item['id'] ?>">
+                            <td class="border px-4 py-2">
+                                <div class="flex items-center gap-4">
+                                    <!-- Product Image -->
+                                    <img src="<?= BASE_URL ?>images/<?= $categoryFolder ?>/<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="w-20 h-20 object-cover ml-2">
+                                    <div>
+                                        <span class="font-semibold"><?= htmlspecialchars($item['name']) ?></span><br>
+                                        <form action="<?= BASE_URL ?>cart/removeItem" method="POST" class="inline">
+                                            <input type="hidden" name="product_id" value="<?= $item['id'] ?>">
+                                            <button type="submit" class="text-red-600 hover:underline">Remove</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="border px-4 py-2 text-center">$<?= number_format($item['price'], 2) ?></td>
 
-                    <!-- Quantity Column with + and - buttons -->
-                    <td class="border px-4 py-2 flex items-center">
-                        <button class="bg-gray-100 px-3 py-1 decrement" data-id="<?= $item['id'] ?>">-</button>
-                        <input type="text" value="<?= $item['quantity'] ?>" readonly class="quantity w-12 text-center border rounded-md mx-2">
-                        <button class="bg-gray-100 px-3 py-1 increment" data-id="<?= $item['id'] ?>">+</button>
-                    </td>
+                            <!-- Quantity Column with + and - buttons -->
+                            <td class="border px-4 py-2 flex items-center justify-center">
+                                <button class="bg-gray-100 px-3 py-1 decrement" data-id="<?= $item['id'] ?>">-</button>
+                                <input type="text" value="<?= $item['quantity'] ?>" readonly class="quantity w-12 text-center border rounded-md mx-2">
+                                <button class="bg-gray-100 px-3 py-1 increment" data-id="<?= $item['id'] ?>">+</button>
+                            </td>
 
-                    <!-- Total price for this item -->
-                    <td class="border px-4 py-2 item-total">$<?= number_format($item['price'] * $item['quantity'], 2) ?></td>
-                </tr>
-            <?php endforeach; ?>
-            </tbody>
-        </table>
-
-        <!-- Subtotal, Tax, Total -->
-        <div class="mt-5">
-            <div class="flex justify-end px-8 py-1 text-lg">
-                <span>Subtotal:</span>
-                <span class="ml-3">$<span id="subtotal"><?= number_format($subtotal, 2) ?></span></span>
-            </div>
-            <div class="flex justify-end px-8 py-1 text-lg">
-                <span>Tax (10%):</span>
-                <span class="ml-3">$<span id="tax"><?= number_format($tax, 2) ?></span></span>
-            </div>
-            <div class="flex justify-end px-8 py-1 font-semibold text-lg">
-                <span>Total:</span>
-                <span class="ml-3">$<span id="total"><?= number_format($total, 2) ?></span></span>
-            </div>
-
-            <!-- Horizontal line -->
-            <hr class="w-full mx-auto my-4 border-t-2 border-gray-300">
-
-            <!-- Proceed to Checkout Button -->
-            <div class="flex justify-end px-4">
-                <div class="flex justify-end px-4">
-                    <a href="<?= BASE_URL ?>cart/proceedToCheckout" class="bg-black text-white px-5 py-2 rounded-md uppercase hover:bg-white hover:text-black hover:border hover:border-black">Proceed to Checkout</a>
-                </div>
-            </div>
+                            <!-- Total price for this item -->
+                            <td class="border px-4 py-2 text-center item-total">$<?= number_format($item['price'] * $item['quantity'], 2) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
+
+        <div class="mt-5 flex justify-end"> <!-- This flex container ensures the table is aligned to the right -->
+    <!-- Calculation Table -->
+    <table class="border border-gray-400 w-1/2 max-w-xs bg-white"> <!-- Limited width for the table, aligned to the right -->
+        <tbody>
+            <tr>
+                <td class="px-4 py-2 border text-left font-medium">Subtotal</td>
+                <td class="px-4 py-2 border text-right">$<span id="subtotal"><?= number_format($subtotal, 2) ?></span></td>
+            </tr>
+            <tr>
+                <td class="px-4 py-2 border text-left font-medium">Tax (10%)</td>
+                <td class="px-4 py-2 border text-right">$<span id="tax"><?= number_format($tax, 2) ?></span></td>
+            </tr>
+            <tr>
+                <td class="px-4 py-2 border text-left font-semibold">Total</td>
+                <td class="px-4 py-2 border text-right font-semibold">$<span id="total"><?= number_format($total, 2) ?></span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Horizontal line -->
+<hr class="w-full mx-auto my-4 border-t-2 border-gray-300">
+
+<!-- Proceed to Checkout Button -->
+<div class="flex justify-end px-2">
+    <a href="<?= BASE_URL ?>cart/proceedToCheckout" class="bg-black text-white px-5 py-2 rounded-md uppercase hover:bg-white hover:text-black hover:border hover:border-black">Proceed to Checkout</a>
+</div>
+
+
     <?php else: ?>
         <p>Your cart is empty.</p>
     <?php endif; ?>
@@ -153,9 +156,8 @@
                 quantity: quantity
             })
         })
-        .then(response => response.json()) // Ensure response is parsed as JSON
+        .then(response => response.json())
         .then(data => {
-            console.log('Response from server:', data);
             if (data.success) {
                 recalculateTotals();  // Update the totals after successful quantity change
             } else {
