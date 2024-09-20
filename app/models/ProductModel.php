@@ -133,4 +133,11 @@ class ProductModel {
         return $this->db->single()['count'];  // Return the count from the array
     }
     
+    public function getProductCountByCategory($category) {
+        $this->db->query("SELECT COUNT(*) AS count FROM products WHERE category_id = (SELECT id FROM categories WHERE name = :category)");
+        $this->db->bind(':category', $category);
+        return $this->db->single()['count'];  // Return the count from the array
+    }
+    
+    
 }

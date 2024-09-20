@@ -24,45 +24,98 @@ class AuthController extends Controller {
 
     // Handle login functionality
         // AuthController.php
+    // public function login() {
+    //     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    //         $username = htmlspecialchars(trim($_POST['username']));
+    //         $password = htmlspecialchars(trim($_POST['password']));
+
+    //         // Authenticate the user
+    //         $user = $this->userModel->authenticate($username, $password);
+
+    //         if ($user) {
+    //             // Set session variables
+    //             $_SESSION['user_id'] = $user['user_id'];
+    //             $_SESSION['username'] = $user['username'];
+    //             $_SESSION['role'] = $user['role'];
+
+    //             // If there is a guest cart stored in the session, transfer it to the user's cart
+    //             if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+    //                 $cartModel = $this->model('CartModel'); // Load the CartModel
+    //                 foreach ($_SESSION['cart'] as $cartItem) {
+    //                     // Ensure product_id is set
+    //                     if (!isset($cartItem['product_id']) || $cartItem['product_id'] == null) {
+    //                         // Handle missing product_id, for example, skip adding the item
+    //                         continue;
+    //                     }
+
+    //                     // Add each session cart item to the database cart
+    //                     $cartModel->addProductToCart(
+    //                         $user['user_id'],
+    //                         $cartItem['product_id'],  // Ensure this is not null
+    //                         $cartItem['quantity']
+    //                     );
+    //                 }
+    //                 // Clear the session cart after transferring to the database
+    //                 unset($_SESSION['cart']);
+    //             }
+
+    //             // Redirect based on role
+    //             if ($_SESSION['role'] === 'admin') {
+    //                 header('Location: ' . BASE_URL . 'admin/dashboard');
+    //             } else {
+    //                 if (isset($_SESSION['redirect_url'])) {
+    //                     $redirect_url = $_SESSION['redirect_url'];
+    //                     unset($_SESSION['redirect_url']);
+    //                     header("Location: $redirect_url");
+    //                 } else {
+    //                     header('Location: ' . BASE_URL . 'profile');
+    //                 }
+    //             }
+    //             exit;
+    //         } else {
+    //             // Authentication failed
+    //             $this->renderView('auth/login_register', ['error' => 'Invalid login credentials']);
+    //         }
+    //     } else {
+    //         $this->renderView('auth/login_register');
+    //     }
+    // }
+
     public function login() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $username = htmlspecialchars(trim($_POST['username']));
             $password = htmlspecialchars(trim($_POST['password']));
-
+    
             // Authenticate the user
             $user = $this->userModel->authenticate($username, $password);
-
+    
             if ($user) {
                 // Set session variables
                 $_SESSION['user_id'] = $user['user_id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role'] = $user['role'];
-
-                // If there is a guest cart stored in the session, transfer it to the user's cart
+    
+                // Merge session cart with database cart
                 if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
-                    $cartModel = $this->model('CartModel'); // Load the CartModel
+                    $cartModel = $this->model('CartModel');
+                    
                     foreach ($_SESSION['cart'] as $cartItem) {
-                        // Ensure product_id is set
-                        if (!isset($cartItem['product_id']) || $cartItem['product_id'] == null) {
-                            // Handle missing product_id, for example, skip adding the item
-                            continue;
-                        }
-
-                        // Add each session cart item to the database cart
                         $cartModel->addProductToCart(
                             $user['user_id'],
-                            $cartItem['product_id'],  // Ensure this is not null
+                            $cartItem['id'],  // Product ID from session cart
                             $cartItem['quantity']
                         );
                     }
-                    // Clear the session cart after transferring to the database
+    
+                    // Clear session cart after merging with database
                     unset($_SESSION['cart']);
                 }
-
-                // Redirect based on role
+    
+                // Redirect user based on role
                 if ($_SESSION['role'] === 'admin') {
                     header('Location: ' . BASE_URL . 'admin/dashboard');
                 } else {
+                    // Redirect to the checkout page if it was the intended destination
                     if (isset($_SESSION['redirect_url'])) {
                         $redirect_url = $_SESSION['redirect_url'];
                         unset($_SESSION['redirect_url']);
@@ -80,6 +133,7 @@ class AuthController extends Controller {
             $this->renderView('auth/login_register');
         }
     }
+    
 
 
 

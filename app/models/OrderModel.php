@@ -54,18 +54,23 @@ class OrderModel {
     
     
     public function getAllSales() {
-        // Assuming the users table stores customer details
         $this->db->query("
             SELECT 
                 orders.id AS order_id, 
                 users.name AS customer_name, 
+                users.user_id AS customer_id, 
                 orders.total, 
+                GROUP_CONCAT(products.name SEPARATOR ', ') AS products, 
                 orders.created_at AS date 
             FROM orders 
             JOIN users ON orders.user_id = users.user_id
+            JOIN order_items ON orders.id = order_items.order_id
+            JOIN products ON order_items.product_id = products.id
+            GROUP BY orders.id
         ");
         return $this->db->resultSet();
     }
+    
 
     // Get order by ID with details
     public function getOrderById($orderId) {

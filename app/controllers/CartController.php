@@ -11,8 +11,32 @@ class CartController extends Controller {
     }
 
     // Display the cart
+    // public function index() {
+    //     // Check if user is logged in
+    //     if (isset($_SESSION['user_id'])) {
+    //         $userId = $_SESSION['user_id'];
+    //         $cartItems = $this->cartModel->getCartItems($userId);
+    //     } else {
+    //         // Fetch cart items from the session for guest users
+    //         $cartItems = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
+    //     }
+    
+    //     $subtotal = 0;
+    //     foreach ($cartItems as $item) {
+    //         $subtotal += $item['price'] * $item['quantity'];
+    //     }
+    //     $tax = $subtotal * 0.10; // Assuming 10% tax
+    //     $total = $subtotal + $tax;
+    
+    //     $this->renderView('customer/cart', [
+    //         'cartItems' => $cartItems,
+    //         'subtotal' => $subtotal,
+    //         'tax' => $tax,
+    //         'total' => $total
+    //     ]);
+    // }
+
     public function index() {
-        // Check if user is logged in
         if (isset($_SESSION['user_id'])) {
             $userId = $_SESSION['user_id'];
             $cartItems = $this->cartModel->getCartItems($userId);
@@ -25,7 +49,7 @@ class CartController extends Controller {
         foreach ($cartItems as $item) {
             $subtotal += $item['price'] * $item['quantity'];
         }
-        $tax = $subtotal * 0.10; // Assuming 10% tax
+        $tax = $subtotal * 0.10;
         $total = $subtotal + $tax;
     
         $this->renderView('customer/cart', [
@@ -35,6 +59,7 @@ class CartController extends Controller {
             'total' => $total
         ]);
     }
+    
     
     // Add item to cart
     public function addToCart() {
@@ -139,13 +164,24 @@ class CartController extends Controller {
         exit;
     }
 
-    public function proceedToCheckout() {
-        // Check if the user is logged in
-        if (!isset($_SESSION['user_id'])) {
-            // Store the intended URL (checkout) in session
-            $_SESSION['redirect_url'] = BASE_URL . 'checkout';
+    // public function proceedToCheckout() {
+    //     // Check if the user is logged in
+    //     if (!isset($_SESSION['user_id'])) {
+    //         // Store the intended URL (checkout) in session
+    //         $_SESSION['redirect_url'] = BASE_URL . 'checkout';
             
-            // Redirect to login/register page
+    //         // Redirect to login/register page
+    //         header('Location: ' . BASE_URL . 'auth');
+    //         exit();
+    //     }
+    
+    //     // If logged in, proceed to checkout
+    //     header('Location: ' . BASE_URL . 'checkout');
+    //     exit;
+    // }
+    public function proceedToCheckout() {
+        if (!isset($_SESSION['user_id'])) {
+            $_SESSION['redirect_url'] = BASE_URL . 'checkout';
             header('Location: ' . BASE_URL . 'auth');
             exit();
         }
@@ -154,5 +190,6 @@ class CartController extends Controller {
         header('Location: ' . BASE_URL . 'checkout');
         exit;
     }
+    
     
 }

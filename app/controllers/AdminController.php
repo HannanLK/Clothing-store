@@ -17,30 +17,35 @@ class AdminController extends Controller {
     }
 
     public function dashboard() {
-        // Fetch counts from database
         $productCount = $this->productModel->getProductCount();
+        $mensCount = $this->productModel->getProductCountByCategory('mens');
+        $womensCount = $this->productModel->getProductCountByCategory('womens');
+        $accessoriesCount = $this->productModel->getProductCountByCategory('accessories');
         $userCount = $this->userModel->getUserCount();
         $adminCount = $this->userModel->getAdminCount();
         $customerCount = $this->userModel->getCustomerCount();
         $blogCount = $this->blogModel->getBlogCount();
         $salesRevenue = $this->orderModel->getSalesRevenue();
-        $inquiryCount = $this->inquiryModel->getInquiryCount();
         $pendingInquiryCount = $this->inquiryModel->getPendingInquiryCount();
+        $inquiryCount = $this->inquiryModel->getInquiryCount();
         $sales = $this->orderModel->getAllSales();
-
-        // Pass data to view
+    
         $this->renderView('admin/dashboard', [
             'productCount' => $productCount,
+            'mensCount' => $mensCount,
+            'womensCount' => $womensCount,
+            'accessoriesCount' => $accessoriesCount,
             'userCount' => $userCount,
             'adminCount' => $adminCount,
             'customerCount' => $customerCount,
             'blogCount' => $blogCount,
             'salesRevenue' => $salesRevenue,
-            'inquiryCount' => $inquiryCount,
             'pendingInquiryCount' => $pendingInquiryCount,
+            'inquiryCount' => $inquiryCount,
             'sales' => $sales
         ]);
     }
+    
 
     // Helper method to fetch sorted products with optional stock filter
     private function getSortedProducts($category) {
