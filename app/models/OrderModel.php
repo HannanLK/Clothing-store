@@ -22,16 +22,18 @@ class OrderModel {
         }
     }
 
+
+    // Fetch orders for a specific user
     public function getOrdersByUser($userId) {
         // Fetch the orders for the user
         $this->db->query("SELECT * FROM orders WHERE user_id = :user_id");
         $this->db->bind(':user_id', $userId);
         $orders = $this->db->resultSet();  // Fetch all orders
-        
+    
         // Loop through each order and fetch the products
         foreach ($orders as &$order) {
             $this->db->query("
-                SELECT products.id, products.name, products.image, order_items.quantity
+                SELECT products.id, products.name, products.image, products.category_id, order_items.quantity
                 FROM order_items
                 JOIN products ON order_items.product_id = products.id
                 WHERE order_items.order_id = :order_id
@@ -39,9 +41,10 @@ class OrderModel {
             $this->db->bind(':order_id', $order['id']);
             $order['products'] = $this->db->resultSet();  // Add products to each order
         }
-        
+    
         return $orders;
     }
+    
     
     
     public function getSalesRevenue() {

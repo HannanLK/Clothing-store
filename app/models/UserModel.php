@@ -73,13 +73,15 @@ class UserModel {
     
     // Method to update an existing user
     public function updateUser($userId, $data) {
-        $this->db->query('UPDATE users SET name = :name, address = :address, phone = :phone WHERE user_id = :user_id');
+        $this->db->query("UPDATE users SET name = :name, address = :address, phone = :phone WHERE user_id = :user_id");
         $this->db->bind(':name', $data['name']);
         $this->db->bind(':address', $data['address']);
         $this->db->bind(':phone', $data['phone']);
         $this->db->bind(':user_id', $userId);
-        return $this->db->execute();
+    
+        $this->db->execute();
     }
+    
     
     // Method to delete a user
     public function deleteUser($userId) {

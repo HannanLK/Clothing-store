@@ -23,6 +23,7 @@ class AuthController extends Controller {
     }
 
     // Handle login functionality
+        // AuthController.php
     public function login() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $username = htmlspecialchars(trim($_POST['username']));
@@ -36,6 +37,27 @@ class AuthController extends Controller {
                 $_SESSION['user_id'] = $user['user_id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role'] = $user['role'];
+
+                // If there is a guest cart stored in the session, transfer it to the user's cart
+                if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+                    $cartModel = $this->model('CartModel'); // Load the CartModel
+                    foreach ($_SESSION['cart'] as $cartItem) {
+                        // Ensure product_id is set
+                        if (!isset($cartItem['product_id']) || $cartItem['product_id'] == null) {
+                            // Handle missing product_id, for example, skip adding the item
+                            continue;
+                        }
+
+                        // Add each session cart item to the database cart
+                        $cartModel->addProductToCart(
+                            $user['user_id'],
+                            $cartItem['product_id'],  // Ensure this is not null
+                            $cartItem['quantity']
+                        );
+                    }
+                    // Clear the session cart after transferring to the database
+                    unset($_SESSION['cart']);
+                }
 
                 // Redirect based on role
                 if ($_SESSION['role'] === 'admin') {
@@ -58,6 +80,8 @@ class AuthController extends Controller {
             $this->renderView('auth/login_register');
         }
     }
+
+
 
     // Handle registration functionality
     public function register() {
