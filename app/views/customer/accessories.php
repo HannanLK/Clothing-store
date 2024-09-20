@@ -81,39 +81,29 @@
                 <h2 id="modalProductName" class="text-xl font-bold mt-3"></h2>
                 <p id="modalProductPrice" class="text-gray-600 mt-2"></p>
                 <p id="modalProductDescription" class="mt-3"></p>
-                <button id="modalAddToCart" class="bg-black text-white px-3 py-3 rounded-sm mt-5">Add to Cart</button>
+                <button id="modalAddToCart" class="bg-black text-white px-3 py-3 rounded-sm mt-5" data-id="">Add to Cart</button>
             </div>
         </div>
     </div>
 
     <!-- Notification -->
-    <div id="notification" class="fixed top-5 right-5 bg-orange-500 text-white px-4 py-2 rounded-md hidden">Product added to cart!</div>
+    <div id="notification" class="fixed top-20 right-5 bg-orange-500 text-white px-4 py-2 rounded-md hidden">Product added to cart!</div>
 
     <script>
+        // Initialize event listeners
+        initializeEventListeners();
+
         // Function to initialize event listeners for View Product and Add to Cart
         function initializeEventListeners() {
             // Modal functionality
             const modal = document.getElementById('productModal');
             const closeModal = document.getElementsByClassName('close')[0];
 
+            // View Product functionality
             document.querySelectorAll('.view-product').forEach(button => {
                 button.addEventListener('click', function() {
                     const productId = this.getAttribute('data-id');
-
-                    // Use AJAX to fetch product details
-                    fetch(`/clothing-store/public/product/details?id=${productId}`)
-                        .then(response => response.json())
-                        .then(product => {
-                            document.getElementById('modalProductName').innerText = product.name;
-                            document.getElementById('modalProductPrice').innerText = `$${product.price}`;
-                            document.getElementById('modalProductDescription').innerText = product.description;
-                            document.getElementById('modalProductImage').src = `/clothing-store/public/images/accessories/${product.image}`;
-                            document.getElementById('modalAddToCart').setAttribute('data-id', product.id); // Update product ID for "Add to Cart"
-                            modal.classList.remove('hidden');
-                        })
-                        .catch(error => {
-                            console.error('Error fetching product details:', error);
-                        });
+                    fetchProductDetails(productId);
                 });
             });
 
@@ -127,51 +117,63 @@
                 }
             }
 
-            // Add to Cart functionality (AJAX)
+            // Add to Cart functionality
             document.querySelectorAll('.add-to-cart').forEach(button => {
                 button.addEventListener('click', function() {
                     const productId = this.getAttribute('data-id');
-
-                    // Send AJAX request to add product to cart
-                    fetch(`/clothing-store/public/cart/addToCart`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: `product_id=${productId}`
-                    })
-                    .then(response => response.text())
-                    .then(() => {
-                        // Show notification
-                        const notification = document.getElementById('notification');
-                        notification.classList.remove('hidden');
-                        setTimeout(() => { notification.classList.add('hidden'); }, 2000);
-                    });
+                    addToCart(productId);
                 });
             });
 
             // Add to Cart button in Modal
             document.getElementById('modalAddToCart').addEventListener('click', function() {
                 const productId = this.getAttribute('data-id');
-
-                // Send AJAX request to add product to cart from modal
-                fetch(`/clothing-store/public/cart/addToCart`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: `product_id=${productId}`
-                })
-                .then(response => response.text())
-                .then(() => {
-                    modal.classList.add('hidden'); // Close modal after adding to cart
-
-                    // Show notification
-                    const notification = document.getElementById('notification');
-                    notification.classList.remove('hidden');
-                    setTimeout(() => { notification.classList.add('hidden'); }, 2000);
-                });
+                addToCart(productId);
+                modal.classList.add('hidden'); // Close modal after adding to cart
             });
         }
 
-        // Initial call to set up listeners
-        initializeEventListeners();
+        // Function to fetch product details and display in modal
+        function fetchProductDetails(productId) {
+            fetch(`/clothing-store/public/product/details?id=${productId}`)
+                .then(response => response.json())
+                .then(product => {
+                    document.getElementById('modalProductName').innerText = product.name;
+                    document.getElementById('modalProductPrice').innerText = `$${product.price}`;
+                    document.getElementById('modalProductDescription').innerText = product.description;
+                    document.getElementById('modalProductImage').src = `/clothing-store/public/images/accessories/${product.image}`;
+                    document.getElementById('modalAddToCart').setAttribute('data-id', product.id);
+                    document.getElementById('productModal').classList.remove('hidden');
+                })
+                .catch(error => {
+                    console.error('Error fetching product details:', error);
+                });
+        }
+
+        // Function to add product to cart
+        function addToCart(productId) {
+            fetch(`/clothing-store/public/cart/addToCart`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `product_id=${productId}`
+            })
+            .then(response => response.text())
+            .then(() => {
+                showNotification();
+            })
+            .catch(error => {
+                console.error('Error adding product to cart:', error);
+            });
+        }
+
+        // Function to show notification
+        function showNotification() {
+            const notification = document.getElementById('notification');
+            notification.classList.remove('hidden');
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 2000);
+        }
 
         // Function to handle sorting
         document.getElementById('sortOptions').addEventListener('change', function() {
@@ -192,13 +194,19 @@
                 // Loop through sorted products and update the UI
                 products.forEach(product => {
                     productContainer.innerHTML += `
-                        <div class="product-card bg-white rounded-lg shadow-md p-5">
-                            <img src="/clothing-store/public/images/accessories/${product.image}" alt="${product.name}" class="w-full h-48 object-cover mb-3 rounded-lg">
-                            <h2 class="text-xl font-semibold">${product.name}</h2>
-                            <p class="text-gray-600">$${product.price}</p>
-                            <div class="mt-3">
-                                <button class="view-product bg-blue-500 text-white px-3 py-2 rounded-sm" data-id="${product.id}">View Product</button>
-                                <button class="add-to-cart bg-green-500 text-white px-3 py-2 rounded-sm ml-2" data-id="${product.id}">Add to Cart</button>
+                        <div class="product-card rounded-lg p-5">
+                            <div class="relative">
+                                <img src="/clothing-store/public/images/accessories/${product.image}" alt="${product.name}" class="w-full h-80 object-cover mb-3 rounded-md shadow-md">
+                                ${product.quantity <= 0 ? '<div class="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center rounded-lg"><span class="text-black font-normal text-center text-lg">Will Be <br> Available Soon!</span></div>' : ''}
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-semibold">${product.name}</h2>
+                                <p class="text-gray-600">$${product.price}</p>
+                            </div>
+                            <div class="mt-2">
+                                <button class="view-product bg-white text-black px-3 py-2 rounded-sm outline outline-1" data-id="${product.id}">View Product</button>
+                                ${product.quantity > 0 ? `<button class="add-to-cart bg-black text-white px-3 py-2 rounded-sm ml-2" data-id="${product.id}">Add to Cart</button>` : '<button class="bg-gray-400 text-white px-3 py-1 rounded-md mt-3 w-full cursor-not-allowed" disabled>Out of Stock</button>'}
+                                ${product.quantity < 5 && product.quantity > 0 ? `<p class="text-red-500 text-sm mt-2">Only ${product.quantity} left in stock</p>` : ''}
                             </div>
                         </div>
                     `;

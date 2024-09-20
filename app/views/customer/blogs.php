@@ -5,39 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blogs</title>
     <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS -->
-    <style>
-        .blog-content {
-            display: none;
-        }
-    </style>
 </head>
 <body class="bg-gray-100">
 
     <div class="container mx-auto p-5">
-        <h1 class="text-3xl font-bold mb-5">Our Blogs</h1>
+        <h1 class="text-3xl font-bold mb-5">OUR BLOGS</h1>
 
         <!-- Blog Cards Section -->
         <div id="blogsContainer">
             <?php if (!empty($blogs)): ?>
                 <?php foreach ($blogs as $blog): ?>
-                    <div class="blog-card bg-white rounded-lg shadow-md p-5 mb-5">
-                        <div class="flex">
+                    <div class="blog-card rounded-sm shadow-md mb-6">
+                        <div class="flex flex-col md:flex-row"> <!-- Flex changed for responsiveness -->
                             <!-- Blog Image -->
-                            <img src="/clothing-store/public/images/blog/<?= htmlspecialchars($blog['image']) ?>" alt="<?= htmlspecialchars($blog['title']) ?>" class="w-1/3 h-48 object-cover rounded-lg mr-5">
+                            <img src="/clothing-store/public/images/blog/<?= htmlspecialchars($blog['image']) ?>" alt="<?= htmlspecialchars($blog['title']) ?>" class="w-full md:w-1/3 h-64 object-cover rounded-sm mb-4 md:mb-0 md:mr-5">
                             
                             <!-- Blog Details -->
-                            <div class="w-2/3">
+                            <div class="w-full md:w-2/3">
                                 <h2 class="text-2xl font-bold"><?= htmlspecialchars($blog['title']) ?></h2>
                                 <p class="text-gray-600"><?= htmlspecialchars($blog['summary']) ?></p>
-                                <p class="text-sm text-gray-500 mt-2">By <?= htmlspecialchars($blog['author']) ?> on <?= date('M d, Y', strtotime($blog['date_added'])) ?></p>
+                                <p class="text-sm text-gray-500 my-3">By <?= htmlspecialchars($blog['author']) ?> on <?= date('M d, Y', strtotime($blog['date_added'])) ?></p>
                                 
                                 <!-- Continue Reading Link -->
-                                <button class="bg-blue-500 text-white px-4 py-2 rounded-md mt-3 continue-reading" data-id="<?= $blog['id'] ?>">Continue Reading</button>
+                                <button class="bg-black text-white px-3 py-2 rounded-sm mt-2 continue-reading" data-id="<?= $blog['id'] ?>">Continue Reading</button>
                                 
                                 <!-- Blog Content (Hidden Initially) -->
-                                <div id="content-<?= $blog['id'] ?>" class="blog-content mt-3">
-                                    <p><?= htmlspecialchars($blog['content']) ?></p>
-                                    <button class="bg-red-500 text-white px-4 py-2 rounded-md mt-2 hide-content" data-id="<?= $blog['id'] ?>">Hide</button>
+                                <div id="content-<?= $blog['id'] ?>" class="blog-content hidden mt-3"> <!-- Changed to hidden -->
+                                    <p class="mr-6"><?= htmlspecialchars($blog['content']) ?></p>
+                                    <button class="bg-white text-black px-3 py-2 rounded-sm outline outline-1 mt hide-content" data-id="<?= $blog['id'] ?>">Hide</button>
                                 </div>
                             </div>
                         </div>
@@ -55,7 +50,7 @@
             button.addEventListener('click', function() {
                 const blogId = this.getAttribute('data-id');
                 const content = document.getElementById('content-' + blogId);
-                content.style.display = 'block';  // Show the blog content
+                content.classList.remove('hidden');  // Show the blog content
                 this.style.display = 'none';  // Hide the "Continue Reading" button
             });
         });
@@ -64,7 +59,7 @@
             button.addEventListener('click', function() {
                 const blogId = this.getAttribute('data-id');
                 const content = document.getElementById('content-' + blogId);
-                content.style.display = 'none';  // Hide the blog content
+                content.classList.add('hidden');  // Hide the blog content
                 document.querySelector(`.continue-reading[data-id="${blogId}"]`).style.display = 'inline-block';  // Show the "Continue Reading" button
             });
         });

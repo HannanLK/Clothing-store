@@ -92,7 +92,7 @@
     </div>
 
     <!-- Notification -->
-    <div id="notification" class="fixed top-5 right-5 bg-orange-500 text-white px-4 py-2 rounded-md hidden">Product added to cart!</div>
+    <div id="notification" class="fixed top-20 right-5 bg-orange-500 text-white px-4 py-2 rounded-md hidden">Product added to cart!</div>
 
     <script>
         function initializeEventListeners() {
@@ -148,23 +148,21 @@
                 }
             }
 
-            // Handle Add to Cart functionality
+    // Function to initialize event listeners for Add to Cart functionality
+    function initializeAddToCartListeners() {
             document.querySelectorAll('.add-to-cart').forEach(button => {
                 button.addEventListener('click', function() {
                     const productId = this.getAttribute('data-id');
 
+                    // Send AJAX request to add product to cart
                     fetch('/clothing-store/public/cart/addToCart', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: `product_id=${productId}&quantity=1`  // Adding 1 quantity for simplicity
+                        body: `product_id=${productId}`
                     })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Error adding product to cart.');
-                        }
-                        return response.text();
-                    })
+                    .then(response => response.text())
                     .then(() => {
+                        // Show notification
                         const notification = document.getElementById('notification');
                         notification.classList.remove('hidden');
                         setTimeout(() => { notification.classList.add('hidden'); }, 2000);
@@ -174,6 +172,10 @@
                     });
                 });
             });
+        }
+
+        // Call this function after loading the page or updating the DOM
+        initializeAddToCartListeners();
 
             document.getElementById('modalAddToCart').addEventListener('click', function() {
                 const productId = this.getAttribute('data-id');
