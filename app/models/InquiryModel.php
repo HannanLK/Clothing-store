@@ -76,6 +76,20 @@ class InquiryModel {
         $this->db->query("SELECT COUNT(*) AS count FROM inquiries WHERE status = 'pending'");
         return $this->db->single()['count'];  // Access count as an array
     }
+
+    public function addInquiry($data) {
+        $this->db->query("INSERT INTO inquiries (name, email, contact_number, subject, message, status, created_at) 
+                          VALUES (:name, :email, :contact_number, :subject, :message, :status, :created_at)");
+        $this->db->bind(':name', $data['name']);
+        $this->db->bind(':email', $data['email']);
+        $this->db->bind(':contact_number', $data['contact_number']);
+        $this->db->bind(':subject', $data['subject']);
+        $this->db->bind(':message', $data['message']);
+        $this->db->bind(':status', $data['status']);
+        $this->db->bind(':created_at', $data['created_at']);
+        return $this->db->execute();
+    }
+    
     
     
 }

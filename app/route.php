@@ -14,6 +14,11 @@ $routes = [
     // Blog routes
     'blogs' => 'BlogController@list',  // Route for blog listing page
 
+    // Contact page routes
+    'contact' => 'InquiryController@showContactForm',       // Route to show the contact form
+    'contact/submit' => 'InquiryController@submitContactForm', // Route to handle form submission
+
+
     // Cart routes
     'cart' => 'CartController@index',          // Display the cart
     'cart/addToCart' => 'CartController@addToCart', // Add item to cart

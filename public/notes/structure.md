@@ -2,12 +2,13 @@
 /server
 │
 ├── /app
-│   ├── /config                        # Configuration files (e.g., database connection)
+│   ├── /config                        # Configuration file (for database connection)
 │   ├── /controllers                   # Controllers for handling requests
 │   │   ├── AdminController.php        # Admin dashboard logic
+|   |   ├── AuthController.php
 │   │   ├── BlogController.php         # Blog-related logic
 │   │   ├── CartController.php         # Cart-related logic
-│   │   ├── ContactController.php      # Contact page logic
+│   │   ├── CheckoutController.php     # Contact page logic
 │   │   ├── HomeController.php         # Home page logic
 │   │   ├── ProductController.php      # Handles products CRUD and sub-categories
 │   │   ├── CategoryController.php     # Handles category and sub-category management

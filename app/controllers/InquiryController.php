@@ -56,4 +56,46 @@ class InquiryController extends Controller {
             header('Location: /clothing-store/public/admin/inquiries');
         }
     }
+
+    // Display the contact form to the user
+    public function showContactForm() {
+        // Render the contact form view (ensure this view is created in the customer folder)
+        $this->renderView('customer/contact');
+    }
+
+    // Handle form submission from the contact page
+    public function submitContactForm() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Sanitize and validate the input fields
+            $data = [
+                'name' => htmlspecialchars(trim($_POST['name'])),
+                'email' => filter_var(trim($_POST['email']), FILTER_VALIDATE_EMAIL),
+                'contact_number' => htmlspecialchars(trim($_POST['contact_number'])),
+                'subject' => htmlspecialchars(trim($_POST['subject'])),
+                'message' => htmlspecialchars(trim($_POST['message'])),
+                'status' => 'pending',  // Status is automatically set to 'pending'
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+
+            if (!$data['email']) {
+                // If email validation fails, redirect back with an error
+                $this->renderView('customer/contact', ['error' => 'Invalid email address']);
+                return;
+            }
+
+            // Insert the inquiry into the database
+            $inquiryModel = $this->model('InquiryModel');
+            $inquiryModel->addInquiry($data);
+
+            // Redirect to a thank you page or back to the contact form
+            header('Location: ' . BASE_URL . 'contact/thankYou');
+            exit;
+        } else {
+            // If it's not a POST request, just show the form again
+            $this->renderView('customer/contact');
+        }
+    }
+
+    
+
 }

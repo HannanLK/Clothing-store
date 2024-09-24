@@ -135,6 +135,16 @@ class App {
             }
         }
 
+        // Handle contact page routing (using InquiryController)
+        else if (isset($url[0]) && strtolower($url[0]) == 'contact') {
+            $this->controller = 'InquiryController';
+            if (isset($url[1]) && strtolower($url[1]) == 'submit') {
+                $this->method = 'submitContactForm';
+            } else {
+                $this->method = 'showContactForm';
+            }
+        }
+
         // Default routing (home page)
         else if (!isset($url[0]) || strtolower($url[0]) == '') {
             $this->controller = 'HomeController';

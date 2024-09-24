@@ -17,6 +17,20 @@ CREATE TABLE products (
     FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
+# users table
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    address VARCHAR(255),
+    phone VARCHAR(15),
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    role ENUM('customer', 'admin') DEFAULT 'customer'
+);
+
+
 # Orders Table
 CREATE TABLE orders (
     id INT PRIMARY KEY AUTO_INCREMENT,
