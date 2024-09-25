@@ -1,12 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS -->
-</head>
-<body class="bg-gray-100 p-8">
+<?php $title = "Dashboard"; ?>
+<div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- Sales -->
         <div class="bg-cyan-600 text-white rounded-lg shadow-lg p-4">
@@ -36,10 +29,9 @@
             </p>
         </div>
 
-
         <!-- Total Number of Users -->
         <div class="bg-pink-700 text-white rounded-lg shadow-lg p-4">
-            <h2 class="text-xl font-bold">TOTAL USERES</h2>
+            <h2 class="text-xl font-bold">TOTAL USERS</h2>
             <p class="text-6xl font-semibold text-center mt-2"><?= $userCount ?></p>
             <hr class="my-3">
             <p class="flex justify-between mx-12">
@@ -56,13 +48,11 @@
 
     <!-- Second Row of Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-
         <!-- Total Number of Blogs -->
         <div class="bg-gray-300 text-black rounded-lg shadow-lg p-6">
             <h2 class="text-xl font-bold text-center">TOTAL BLOGS</h2>
             <p class="text-6xl font-semibold text-center mt-6"><?= $blogCount ?></p>
         </div>
-
 
         <!-- Total Number of Inquiries -->
         <div class="bg-gray-300 text-black rounded-lg shadow-lg p-6">
@@ -109,21 +99,36 @@
     </div>
 
     <!-- Order Details Modal -->
-    <div id="orderModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
-        <div class="bg-white rounded-lg shadow-lg p-6 w-1/3">
+    <div id="orderModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50"> <!-- Hidden initially -->
+        <div class="bg-white rounded-lg shadow-lg p-6 w-full md:w-1/3">
             <h2 class="text-xl font-bold mb-4">Order Details</h2>
             <div id="orderDetails"></div>
-            <button id="closeModal" class="mt-4 bg-red-500 text-white px-4 py-2 rounded-md">Close</button>
+            <div class="flex justify-end">
+                <button id="closeModal" class="bg-red-500 text-white px-4 py-2 rounded-md ml-2">Close</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // Modal logic for viewing order details
+        // Function to show the modal
+        function showModal() {
+            const orderModal = document.getElementById('orderModal');
+            orderModal.classList.remove('hidden');
+            orderModal.classList.add('flex', 'items-center', 'justify-center');
+        }
+
+        // Function to hide the modal
+        function hideModal() {
+            const orderModal = document.getElementById('orderModal');
+            orderModal.classList.add('hidden');
+            orderModal.classList.remove('flex', 'items-center', 'justify-center');
+        }
+
+        // Add event listener for "view order" buttons
         document.querySelectorAll('.view-order-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const orderId = this.getAttribute('data-order-id');
-
-                fetch(`/clothing-store/public/admin/getOrderDetails?id=${orderId}`)
+                fetch('<?= BASE_URL ?>/admin/getOrderDetails?id=' + orderId)
                     .then(response => response.json())
                     .then(data => {
                         const orderDetails = document.getElementById('orderDetails');
@@ -134,16 +139,15 @@
                             <p><strong>Products:</strong> ${data.products}</p>
                             <p><strong>Date:</strong> ${data.date}</p>
                         `;
-                        document.getElementById('orderModal').classList.remove('hidden');
+                        showModal();
                     })
                     .catch(error => console.error('Error fetching order details:', error));
             });
         });
 
-        // Close the modal
+        // Add event listener to close button
         document.getElementById('closeModal').addEventListener('click', function() {
-            document.getElementById('orderModal').classList.add('hidden');
+            hideModal();
         });
     </script>
-</body>
-</html>
+</div>

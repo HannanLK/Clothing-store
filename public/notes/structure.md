@@ -4,25 +4,29 @@
 ├── /app
 │   ├── /config                        # Configuration file (for database connection)
 │   ├── /controllers                   # Controllers for handling requests
-│   │   ├── AdminController.php        # Admin dashboard logic
-|   |   ├── AuthController.php
-│   │   ├── BlogController.php         # Blog-related logic
+│   │   ├── AdminController.php        # Handle (CRUD for Products and Blogs)
+|   |   ├── AuthController.php         # Handle User Authentication and Registration
+│   │   ├── BlogController.php         # Blog-related logic (Viewing)
 │   │   ├── CartController.php         # Cart-related logic
 │   │   ├── CheckoutController.php     # Contact page logic
+│   │   ├── Customer Controller.php    # Fetching details of customer's orders
 │   │   ├── HomeController.php         # Home page logic
+│   │   ├── InquiryController.php      # Handle inquiries logics
+│   │   ├── OrderController.php        # Handle Order Logics
 │   │   ├── ProductController.php      # Handles products CRUD and sub-categories
-│   │   ├── CategoryController.php     # Handles category and sub-category management
 │   │   ├── ProfileController.php      # Profile (user login, management) logic
+│   │   ├── UserController.php         # Handle Admin and Customer logics
 │   ├── /core                          # Core files (main classes for app execution)
 │   │   ├── App.php                    # Core app class handling routing
 │   │   ├── Controller.php             # Base controller class
 │   │   ├── Database.php               # Database handling logic
-│   ├── /models                        # Models for handling data logic
-│   │   ├── ProductModel.php           # Handles all product data (including categories/sub-categories)
-│   │   ├── CategoryModel.php          # Handles category and sub-category data
-│   │   ├── UserModel.php              # Handles user data
+│   ├── /models
 │   │   ├── BlogModel.php              # Handles blog data
-│   │   ├── ContactModel.php           # Handles contact data
+│   │   ├── CartModel.php              # Hadles Cart Data
+│   │   ├── InquiryModel.php           # Handles inquiry data
+│   │   ├── OrderModel.php             # Handles Order data            
+│   │   ├── ProductModel.php           # Handles all product data (including categories/sub-categories)
+│   │   ├── UserModel.php              # Handles user data
 │   ├── /views                         # Views for rendering HTML content
 │   │   ├── /layouts                   # Shared layouts (admin and user)
 │   │   │   ├── admin.php              # Admin layout

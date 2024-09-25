@@ -1,7 +1,8 @@
-# Category Table
+# Category table
 CREATE TABLE categories (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    description TEXT
 );
 
 # Product Table
@@ -29,6 +30,8 @@ CREATE TABLE users (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     role ENUM('customer', 'admin') DEFAULT 'customer'
 );
+
+# Blogs Table
 
 
 # Orders Table
@@ -61,6 +64,8 @@ CREATE TABLE sales (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Timestamp when the sale is recorded
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE  -- Foreign key relation to orders
 );
+
+
 
 
 

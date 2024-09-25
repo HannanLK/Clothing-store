@@ -16,6 +16,7 @@ class AdminController extends Controller {
         $this->inquiryModel = $this->model('InquiryModel');
     }
 
+
     public function dashboard() {
         $productCount = $this->productModel->getProductCount();
         $mensCount = $this->productModel->getProductCountByCategory('mens');
@@ -124,15 +125,32 @@ class AdminController extends Controller {
         }
     }
 
-    // Delete product
+    // // Delete product
+    // public function deleteProduct() {
+    //     if (isset($_GET['id'])) {
+    //         $id = htmlspecialchars($_GET['id']);
+    //         $product = $this->model('ProductModel')->getProductById($id);
+    //         $this->model('ProductModel')->deleteProduct($id);
+    //         $this->redirectToCategoryPage($product['category']);
+    //     }
+    // }
+
     public function deleteProduct() {
         if (isset($_GET['id'])) {
             $id = htmlspecialchars($_GET['id']);
             $product = $this->model('ProductModel')->getProductById($id);
+    
+            // First, delete all related cart items
+            $this->model('CartModel')->deleteItemsByProductId($id);
+    
+            // Then, delete the product
             $this->model('ProductModel')->deleteProduct($id);
+    
+            // Redirect back to the category page
             $this->redirectToCategoryPage($product['category']);
         }
     }
+    
 
     // Helper method to determine image folder for products
     private function determineImageFolder($category) {
