@@ -1,8 +1,8 @@
-<script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS -->
+<?php $title = "Mens Collection"; ?>
 <div>
     <!-- Banner Image -->
     <div class="relative w-full h-80"> <!-- Set a height for the banner -->
-        <img src="/clothing-store/public/images/banners/bannerMens.png" alt="mens banner img" class="w-full h-full object-cover">
+        <img src="<?= BASE_URL ?>images/banners/bannerMens.png" alt="mens banner img" class="w-full h-full object-cover">
         <h1 class="absolute inset-0 flex items-center justify-center text-white text-4xl font-light">
             #Glitz for Mens
         </h1>
@@ -27,7 +27,7 @@
                 <?php foreach ($products as $product): ?>
                     <div class="relative product-card rounded-lg p-5">
                         <div class="relative">
-                            <img src="/clothing-store/public/images/mens/<?= $product['image'] ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full h-80 object-cover mb-3 rounded-md shadow-md">
+                            <img src="<?= BASE_URL ?>images/mens/<?= $product['image'] ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full h-80 object-cover mb-3 rounded-md shadow-md">
 
                             <!-- Out of Stock Overlay, limited to the image -->
                             <?php if ($product['quantity'] <= 0): ?>
@@ -49,7 +49,7 @@
                                 <button class="add-to-cart bg-black text-white px-3 py-2 rounded-sm ml-2" data-id="<?= $product['id'] ?>">Add to Cart</button>
                             </div>
                         <?php else: ?>
-                            <button class="bg-gray-400 text-white px-3 py-1 rounded-md mt-3 w-full cursor-not-allowed" disabled>Out of Stock</button>
+                            <button class="bg-gray-400 text-white px-3 py-1 rounded-sm mt-3 w-full cursor-not-allowed" disabled>Out of Stock</button>
                         <?php endif; ?>
 
                         <!-- Stock notice -->
@@ -92,13 +92,13 @@
                     const productId = this.getAttribute('data-id');
 
                     // Use AJAX to fetch product details
-                    fetch(`/clothing-store/public/product/details?id=${productId}`)
+                    fetch(`<?= BASE_URL ?>product/details?id=${productId}`)
                         .then(response => response.json())
                         .then(product => {
                             document.getElementById('modalProductName').innerText = product.name;
                             document.getElementById('modalProductPrice').innerText = `$${product.price}`;
                             document.getElementById('modalProductDescription').innerText = product.description;
-                            document.getElementById('modalProductImage').src = `/clothing-store/public/images/mens/${product.image}`;
+                            document.getElementById('modalProductImage').src = `<?= BASE_URL ?>images/mens/${product.image}`;
                             document.getElementById('modalAddToCart').setAttribute('data-id', product.id); // Update product ID for "Add to Cart"
                             modal.classList.remove('hidden');
                         })
@@ -124,7 +124,7 @@
                     const productId = this.getAttribute('data-id');
 
                     // Send AJAX request to add product to cart
-                    fetch(`/clothing-store/public/cart/addToCart`, {
+                    fetch(`<?= BASE_URL ?>cart/addToCart`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: `product_id=${productId}`
@@ -140,7 +140,7 @@
 
             document.getElementById('modalAddToCart').addEventListener('click', function() {
                 const productId = this.getAttribute('data-id');
-                fetch(`/clothing-store/public/cart/addToCart`, {
+                fetch(`<?= BASE_URL ?>cart/addToCart`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: `product_id=${productId}`
@@ -160,7 +160,7 @@
         // Function to handle sorting and update the same product layout
         document.getElementById('sortOptions').addEventListener('change', function() {
             const sortOption = this.value;
-            fetch(`/clothing-store/public/mens?sort=${sortOption}`, {
+            fetch(`<?= BASE_URL ?>mens?sort=${sortOption}`, {
                 method: 'GET',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
@@ -174,7 +174,7 @@
                     productContainer.innerHTML += `
                         <div class="relative product-card rounded-lg p-5">
                             <div class="relative">
-                                <img src="/clothing-store/public/images/mens/${product.image}" alt="${product.name}" class="w-full h-80 object-cover mb-3 rounded-md shadow-md">
+                                <img src="<?= BASE_URL ?>images/mens/${product.image}" alt="${product.name}" class="w-full h-80 object-cover mb-3 rounded-md shadow-md">
                                 ${product.quantity <= 0 ? '<div class="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center rounded-lg"><span class="text-black font-normal text-center text-lg">Will Be <br> Available Soon!</span></div>' : ''}
                             </div>
                             <div>

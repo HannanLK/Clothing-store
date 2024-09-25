@@ -1,24 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blogs</title>
-    <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS -->
-</head>
-<body class="bg-gray-100">
-
+<?php $title = "Blogs"; ?>
+<div>
     <div class="container mx-auto p-5">
-        <h1 class="text-3xl font-bold mb-5">OUR BLOGS</h1>
+        <h1 class="text-3xl font-bold mb-5 text-center">OUR BLOGS</h1>
+        <hr class=" w-10 border-t-2 border-blue-950 mx-auto mb-2">
 
         <!-- Blog Cards Section -->
         <div id="blogsContainer">
             <?php if (!empty($blogs)): ?>
                 <?php foreach ($blogs as $blog): ?>
                     <div class="blog-card rounded-sm shadow-md mb-6">
-                        <div class="flex flex-col md:flex-row"> <!-- Flex changed for responsiveness -->
+                        <div class="flex flex-col md:flex-row"> <!-- Flex for responsiveness -->
                             <!-- Blog Image -->
-                            <img src="/clothing-store/public/images/blog/<?= htmlspecialchars($blog['image']) ?>" alt="<?= htmlspecialchars($blog['title']) ?>" class="w-full md:w-1/3 h-64 object-cover rounded-sm mb-4 md:mb-0 md:mr-5">
+                            <img src="<?= BASE_URL ?>images/blog/<?= htmlspecialchars($blog['image']) ?>" alt="<?= htmlspecialchars($blog['title']) ?>" class="w-full md:w-1/3 h-64 object-cover rounded-sm mb-4 md:mb-0 md:mr-5">
                             
                             <!-- Blog Details -->
                             <div class="w-full md:w-2/3">
@@ -30,8 +23,8 @@
                                 <button class="bg-black text-white px-3 py-2 rounded-sm mt-2 continue-reading" data-id="<?= $blog['id'] ?>">Continue Reading</button>
                                 
                                 <!-- Blog Content (Hidden Initially) -->
-                                <div id="content-<?= $blog['id'] ?>" class="blog-content hidden mt-3"> <!-- Changed to hidden -->
-                                    <p class="mr-6"><?= htmlspecialchars($blog['content']) ?></p>
+                                <div id="content-<?= $blog['id'] ?>" class="blog-content hidden mt-3">
+                                    <p class="mr-6"><?= nl2br(htmlspecialchars($blog['content'])) ?></p>
                                     <button class="bg-white text-black px-3 py-2 rounded-sm outline outline-1 mt hide-content" data-id="<?= $blog['id'] ?>">Hide</button>
                                 </div>
                             </div>
@@ -64,6 +57,4 @@
             });
         });
     </script>
-
-</body>
-</html>
+</div>

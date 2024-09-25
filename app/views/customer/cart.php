@@ -1,13 +1,12 @@
-<script src="https://cdn.tailwindcss.com"></script>
-<div class="container mx-auto p-5 max-w-screen-lg"> <!-- Center the container and limit width -->
-    <h1 class="text-3xl font-bold mb-5">YOUR CART</h1> <!-- Center the title -->
+<div class="container mx-auto p-5 max-w-screen-lg"> 
+    <h1 class="text-3xl font-bold mb-5">YOUR CART</h1> 
 
     <?php if (!empty($cartItems)): ?>
-        <div class="overflow-x-auto"> <!-- Make table scrollable on small screens -->
+        <div class="overflow-x-auto"> <!-- Scrollable on mobile screens -->
             <table class="min-w-full bg-white border border-gray-200">
                 <thead>
                     <tr>
-                        <th class="bg-gray-100 text-gray-800 px-4 py-3 border w-1/2 sm:w-1/4">Product</th> <!-- Reduce width on mobile -->
+                        <th class="bg-gray-100 text-gray-800 px-4 py-3 border w-1/2 sm:w-1/4">Product</th>
                         <th class="bg-gray-100 text-gray-800 px-4 py-3 border w-1/4">Price</th>
                         <th class="bg-gray-100 text-gray-800 px-4 py-3 border w-1/4">Quantity</th>
                         <th class="bg-gray-100 text-gray-800 px-4 py-3 border w-1/4">Total</th>
@@ -16,7 +15,6 @@
                 <tbody id="cartItems">
                     <?php foreach ($cartItems as $item): ?>
                         <?php
-                        // Ensure category_id exists in the array
                         $categoryFolder = 'unknown';
                         if (isset($item['category_id'])) {
                             switch ($item['category_id']) {
@@ -29,7 +27,6 @@
                         <tr data-product-id="<?= $item['id'] ?>">
                             <td class="border px-4 py-2">
                                 <div class="flex items-center gap-4">
-                                    <!-- Product Image -->
                                     <img src="<?= BASE_URL ?>images/<?= $categoryFolder ?>/<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="w-20 h-20 object-cover ml-2">
                                     <div>
                                         <span class="font-semibold"><?= htmlspecialchars($item['name']) ?></span><br>
@@ -49,7 +46,6 @@
                                 <button class="bg-gray-100 px-3 py-1 increment" data-id="<?= $item['id'] ?>">+</button>
                             </td>
 
-                            <!-- Total price for this item -->
                             <td class="border px-4 py-2 text-center item-total">$<?= number_format($item['price'] * $item['quantity'], 2) ?></td>
                         </tr>
                     <?php endforeach; ?>
@@ -57,34 +53,30 @@
             </table>
         </div>
 
-        <div class="mt-5 flex justify-end"> <!-- This flex container ensures the table is aligned to the right -->
-    <!-- Calculation Table -->
-    <table class="border border-gray-400 w-1/2 max-w-xs bg-white"> <!-- Limited width for the table, aligned to the right -->
-        <tbody>
-            <tr>
-                <td class="px-4 py-2 border text-left font-medium">Subtotal</td>
-                <td class="px-4 py-2 border text-right">$<span id="subtotal"><?= number_format($subtotal, 2) ?></span></td>
-            </tr>
-            <tr>
-                <td class="px-4 py-2 border text-left font-medium">Tax (10%)</td>
-                <td class="px-4 py-2 border text-right">$<span id="tax"><?= number_format($tax, 2) ?></span></td>
-            </tr>
-            <tr>
-                <td class="px-4 py-2 border text-left font-semibold">Total</td>
-                <td class="px-4 py-2 border text-right font-semibold">$<span id="total"><?= number_format($total, 2) ?></span></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+        <div class="mt-5 flex justify-end">
+            <table class="border border-gray-400 w-full sm:w-1/2 max-w-xs bg-white"> 
+                <tbody>
+                    <tr>
+                        <td class="px-4 py-2 border text-left font-medium">Subtotal</td>
+                        <td class="px-4 py-2 border text-right">$<span id="subtotal"><?= number_format($subtotal, 2) ?></span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-2 border text-left font-medium">Tax (10%)</td>
+                        <td class="px-4 py-2 border text-right">$<span id="tax"><?= number_format($tax, 2) ?></span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-2 border text-left font-semibold">Total</td>
+                        <td class="px-4 py-2 border text-right font-semibold">$<span id="total"><?= number_format($total, 2) ?></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-<!-- Horizontal line -->
-<hr class="w-full mx-auto my-4 border-t-2 border-gray-300">
+        <hr class="w-full mx-auto my-4 border-t-2 border-gray-300">
 
-<!-- Proceed to Checkout Button -->
-<div class="flex justify-end px-2">
-    <a href="<?= BASE_URL ?>cart/proceedToCheckout" class="bg-black text-white px-5 py-2 rounded-md uppercase hover:bg-white hover:text-black hover:border hover:border-black">Proceed to Checkout</a>
-</div>
-
+        <div class="flex justify-end px-2">
+            <a href="<?= BASE_URL ?>cart/proceedToCheckout" class="bg-black text-white px-5 py-2 rounded-md uppercase hover:bg-white hover:text-black hover:border hover:border-black">Proceed to Checkout</a>
+        </div>
 
     <?php else: ?>
         <p>Your cart is empty.</p>
@@ -92,7 +84,6 @@
 </div>
 
 <script>
-    // Function to recalculate totals
     function recalculateTotals() {
         let subtotal = 0;
 
@@ -114,7 +105,6 @@
         document.getElementById('total').textContent = total.toFixed(2);
     }
 
-    // Handle increment and decrement buttons
     document.querySelectorAll('.increment').forEach(button => {
         button.addEventListener('click', function () {
             const row = this.closest('tr');
@@ -141,25 +131,19 @@
         });
     });
 
-    // Function to send updated quantity to the server
     function updateQuantity(productId, quantity) {
-        console.log('Updating quantity for product ID:', productId, 'with quantity:', quantity);
-
         fetch('<?= BASE_URL ?>cart/updateQuantity', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-Requested-With': 'XMLHttpRequest'
             },
-            body: JSON.stringify({
-                product_id: productId,
-                quantity: quantity
-            })
+            body: JSON.stringify({ product_id: productId, quantity: quantity })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                recalculateTotals();  // Update the totals after successful quantity change
+                recalculateTotals();
             } else {
                 console.error('Failed to update quantity.');
             }

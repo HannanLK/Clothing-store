@@ -1,4 +1,4 @@
-<script src="https://cdn.tailwindcss.com"></script>
+<?php $title = "Home Page"; ?>
 <div>
     <!-- Sliding Banner Section -->
     <header class="relative overflow-hidden w-full h-80 slider">
@@ -8,7 +8,7 @@
                 <img src="<?= BASE_URL ?>images/banners/bannerHomeMens.png" alt="Banner 1" class="w-full h-full object-cover">
                 <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white">
                     <h2 class="text-5xl font-light text-sky-950 mb-6">Exclusive Men's Wear</h2>
-                    <a href="<?= BASE_URL ?>/mens" class="bg-sky-900 text-white px-4 py-2 rounded-sm">Shop Mens</a>
+                    <a href="<?= BASE_URL ?>mens" class="bg-sky-900 text-white px-4 py-2 rounded-sm">Shop Mens</a>
                 </div>
             </div>
             <!-- Slide 2 -->
@@ -16,7 +16,7 @@
                 <img src="<?= BASE_URL ?>images/banners/bannerHome2.png" alt="Banner 2" class="w-full h-full object-cover">
                 <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
                     <h2 class="text-5xl font-light mb-6 text-pink-800">Exclusive Women's Wear</h2>
-                    <a href="<?= BASE_URL ?>/womens" class="bg-pink-500 text-white px-4 py-2 rounded-sm mb-2">Shop Women's</a>
+                    <a href="<?= BASE_URL ?>womens" class="bg-pink-500 text-white px-4 py-2 rounded-sm mb-2">Shop Women's</a>
                 </div>
             </div>
             <!-- Slide 3 -->
@@ -24,7 +24,7 @@
                 <img src="<?= BASE_URL ?>images/banners/bannerHome3.png" alt="Banner 3" class="w-full h-full object-cover">
                 <div class="absolute top-1/2 left-2/3 transform -translate-x-1/2 -translate-y-1/2">
                     <h2 class="text-5xl font-light mb-6 text-emerald-700">Exclusive Accessories</h2>
-                    <a href="<?= BASE_URL ?>/accessories" class="bg-emerald-800 text-white px-4 py-2 rounded-sm">Shop Accessories</a>
+                    <a href="<?= BASE_URL ?>accessories" class="bg-emerald-800 text-white px-4 py-2 rounded-sm">Shop Accessories</a>
                 </div>
             </div>
         </div>
@@ -148,21 +148,18 @@
                 }
             }
 
-    // Function to initialize event listeners for Add to Cart functionality
-    function initializeAddToCartListeners() {
+            // Add to Cart functionality
             document.querySelectorAll('.add-to-cart').forEach(button => {
                 button.addEventListener('click', function() {
                     const productId = this.getAttribute('data-id');
 
-                    // Send AJAX request to add product to cart
-                    fetch('/clothing-store/public/cart/addToCart', {
+                    fetch('<?= BASE_URL ?>cart/addToCart', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: `product_id=${productId}`
                     })
                     .then(response => response.text())
                     .then(() => {
-                        // Show notification
                         const notification = document.getElementById('notification');
                         notification.classList.remove('hidden');
                         setTimeout(() => { notification.classList.add('hidden'); }, 2000);
@@ -172,10 +169,6 @@
                     });
                 });
             });
-        }
-
-        // Call this function after loading the page or updating the DOM
-        initializeAddToCartListeners();
 
             document.getElementById('modalAddToCart').addEventListener('click', function() {
                 const productId = this.getAttribute('data-id');

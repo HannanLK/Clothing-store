@@ -1,3 +1,4 @@
+<?php $title = "Contact"; ?>
 <!-- Contact Us Section -->
 <div class="container mx-auto py-10 px-4 sm:px-6 md:px-10 lg:px-14">
 
@@ -95,7 +96,8 @@
             <div class="text-gray-600 text-justify mx-3">
                 <p>
                     Established in 1972, Glitz has become the leading fashion retailer in Sri Lanka, renowned for our dedication to customer satisfaction and innovation. 
-                    In 2012, we expanded our operations overseas, bringing our unique blend of contemporary and culturally rich designs to a global audience. 
+                    In 2012, we expanded our operations overseas, bringing our unique blend of contemporary and culturally rich designs to a global audience.
+                    <br><br> 
                     Our collections are a testament to our commitment to quality and creativity, ensuring every piece reflects the elegance and heritage of Sri Lankan fashion.
                     At Glitz, we take pride in protecting Sri Lanka's cultural legacy while continuously introducing new design ideas that cater to diverse styles and preferences.
                 </p>
