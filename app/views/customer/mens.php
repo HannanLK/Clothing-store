@@ -1,38 +1,38 @@
 <?php $title = "Mens Collection"; ?>
 <div>
     <!-- Banner Image -->
-    <div class="relative w-full h-80"> <!-- Set a height for the banner -->
+    <div class="relative w-full h-80">
         <img src="<?= BASE_URL ?>images/banners/bannerMens.png" alt="mens banner img" class="w-full h-full object-cover">
         <h1 class="absolute inset-0 flex items-center justify-center text-white text-4xl font-light">
-            #Glitz for Mens
+            MENS COLLECTION
         </h1>
-    </div>
-    <div id="main-content" class="container mx-auto p-5">
-        <h1 class="text-3xl font-bold mb-5">Men's Products</h1>
-
-        <!-- Sort Options -->
-        <div class="mb-5">
-            <label for="sortOptions" class="font-semibold mr-3">Sort by:</label>
+        <!-- Sort Options in the bottom right corner -->
+        <div class="absolute bottom-5 right-5 flex items-center bg-opacity-70 px-4 py-2 rounded-lg">
+            <label for="sortOptions" class="font-semibold mr-3 text-white">SORT BY:</label>
             <select id="sortOptions" class="bg-white border border-gray-300 px-4 py-2 rounded-md">
-                <option value="name_asc" <?= isset($sortOption) && $sortOption == 'name_asc' ? 'selected' : '' ?>>Name (A-Z)</option>
-                <option value="name_desc" <?= isset($sortOption) && $sortOption == 'name_desc' ? 'selected' : '' ?>>Name (Z-A)</option>
+                <option value="name_asc" <?= isset($sortOption) && $sortOption == 'name_asc' ? 'selected' : '' ?>>Name Ascending</option>
+                <option value="name_desc" <?= isset($sortOption) && $sortOption == 'name_desc' ? 'selected' : '' ?>>Name Descending</option>
                 <option value="price_asc" <?= isset($sortOption) && $sortOption == 'price_asc' ? 'selected' : '' ?>>Price (Low to High)</option>
                 <option value="price_desc" <?= isset($sortOption) && $sortOption == 'price_desc' ? 'selected' : '' ?>>Price (High to Low)</option>
             </select>
         </div>
+    </div>
 
+    <div id="main-content" class="container mx-auto p-5">
+        
+        <hr class=" w-10 border-t-2 border-blue-950 mx-auto mb-2">
         <!-- Retrieving Product as Cards -->
         <div id="productContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <?php if (!empty($products)): ?>
                 <?php foreach ($products as $product): ?>
                     <div class="relative product-card rounded-lg p-5">
                         <div class="relative">
-                            <img src="<?= BASE_URL ?>images/mens/<?= $product['image'] ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full h-80 object-cover mb-3 rounded-md shadow-md">
+                            <img src="<?= BASE_URL ?>images/mens/<?= $product['image'] ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full h-full object-cover mb-3 rounded-md shadow-md">
 
                             <!-- Out of Stock Overlay, limited to the image -->
                             <?php if ($product['quantity'] <= 0): ?>
                                 <div class="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center rounded-lg">
-                                    <span class="text-black font-normal text-center text-lg">Will Be <br> Available Soon! </span>
+                                    <span class="text-black font-normal text-center text-lg">Will Be <br> Available Soon!</span>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -65,8 +65,8 @@
     </div>
 
     <!-- Product Modal -->
-    <div id="productModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50">
-        <div class="modal-content bg-white mx-auto my-10 p-5 border border-gray-300 rounded-lg max-w-2xl flex">
+    <div id="productModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 text-justify">
+        <div class="modal-content bg-white mx-auto my-10 p-5 border border-gray-300 rounded-lg max-w-4xl flex">
             <img id="modalProductImage" class="w-1/2 object-cover rounded-lg" src="" alt="Product Image">
             <div class="modal-details w-1/2 pl-5">
                 <span class="close text-gray-500 text-2xl font-bold cursor-pointer">&times;</span>
@@ -174,7 +174,7 @@
                     productContainer.innerHTML += `
                         <div class="relative product-card rounded-lg p-5">
                             <div class="relative">
-                                <img src="<?= BASE_URL ?>images/mens/${product.image}" alt="${product.name}" class="w-full h-80 object-cover mb-3 rounded-md shadow-md">
+                                <img src="<?= BASE_URL ?>images/mens/${product.image}" alt="${product.name}" class="w-full h-96 object-cover mb-3 rounded-md shadow-md">
                                 ${product.quantity <= 0 ? '<div class="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center rounded-lg"><span class="text-black font-normal text-center text-lg">Will Be <br> Available Soon!</span></div>' : ''}
                             </div>
                             <div>

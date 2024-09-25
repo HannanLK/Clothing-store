@@ -72,6 +72,13 @@ class CartModel {
         $this->db->execute();
     }
     
+    // Add this method to delete cart items by product ID
+    public function deleteItemsByProductId($productId) {
+        $this->db->query('DELETE FROM cart WHERE product_id = :product_id');
+        $this->db->bind(':product_id', $productId);
+        $this->db->execute();
+    }
+    
     
     
 }

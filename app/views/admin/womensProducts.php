@@ -1,5 +1,5 @@
 <div>
-    < id="main-content" class="container mx-auto p-5">
+    <div id="main-content" class="container mx-auto p-5">
         <h1 class="text-3xl font-bold mb-5">Manage Women's Products</h1>
 
         <!-- Add Product Button -->
@@ -57,7 +57,6 @@
                         <th class="px-4 py-2 border">Name</th>
                         <th class="px-4 py-2 border">Price</th>
                         <th class="px-4 py-2 border">Quantity</th>
-                        <th class="px-4 py-2 border">Description</th>
                         <th class="px-4 py-2 border">Action</th>
                     </tr>
                 </thead>
@@ -70,7 +69,6 @@
                                 <td class="border px-4 py-2"><?= htmlspecialchars($product['name']) ?></td>
                                 <td class="border px-4 py-2">$<?= htmlspecialchars($product['price']) ?></td>
                                 <td class="border px-4 py-2"><?= htmlspecialchars($product['quantity']) ?></td>
-                                <td class="border px-4 py-2"><?= htmlspecialchars($product['description']) ?></td>
                                 <td class="border px-4 py-2">
                                     <button class="view-product bg-blue-500 text-white px-3 py-2 rounded-md" data-id="<?= $product['id'] ?>">View</button>
                                     <button class="edit-product bg-yellow-500 text-white px-3 py-2 rounded-md ml-2" data-id="<?= $product['id'] ?>">Edit</button>
@@ -79,7 +77,7 @@
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
-                        <tr><td colspan="7" class="border px-4 py-2">No products found in this category.</td></tr>
+                        <tr><td colspan="6" class="border px-4 py-2">No products found in this category.</td></tr>
                     <?php endif; ?>
                 </tbody>
             </table>
@@ -136,11 +134,14 @@
 
                 var viewHtml = `
                     <h2 class="text-2xl font-semibold mb-4">View Product</h2>
+                    <label class="block text-lg font-medium mb-2">Product Name</label>
                     <input type="text" value="${productData.name}" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3" disabled>
+                    <label class="block text-lg font-medium mb-2">Price</label>
                     <input type="number" value="${productData.price}" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3" disabled>
-                    <textarea class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3" disabled>${productData.description}</textarea>
+                     <label class="block text-lg font-medium mb-2">Desription</label>
+                    <textarea class="w-full h-48 border border-gray-300 rounded-lg px-3 py-2 mb-3" disabled>${productData.description}</textarea>
                 `;
-                showModal(viewHtml, `/clothing-store/public/images/womens/${productData.image}`);
+                showModal(viewHtml, '<?= BASE_URL ?>/images/womens/' + productData.image);
             });
         });
 
@@ -174,7 +175,7 @@
                         <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Save Changes</button>
                     </form>
                 `;
-                showModal(editHtml, `/clothing-store/public/images/womens/${productData.image}`);
+                showModal(editHtml, '<?= BASE_URL ?>/images/womens/' + productData.image);
             });
         });
 

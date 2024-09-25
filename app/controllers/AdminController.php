@@ -125,33 +125,6 @@ class AdminController extends Controller {
         }
     }
 
-    // // Delete product
-    // public function deleteProduct() {
-    //     if (isset($_GET['id'])) {
-    //         $id = htmlspecialchars($_GET['id']);
-    //         $product = $this->model('ProductModel')->getProductById($id);
-    //         $this->model('ProductModel')->deleteProduct($id);
-    //         $this->redirectToCategoryPage($product['category']);
-    //     }
-    // }
-
-    public function deleteProduct() {
-        if (isset($_GET['id'])) {
-            $id = htmlspecialchars($_GET['id']);
-            $product = $this->model('ProductModel')->getProductById($id);
-    
-            // First, delete all related cart items
-            $this->model('CartModel')->deleteItemsByProductId($id);
-    
-            // Then, delete the product
-            $this->model('ProductModel')->deleteProduct($id);
-    
-            // Redirect back to the category page
-            $this->redirectToCategoryPage($product['category']);
-        }
-    }
-    
-
     // Helper method to determine image folder for products
     private function determineImageFolder($category) {
         switch ($category) {
@@ -247,7 +220,26 @@ class AdminController extends Controller {
         }
     }
 
-    // Redirect helper method for product categories
+    public function deleteProduct() {
+        if (isset($_GET['id'])) {
+            $id = htmlspecialchars($_GET['id']);
+            $product = $this->model('ProductModel')->getProductById($id);
+    
+            if ($product) {
+                // Delete the product from the database
+                $this->model('ProductModel')->deleteProduct($id);
+    
+                // Redirect back to the same page using HTTP_REFERER
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit();
+            } else {
+                // Handle case where product doesn't exist
+                header('Location: /clothing-store/public/admin/dashboard');
+                exit();
+            }
+        }
+    }
+    
     private function redirectToCategoryPage($category) {
         switch ($category) {
             case 'mens':
@@ -260,9 +252,10 @@ class AdminController extends Controller {
                 header('Location: /clothing-store/public/admin/accessories');
                 break;
             default:
-                header('Location: /clothing-store/public/admin/products');
+                header('Location: /clothing-store/public/admin/dashboard');
                 break;
         }
         exit;
     }
+    
 }

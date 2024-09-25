@@ -70,21 +70,26 @@ class UserModel {
         }
     }
     
-    
     // Method to update an existing user
     public function updateUser($userId, $data) {
-        $this->db->query("UPDATE users SET name = :name, address = :address, phone = :phone WHERE user_id = :user_id");
+        $this->db->query("UPDATE users SET name = :name, address = :address, phone = :phone, role = :role WHERE user_id = :user_id");
         $this->db->bind(':name', $data['name']);
         $this->db->bind(':address', $data['address']);
         $this->db->bind(':phone', $data['phone']);
+        $this->db->bind(':role', $data['role']); // Bind role field
         $this->db->bind(':user_id', $userId);
-    
-        $this->db->execute();
+
+        return $this->db->execute();
     }
-    
-    
+
     // Method to delete a user
     public function deleteUser($userId) {
+        // First, delete related records from the cart table (or any other related tables)
+        $this->db->query('DELETE FROM cart WHERE user_id = :id');
+        $this->db->bind(':id', $userId);
+        $this->db->execute();
+
+        // Now, delete the user
         $this->db->query('DELETE FROM users WHERE user_id = :id');
         $this->db->bind(':id', $userId);
         return $this->db->execute();

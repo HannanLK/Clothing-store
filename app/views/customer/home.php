@@ -8,7 +8,7 @@
                 <img src="<?= BASE_URL ?>images/banners/bannerHomeMens.png" alt="Banner 1" class="w-full h-full object-cover">
                 <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white">
                     <h2 class="text-5xl font-light text-sky-950 mb-6">Exclusive Men's Wear</h2>
-                    <a href="<?= BASE_URL ?>mens" class="bg-sky-900 text-white px-4 py-2 rounded-sm">Shop Mens</a>
+                    <a href="<?= BASE_URL ?>/mens" class="bg-sky-900 text-white px-4 py-2 rounded-sm">Shop Mens</a>
                 </div>
             </div>
             <!-- Slide 2 -->
@@ -16,7 +16,7 @@
                 <img src="<?= BASE_URL ?>images/banners/bannerHome2.png" alt="Banner 2" class="w-full h-full object-cover">
                 <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
                     <h2 class="text-5xl font-light mb-6 text-pink-800">Exclusive Women's Wear</h2>
-                    <a href="<?= BASE_URL ?>womens" class="bg-pink-500 text-white px-4 py-2 rounded-sm mb-2">Shop Women's</a>
+                    <a href="<?= BASE_URL ?>/womens" class="bg-pink-500 text-white px-4 py-2 rounded-sm mb-2">Shop Women's</a>
                 </div>
             </div>
             <!-- Slide 3 -->
@@ -24,7 +24,7 @@
                 <img src="<?= BASE_URL ?>images/banners/bannerHome3.png" alt="Banner 3" class="w-full h-full object-cover">
                 <div class="absolute top-1/2 left-2/3 transform -translate-x-1/2 -translate-y-1/2">
                     <h2 class="text-5xl font-light mb-6 text-emerald-700">Exclusive Accessories</h2>
-                    <a href="<?= BASE_URL ?>accessories" class="bg-emerald-800 text-white px-4 py-2 rounded-sm">Shop Accessories</a>
+                    <a href="<?= BASE_URL ?>/accessories" class="bg-emerald-800 text-white px-4 py-2 rounded-sm">Shop Accessories</a>
                 </div>
             </div>
         </div>
@@ -50,7 +50,7 @@
                 $categoryFolder = isset($categoryMap[$product['category_id']]) ? $categoryMap[$product['category_id']] : 'unknown';
             ?>
                 <div class="relative product-card rounded-lg p-5">
-                    <img src="<?= BASE_URL ?>images/<?= $categoryFolder ?>/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full h-80 object-cover mb-3 rounded-md shadow-md">
+                    <img src="<?= BASE_URL ?>images/<?= $categoryFolder ?>/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-72 h-96 object-cover mb-3 rounded-md shadow-md">
                     <p class="font-semibold text-lg"><?= htmlspecialchars($product['name']) ?></p>
                     <p class="text-gray-600">$<?= htmlspecialchars($product['price']) ?></p>
                     <button class="view-product bg-white text-black px-3 py-2 rounded-sm outline outline-1" data-id="<?= $product['id'] ?>">View Product</button>
@@ -67,7 +67,7 @@
                 $categoryFolder = isset($categoryMap[$product['category_id']]) ? $categoryMap[$product['category_id']] : 'unknown';
             ?>
                 <div class="relative product-card rounded-lg p-5">
-                    <img src="<?= BASE_URL ?>images/<?= $categoryFolder ?>/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full h-80 object-cover mb-3 rounded-md shadow-md">
+                    <img src="<?= BASE_URL ?>images/<?= $categoryFolder ?>/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-72 h-96 object-cover mb-3 rounded-md shadow-md">
                     <p class="font-semibold text-lg"><?= htmlspecialchars($product['name']) ?></p>
                     <p class="text-gray-600">$<?= htmlspecialchars($product['price']) ?></p>
                     <button class="view-product bg-white text-black px-3 py-2 rounded-sm outline outline-1" data-id="<?= $product['id'] ?>">View Product</button>
@@ -79,7 +79,7 @@
 
     <!-- Product Modal -->
     <div id="productModal" class="fixed hidden inset-0 bg-black bg-opacity-50 items-center justify-center">
-        <div class="bg-white p-5 border border-gray-300 rounded-lg max-w-md w-full flex">
+        <div class="bg-white p-5 border border-gray-300 rounded-lg max-w-2xl w h-128 flex">
             <img id="modalProductImage" class="w-1/2 rounded-lg object-cover" src="" alt="Product Image">
             <div class="ml-4 w-1/2">
                 <span class="close text-gray-500 hover:text-black text-2xl font-bold cursor-pointer">&times;</span>
@@ -148,18 +148,21 @@
                 }
             }
 
-            // Add to Cart functionality
+    // Function to initialize event listeners for Add to Cart functionality
+    function initializeAddToCartListeners() {
             document.querySelectorAll('.add-to-cart').forEach(button => {
                 button.addEventListener('click', function() {
                     const productId = this.getAttribute('data-id');
 
-                    fetch('<?= BASE_URL ?>cart/addToCart', {
+                    // Send AJAX request to add product to cart
+                    fetch('/clothing-store/public/cart/addToCart', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: `product_id=${productId}`
                     })
                     .then(response => response.text())
                     .then(() => {
+                        // Show notification
                         const notification = document.getElementById('notification');
                         notification.classList.remove('hidden');
                         setTimeout(() => { notification.classList.add('hidden'); }, 2000);
@@ -169,6 +172,10 @@
                     });
                 });
             });
+        }
+
+        // Call this function after loading the page or updating the DOM
+        initializeAddToCartListeners();
 
             document.getElementById('modalAddToCart').addEventListener('click', function() {
                 const productId = this.getAttribute('data-id');

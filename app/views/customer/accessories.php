@@ -6,20 +6,22 @@
         <h1 class="absolute inset-0 flex items-center justify-center text-slate-300 text-5xl font-light">
             ACCESSORIES
         </h1>
-    </div>
-
-    <div id="main-content" class="container mx-auto p-5">
 
         <!-- Sort Options -->
-        <div class="mb-5">
-            <label for="sortOptions" class="font-semibold mr-3">Sort by:</label>
+        <div class="absolute bottom-5 right-5 flex items-center bg-opacity-70 px-4 py-2 rounded-lg">
+            <label for="sortOptions" class="font-semibold mr-3 text-white">SORT BY:</label>
             <select id="sortOptions" class="bg-white border border-gray-300 px-4 py-2 rounded-md">
-                <option value="name_asc" <?= isset($sortOption) && $sortOption == 'name_asc' ? 'selected' : '' ?>>Name (A-Z)</option>
-                <option value="name_desc" <?= isset($sortOption) && $sortOption == 'name_desc' ? 'selected' : '' ?>>Name (Z-A)</option>
+                <option value="name_asc" <?= isset($sortOption) && $sortOption == 'name_asc' ? 'selected' : '' ?>>Name Ascending</option>
+                <option value="name_desc" <?= isset($sortOption) && $sortOption == 'name_desc' ? 'selected' : '' ?>>Name Descending</option>
                 <option value="price_asc" <?= isset($sortOption) && $sortOption == 'price_asc' ? 'selected' : '' ?>>Price (Low to High)</option>
                 <option value="price_desc" <?= isset($sortOption) && $sortOption == 'price_desc' ? 'selected' : '' ?>>Price (High to Low)</option>
             </select>
         </div>
+    </div>
+
+    <div id="main-content" class="container mx-auto p-5">
+
+
 
         <!-- Retrieving Products as Cards -->
         <div id="productContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

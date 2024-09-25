@@ -56,7 +56,6 @@
                         <th class="px-4 py-2 border">Name</th>
                         <th class="px-4 py-2 border">Price</th>
                         <th class="px-4 py-2 border">Quantity</th>
-                        <th class="px-4 py-2 border">Description</th>
                         <th class="px-4 py-2 border">Action</th>
                     </tr>
                 </thead>
@@ -69,7 +68,6 @@
                                 <td class="border px-4 py-2"><?= htmlspecialchars($product['name']) ?></td>
                                 <td class="border px-4 py-2">$<?= htmlspecialchars($product['price']) ?></td>
                                 <td class="border px-4 py-2"><?= htmlspecialchars($product['quantity']) ?></td>
-                                <td class="border px-4 py-2"><?= htmlspecialchars($product['description']) ?></td>
                                 <td class="border px-4 py-2">
                                     <button class="view-product bg-blue-500 text-white px-3 py-2 rounded-md" data-id="<?= $product['id'] ?>">View</button>
                                     <button class="edit-product bg-yellow-500 text-white px-3 py-2 rounded-md ml-2" data-id="<?= $product['id'] ?>">Edit</button>
@@ -78,7 +76,7 @@
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
-                        <tr><td colspan="7" class="border px-4 py-2">No products found in this category.</td></tr>
+                        <tr><td colspan="6" class="border px-4 py-2">No products found in this category.</td></tr>
                     <?php endif; ?>
                 </tbody>
             </table>
@@ -143,7 +141,7 @@
                     <input type="number" value="${productData.price}" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3" disabled>
 
                     <label for="description" class="block text-lg font-medium">Description:</label>
-                    <textarea class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3" disabled>${productData.description}</textarea>
+                    <textarea class="w-full h-48 border border-gray-300 rounded-lg px-3 py-2 mb-3" disabled>${productData.description}</textarea>
                 `;
                 showModal(viewHtml, `/clothing-store/public/images/mens/${productData.image}`);
             });
@@ -171,7 +169,7 @@
                         <input type="number" name="quantity" value="${productData.quantity}" min="0" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">
 
                         <label for="description" class="block text-lg font-medium">Description:</label>
-                        <textarea name="description" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3">${productData.description}</textarea>
+                        <textarea name="description" class="w-full h-48 border border-gray-300 rounded-lg px-3 py-2 mb-3">${productData.description}</textarea>
 
                         <label for="image" class="block text-lg font-medium">Update Image:</label>
                         <input type="file" name="image" accept="image/png, image/jpg, image/jpeg" class="w-full mb-3">
